@@ -12,13 +12,6 @@ namespace UtilityBelt
         private const int PORT_MIN_VALUE = 1;
         private const int PORT_MAX_VALUE = 65535;
 
-        
-
-        public PortScanner()
-        {
-
-        }
-
         public static void Scanner(string host, int minPort = PORT_MIN_VALUE, int maxPort = PORT_MAX_VALUE)
         {
             if (minPort > maxPort)
@@ -65,7 +58,7 @@ namespace UtilityBelt
                 // connect
                 bool connected = false;
                 Task result = socket.ConnectAsync(host, port);
-                int index = Task.WaitAny(new[] { result }, 1000 );
+                int index = Task.WaitAny(new[] { result }, 100 );
                 connected = socket.Connected;
                 socket.Close();
                 if (!connected)

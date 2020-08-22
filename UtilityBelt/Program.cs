@@ -20,7 +20,6 @@ namespace UtilityBelt
             Console.WriteLine("");
             Console.WriteLine("Select the Tool");
             Console.WriteLine("1) Port Scanner");
-            Console.WriteLine("2) DDOS");
             Console.WriteLine("");
 
             string optionPicked = Console.ReadLine().ToLower();
@@ -34,7 +33,7 @@ namespace UtilityBelt
                     string domain = Console.ReadLine().ToLower();
                     Console.WriteLine("Please enter a starting Port Number:");
                     int lowPort = int.Parse(Console.ReadLine());
-                    Console.WriteLine("Please enter a domain:");
+                    Console.WriteLine("Please enter an ending Port Number:");
                     int highPort = int.Parse(Console.ReadLine());
 
                     PortScanner.Scanner(domain, lowPort, highPort);
