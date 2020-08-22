@@ -1,0 +1,26 @@
+﻿<Properties StartupConfiguration="{4115BD5B-85ED-4C69-93C3-DC5D367A9114}|Default">
+  <MonoDevelop.Ide.ItemProperties.UtilityBelt PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="UtilityBelt/PortScanner.cs">
+    <Files>
+      <File FileName="UtilityBelt/Program.cs" Line="38" Column="27" />
+      <File FileName="UtilityBelt/PortScanner.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="UtilityBelt" expanded="True">
+            <Node name="UtilityBelt" expanded="True">
+              <Node name="PortScanner.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

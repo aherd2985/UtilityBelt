@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "/Users/andrew.herd/.dotnet/store/|arch|/|tfm|",
+      "/Users/andrew.herd/.nuget/packages"
+    ]
+  }
+}
