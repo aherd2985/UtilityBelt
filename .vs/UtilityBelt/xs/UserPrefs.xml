@@ -2,8 +2,8 @@
   <MonoDevelop.Ide.ItemProperties.UtilityBelt PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="UtilityBelt/PortScanner.cs">
     <Files>
-      <File FileName="UtilityBelt/Program.cs" Line="38" Column="27" />
-      <File FileName="UtilityBelt/PortScanner.cs" Line="1" Column="1" />
+      <File FileName="UtilityBelt/Program.cs" Line="36" Column="55" />
+      <File FileName="UtilityBelt/PortScanner.cs" Line="69" Column="33" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,6 +14,9 @@
             </Node>
           </Node>
         </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
