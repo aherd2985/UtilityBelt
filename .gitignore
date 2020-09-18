@@ -38,3 +38,8 @@ x86/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+
+*.DS_Store
+**/.DS_Store
+._.DS_Store
+**/._.DS_Store
