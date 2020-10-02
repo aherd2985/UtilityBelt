@@ -1,4 +1,4 @@
-﻿namespace UtilityBelt
+﻿namespace UtilityBelt.Models
 {
   public class SecretsModel
   {
