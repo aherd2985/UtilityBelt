@@ -30,7 +30,8 @@ namespace UtilityBelt
       Console.WriteLine("Select the Tool");
       Console.WriteLine("1) Port Scanner");
       Console.WriteLine("2) Text Message");
-      Console.WriteLine("2) Random Chuck Norris Joke");
+      Console.WriteLine("3) Random Chuck Norris Joke");
+      Console.WriteLine("3) Random Cat Fact");
       Console.WriteLine("");
 
       string optionPicked = Console.ReadLine().ToLower();
@@ -99,6 +100,28 @@ namespace UtilityBelt
           Console.WriteLine("");
           Console.ForegroundColor = ConsoleColor.Yellow;
           Console.WriteLine(chuckJoke.value);
+          Console.WriteLine("");
+          break;
+
+        case "4":
+        case "cat fact":
+        case "cat":
+          ChuckJokeModel returnCat = new ChuckJokeModel();
+          string catContent = string.Empty;
+          string catUrl = "https://cat-fact.herokuapp.com/facts/random";
+          WebRequest catReq = WebRequest.Create(catUrl);
+
+          using (WebResponse wr = catReq.GetResponse())
+          using (Stream receiveStream = wr.GetResponseStream())
+          using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
+            content = sReader.ReadToEnd();
+          CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content);
+          Console.WriteLine("");
+          if(catFact.status.verified)
+            Console.ForegroundColor = ConsoleColor.Green;
+          else
+            Console.ForegroundColor = ConsoleColor.Red;
+          Console.WriteLine(catFact.text);
           Console.WriteLine("");
           break;
 
