@@ -3,6 +3,11 @@ using System;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json;
+using System.IO;
+using System.Text;
+using UtilityBelt.Models;
+using System.Drawing;
 
 namespace UtilityBelt
 {
@@ -17,8 +22,6 @@ namespace UtilityBelt
       IOptions<SecretsModel> options = services.GetRequiredService<IOptions<SecretsModel>>();
 
       MenuOptions(options);
-
-
     }
 
     static void MenuOptions(IOptions<SecretsModel> options)
@@ -27,6 +30,7 @@ namespace UtilityBelt
       Console.WriteLine("Select the Tool");
       Console.WriteLine("1) Port Scanner");
       Console.WriteLine("2) Text Message");
+      Console.WriteLine("2) Random Chuck Norris Joke");
       Console.WriteLine("");
 
       string optionPicked = Console.ReadLine().ToLower();
@@ -75,6 +79,27 @@ namespace UtilityBelt
           client.Send(message);
           Console.WriteLine("Sent");
           Console.ReadLine();
+          break;
+
+        case "3":
+        case "random chuck norris joke":
+        case "chuck norris joke":
+        case "chuck norris":
+        case "joke":
+          ChuckJokeModel returnObject = new ChuckJokeModel();
+          string content = string.Empty;
+          string url = "https://api.chucknorris.io/jokes/random";
+          WebRequest myReq = WebRequest.Create(url);
+
+          using (WebResponse wr = myReq.GetResponse())
+          using (Stream receiveStream = wr.GetResponseStream())
+          using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
+            content = sReader.ReadToEnd();
+          ChuckJokeModel chuckJoke = JsonSerializer.Deserialize<ChuckJokeModel>(content);
+          Console.WriteLine("");
+          Console.ForegroundColor = ConsoleColor.Yellow;
+          Console.WriteLine(chuckJoke.value);
+          Console.WriteLine("");
           break;
 
         default:
