@@ -31,7 +31,8 @@ namespace UtilityBelt
       Console.WriteLine("1) Port Scanner");
       Console.WriteLine("2) Text Message");
       Console.WriteLine("3) Random Chuck Norris Joke");
-      Console.WriteLine("3) Random Cat Fact");
+      Console.WriteLine("4) Random Cat Fact");
+      Console.WriteLine("5) Bitcoin Prices");
       Console.WriteLine("");
 
       string optionPicked = Console.ReadLine().ToLower();
@@ -118,10 +119,30 @@ namespace UtilityBelt
           CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content);
           Console.WriteLine("");
           if(catFact.status.verified)
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Yellow;
           else
             Console.ForegroundColor = ConsoleColor.Red;
           Console.WriteLine(catFact.text);
+          Console.WriteLine("");
+          break;
+
+        case "5":
+        case "bitcoin prices":
+        case "bitcoin":
+          ChuckJokeModel returnBitcoin = new ChuckJokeModel();
+          string bitContent = string.Empty;
+          string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
+          WebRequest bitReq = WebRequest.Create(bitUrl);
+
+          using (WebResponse wr = bitReq.GetResponse())
+          using (Stream receiveStream = wr.GetResponseStream())
+          using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
+            content = sReader.ReadToEnd();
+          BitcoinPrice bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content);
+          Console.WriteLine("");
+          Console.ForegroundColor = ConsoleColor.Yellow;
+          Console.WriteLine("As Of - " + bitFact.time.updated);
+          Console.WriteLine("USD - $ " + bitFact.bpi.USD.rate);
           Console.WriteLine("");
           break;
 
