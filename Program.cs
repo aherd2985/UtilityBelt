@@ -33,6 +33,7 @@ namespace UtilityBelt
       Console.WriteLine("3) Random Chuck Norris Joke");
       Console.WriteLine("4) Random Cat Fact");
       Console.WriteLine("5) Bitcoin Prices");
+      Console.WriteLine("6) Who is in Space");
       Console.WriteLine("");
 
       string optionPicked = Console.ReadLine().ToLower();

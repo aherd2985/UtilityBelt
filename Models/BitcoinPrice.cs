@@ -6,19 +6,19 @@ namespace UtilityBelt.Models
 {
   public class BitcoinPrice
   {
-    public Time time { get; set; }
+    public BitcoinTime time { get; set; }
     public string disclaimer { get; set; }
     public string chartName { get; set; }
-    public Bpi bpi { get; set; }
+    public BitcoinBpi bpi { get; set; }
   }
-  public class Time
+  public class BitcoinTime
   {
     public string updated { get; set; }
     public DateTime updatedISO { get; set; }
     public string updateduk { get; set; }
   }
 
-  public class USD
+  public class BitcoinUSD
   {
     public string code { get; set; }
     public string symbol { get; set; }
@@ -27,7 +27,7 @@ namespace UtilityBelt.Models
     public double rate_float { get; set; }
   }
 
-  public class GBP
+  public class BitcoinGBP
   {
     public string code { get; set; }
     public string symbol { get; set; }
@@ -36,7 +36,7 @@ namespace UtilityBelt.Models
     public double rate_float { get; set; }
   }
 
-  public class EUR
+  public class BitcoinEUR
   {
     public string code { get; set; }
     public string symbol { get; set; }
@@ -45,10 +45,10 @@ namespace UtilityBelt.Models
     public double rate_float { get; set; }
   }
 
-  public class Bpi
+  public class BitcoinBpi
   {
-    public USD USD { get; set; }
-    public GBP GBP { get; set; }
-    public EUR EUR { get; set; }
+    public BitcoinUSD USD { get; set; }
+    public BitcoinGBP GBP { get; set; }
+    public BitcoinEUR EUR { get; set; }
   }
 }
