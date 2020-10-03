@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using UtilityBelt.Models;
 using System.Drawing;
+using System.Linq;
 
 namespace UtilityBelt
 {
@@ -89,7 +90,6 @@ namespace UtilityBelt
         case "chuck norris joke":
         case "chuck norris":
         case "joke":
-          ChuckJokeModel returnObject = new ChuckJokeModel();
           string content = string.Empty;
           string url = "https://api.chucknorris.io/jokes/random";
           WebRequest myReq = WebRequest.Create(url);
@@ -108,8 +108,6 @@ namespace UtilityBelt
         case "4":
         case "cat fact":
         case "cat":
-          ChuckJokeModel returnCat = new ChuckJokeModel();
-          string catContent = string.Empty;
           string catUrl = "https://cat-fact.herokuapp.com/facts/random";
           WebRequest catReq = WebRequest.Create(catUrl);
 
@@ -130,8 +128,6 @@ namespace UtilityBelt
         case "5":
         case "bitcoin prices":
         case "bitcoin":
-          ChuckJokeModel returnBitcoin = new ChuckJokeModel();
-          string bitContent = string.Empty;
           string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
           WebRequest bitReq = WebRequest.Create(bitUrl);
 
@@ -144,6 +140,27 @@ namespace UtilityBelt
           Console.ForegroundColor = ConsoleColor.Yellow;
           Console.WriteLine("As Of - " + bitFact.time.updated);
           Console.WriteLine("USD - $ " + bitFact.bpi.USD.rate);
+          Console.WriteLine("");
+          break;
+
+        case "6":
+        case "who is in space":
+        case "space":
+          string sapcePeopleUrl = "http://api.open-notify.org/astros.json";
+          WebRequest sapcePeopleReq = WebRequest.Create(sapcePeopleUrl);
+
+          using (WebResponse wr = sapcePeopleReq.GetResponse())
+          using (Stream receiveStream = wr.GetResponseStream())
+          using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
+            content = sReader.ReadToEnd();
+          SpacePersonModel sapcePeopleFact = JsonSerializer.Deserialize<SpacePersonModel>(content);
+          Console.WriteLine("");
+          Console.ForegroundColor = ConsoleColor.Yellow;
+          Console.WriteLine("There are " + sapcePeopleFact.people.Count() + " in space right now!");
+          foreach(SpacePerson spacePerson in sapcePeopleFact.people)
+          {
+            Console.WriteLine(spacePerson.name + " is in " + spacePerson.craft);
+          }
           Console.WriteLine("");
           break;
 
