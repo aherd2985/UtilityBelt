@@ -16,9 +16,9 @@ namespace UtilityBelt.Models
     public string user { get; set; }
     public string text { get; set; }
     public int __v { get; set; }
-    public Status status { get; set; }
+    public CatFactStatus status { get; set; }
   }
-  public class Status
+  public class CatFactStatus
   {
     public bool verified { get; set; }
     public int sentCount { get; set; }
