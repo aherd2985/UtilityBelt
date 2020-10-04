@@ -78,6 +78,7 @@ namespace UtilityBelt
             Console.WriteLine("8) Country Information");
             Console.WriteLine("9) Discord sender");
             Console.WriteLine("10) Random Quote");
+            Console.WriteLine("11) Random Insult");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -145,6 +146,11 @@ namespace UtilityBelt
                 case "10":
                 case "quote":
                     RandomQuote();
+                    break;
+
+                case "11":
+                case "insult":
+                    RandomInsult();
                     break;
 
                 default:
@@ -456,6 +462,23 @@ namespace UtilityBelt
         }
 
         #endregion
+
+        #endregion
+
+        #region Random insult
+        static void RandomInsult()
+        {
+            string content = string.Empty;
+            string apiUrl = "https://evilinsult.com/generate_insult.php?lang=en&type=json";
+            using (var wc = new WebClient())
+            {
+                content = wc.DownloadString(apiUrl);
+            }
+            EvilInsultModel insultResponse = JsonSerializer.Deserialize<EvilInsultModel>(content);
+            Console.WriteLine();
+            Console.WriteLine(insultResponse.Insult);
+            Console.WriteLine();
+        }
 
         #endregion
 
