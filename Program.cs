@@ -7,6 +7,8 @@ using System.Text.Json;
 using UtilityBelt.Models;
 using UtilityBelt.Helpers;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace UtilityBelt
 {
@@ -73,6 +75,7 @@ namespace UtilityBelt
       Console.WriteLine("6) Who is in Space");
       Console.WriteLine("7) Weather forecast");
       Console.WriteLine("8) Country Information");
+      Console.WriteLine("9) Discord sender");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -127,6 +130,14 @@ namespace UtilityBelt
         case "8":
         case "Country":
           CountryInformation();
+          break;
+
+        case "9":
+        case "discord":
+        case "ds":
+        case "webhook":
+        case "wh":
+          DiscordWebhook(options);
           break;
 
         default:
@@ -365,6 +376,39 @@ namespace UtilityBelt
       {
         Console.WriteLine("Country not found");
       }
+    }
+
+    static void DiscordWebhook(IOptions<SecretsModel> options)
+    {
+      string whook = options.Value.DiscordWebhook;
+
+      if (String.IsNullOrEmpty(whook))
+      {
+        Console.WriteLine("Whoops! You dont have a webhook defined in your config!"); return;
+      }
+
+      Console.Write("Enter the message:");
+      string msg = Console.ReadLine();
+
+      WebHookContent cont = new WebHookContent()
+      {
+        content = msg
+      };
+      string json = JsonSerializer.Serialize(cont);
+
+      using (var www = new HttpClient())
+      {
+        var content = new StringContent(json);
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+        var task = www.PostAsync(whook, content);
+        task.Wait();
+      }
+      Console.WriteLine("Message sent!");
+    }
+
+    internal class WebHookContent
+    {
+      public string content { get; set; }
     }
 
     enum BooleanAliases
