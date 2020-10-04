@@ -159,7 +159,6 @@ namespace UtilityBelt
         #region Choice Processors
 
         #region Weather
-
         static void WeatherForecast(IOptions<SecretsModel> options)
         {
             var openWeatherMapApiKey = options.Value.OpenWeatherMapApiKey;
@@ -336,14 +335,9 @@ namespace UtilityBelt
             CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content);
             Console.WriteLine();
             if (catFact.status != null && catFact.status.verified)
-            {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-
-            }
             else
-            {
                 Console.ForegroundColor = ConsoleColor.Red;
-            }
             Console.WriteLine(catFact.text);
             Console.WriteLine();
         }
