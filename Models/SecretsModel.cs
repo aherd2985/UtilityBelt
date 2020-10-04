@@ -5,5 +5,6 @@ namespace UtilityBelt.Models
     public string Email {  get; set; }
     public string EmailPassword { get; set; }
     public string OpenWeatherMapApiKey {get;set;}
+    public string DiscordWebhook { get;set;}
   }
 }
