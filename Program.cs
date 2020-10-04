@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Options;
+ï»¿using Microsoft.Extensions.Options;
 using System;
 using System.Net;
 using System.Net.Mail;
@@ -9,13 +9,13 @@ using System.Text;
 using UtilityBelt.Models;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace UtilityBelt
 {
     class Program
     {
         public const string APIKEY = "3ff37271b27fb7f1ff7db74cdd57a9c6";
-
 
         static void Main(string[] args)
         {
@@ -65,6 +65,7 @@ namespace UtilityBelt
             Console.WriteLine("5) Bitcoin Prices");
             Console.WriteLine("6) Who is in Space");
             Console.WriteLine("7) Weather forecast");
+            Console.WriteLine("8) Discord sender");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -116,12 +117,48 @@ namespace UtilityBelt
                     WeatherForecast();
                     break;
 
+                case "8":
+                case "discord":
+                case "ds":
+                case "webhook":
+                case "wh":
+                    DiscordWebhook(options);
+                    break;
+
                 default:
                     Console.WriteLine("Please make a valid option");
                     MenuOptions(options);
                     break;
 
             }
+        }
+
+        static void DiscordWebhook(IOptions<SecretsModel> options)
+        {
+            string whook = options.Value.DiscordWebhook;
+
+            if (String.IsNullOrEmpty(whook))
+            {
+                Console.WriteLine("Whoops! You dont have a webhook defined in your config!"); return;
+            }
+
+            Console.Write("Enter the message:");
+            string msg = Console.ReadLine();
+
+            WebHookContent cont = new WebHookContent()
+            {
+                content = msg
+            };
+            string json = JsonSerializer.Serialize(cont);
+
+            using (var www = new HttpClient())
+            {
+                var content = new StringContent(json);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                var task = www.PostAsync(whook, content);
+                task.Wait();
+            }
+            Console.WriteLine("Message sent!");
         }
 
         static void WeatherForecast()
@@ -139,7 +176,7 @@ namespace UtilityBelt
             WeatherRoot wr = JsonSerializer.Deserialize<WeatherRoot>(resp);
 
             Console.WriteLine();
-            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C. Feels like: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C");
+            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "Â°F or " + Weather.KtoC(wr.main.temp) + "Â°C. Feels like: " + Weather.KtoF(wr.main.temp) + "Â°F or " + Weather.KtoC(wr.main.temp) + "Â°C");
             Console.WriteLine("Wind speed: " + wr.wind.speed + " m/s. Air pressure is " + wr.main.pressure + "mmHg or " + Math.Round(wr.main.pressure * 133.322, 1) + " Pascals.");
             long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             bool SunWhat = currentTime > wr.sys.sunrise;
@@ -293,5 +330,10 @@ namespace UtilityBelt
             return Convert.ToBoolean(Enum.Parse(typeof(BooleanAliases), str.ToUpper()));
         }
 
+    }
+
+    internal class WebHookContent
+    {
+        public string content { get; set; }
     }
 }
