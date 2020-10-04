@@ -5,6 +5,7 @@ using System.Net.Mail;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using UtilityBelt.Models;
+using UtilityBelt.Helpers;
 using System.Collections.Generic;
 
 namespace UtilityBelt
@@ -203,10 +204,10 @@ namespace UtilityBelt
       MailMessage message = new MailMessage();
       message.From = new MailAddress(options.Value.Email);
 
-      // assuming at&t for now
-      // todo: add other carriers... fun
+      var carrierType = MenuEnum<CarrierType>("Carrier");
+      var meta = EnumHelper.GetAttributeOfType<CarrierMetaAttribute>(carrierType);
 
-      message.To.Add(new MailAddress(send2Number + "@txt.att.net"));
+      message.To.Add(new MailAddress(send2Number + $"@{meta?.Domain}"));
       message.Subject = "This is my subject";
       message.Body = "This is the content";
 
@@ -224,6 +225,37 @@ namespace UtilityBelt
 
       message.Dispose();
       client.Dispose();
+    }
+
+    static T MenuEnum<T>(string subject)
+            where T : struct, Enum
+    {
+      Console.WriteLine("");
+      Console.WriteLine($"Select the {subject}");
+
+      Array values = Enum.GetValues(typeof(T));
+      for (int i = 0; i < values.Length; i++)
+      {
+        var current = values.GetValue(i) as Enum;
+        var meta = EnumHelper.GetAttributeOfType<CarrierMetaAttribute>(current);
+        string description = meta?.Name ?? Enum.GetName(typeof(T), current);
+        Console.WriteLine($"{i + 1}) {description}");
+      }
+
+      Console.WriteLine("");
+
+      Console.Write("Your choice:");
+      string optionPicked = Console.ReadLine().ToLower();
+
+      bool isValid = Enum.TryParse(optionPicked, true, out T result);
+
+      if (!isValid || !Enum.IsDefined(typeof(T), result))
+      {
+        Console.WriteLine("Please select a valid option");
+        return MenuEnum<T>(subject);
+      }
+
+      return result;
     }
 
     static void RandomChuckNorrisJoke()
