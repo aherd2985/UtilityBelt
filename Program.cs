@@ -77,6 +77,7 @@ namespace UtilityBelt
             Console.WriteLine("7) Weather forecast");
             Console.WriteLine("8) Country Information");
             Console.WriteLine("9) Discord sender");
+            Console.WriteLine("10) Random Quote");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -141,6 +142,11 @@ namespace UtilityBelt
                     DiscordWebhook(options);
                     break;
 
+                case "10":
+                case "quote":
+                    RandomQuote();
+                    break;
+
                 default:
                     Console.WriteLine("Please make a valid option");
                     MenuOptions(options);
@@ -153,6 +159,7 @@ namespace UtilityBelt
         #region Choice Processors
 
         #region Weather
+
         static void WeatherForecast(IOptions<SecretsModel> options)
         {
             var openWeatherMapApiKey = options.Value.OpenWeatherMapApiKey;
@@ -430,6 +437,25 @@ namespace UtilityBelt
             }
             Console.WriteLine("Message sent!");
         }
+        #endregion
+
+        #region Random quote
+        static void RandomQuote()
+        {
+            string content = string.Empty;
+            string quoteUrl = "https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
+            using (var wc = new WebClient())
+            {
+                content = wc.DownloadString(quoteUrl);
+            }
+            QuoteModel quote = JsonSerializer.Deserialize<QuoteModel>(content);
+            Console.WriteLine();
+            Console.WriteLine(quote.QuoteText);
+            Console.WriteLine($"--{quote.QuoteAuthor}");
+            Console.WriteLine();
+
+        }
+
         #endregion
 
         #endregion
