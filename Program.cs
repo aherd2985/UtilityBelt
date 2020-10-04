@@ -4,11 +4,8 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
-using System.IO;
-using System.Text;
 using UtilityBelt.Models;
-using System.Linq;
-using System.Net.Http;
+using System.Text;
 
 namespace UtilityBelt
 {
@@ -142,7 +139,7 @@ namespace UtilityBelt
             WeatherRoot wr = JsonSerializer.Deserialize<WeatherRoot>(resp);
 
             Console.WriteLine();
-            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "�F or " + Weather.KtoC(wr.main.temp) + "�C. Feels like: " + Weather.KtoF(wr.main.temp) + "�F or " + Weather.KtoC(wr.main.temp) + "�C");
+            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C. Feels like: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C");
             Console.WriteLine("Wind speed: " + wr.wind.speed + " m/s. Air pressure is " + wr.main.pressure + "mmHg or " + Math.Round(wr.main.pressure * 133.322, 1) + " Pascals.");
             long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             bool SunWhat = currentTime > wr.sys.sunrise;
@@ -239,6 +236,22 @@ namespace UtilityBelt
             Console.WriteLine("As Of - " + bitFact.time.updated);
             Console.WriteLine("USD - $ " + bitFact.bpi.USD.rate);
             Console.WriteLine();
+
+            string monthlyData = string.Empty;
+            using (var wc = new WebClient())
+            {
+                monthlyData = wc.DownloadString(bitUrl);
+            }
+
+    
+            var series = new double[100];
+            for (var i = 0; i < series.Length; i++)
+            {
+                series[i] = 15 * Math.Sin(i * ((Math.PI * 4) / series.Length));
+            }
+                            
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.WriteLine(AsciiChart.Sharp.AsciiChart.Plot(series));
         }
 
         static void CatFact()
