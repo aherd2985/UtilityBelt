@@ -12,6 +12,12 @@ namespace UtilityBelt
         private const int PORT_MIN_VALUE = 1;
         private const int PORT_MAX_VALUE = 65535;
 
+        /// <summary>
+        /// Fully scans the hostname for all opened ports in range [minPort; maxPort]
+        /// </summary>
+        /// <param name="host">Hostname to scan</param>
+        /// <param name="minPort">Starting port</param>
+        /// <param name="maxPort">Maximal port</param>
         public static void Scanner(string host, int minPort = PORT_MIN_VALUE, int maxPort = PORT_MAX_VALUE)
         {
             if (minPort > maxPort)
@@ -27,24 +33,24 @@ namespace UtilityBelt
                     $"Max port cannot be less than {PORT_MIN_VALUE} " +
                     $"or greater than {PORT_MAX_VALUE}");
 
-
-            List<int> portList = Enumerable.Range(minPort, maxPort - minPort).ToList();
             List<int> openPorts = new List<int>();
-            List<int> closedPorts = new List<int>();
-            
-            foreach (int portNbr in portList)
-            {
-                if(IsPortOpenAsync(host, portNbr)){
-                    openPorts.Add(portNbr);
-                    Console.WriteLine(string.Format("Port Nbr {0} is OPEN", portNbr));
-                }
-                else
-                    closedPorts.Add(portNbr);
-            }
-            
 
+            for (int portNbr = minPort; portNbr <= maxPort; portNbr++)
+            {
+                if (IsPortOpenAsync(host, portNbr))
+                {
+                    openPorts.Add(portNbr);
+                    Console.WriteLine($"Port {portNbr} is open!");
+                }
+            }
         }
 
+        /// <summary>
+        /// Tests if a port is open or not
+        /// </summary>
+        /// <param name="host">Destination hostname</param>
+        /// <param name="port">Destination port</param>
+        /// <returns>Whether or not the port is open</returns>
         private static bool IsPortOpenAsync(string host, int port)
         {
             Socket socket = null;
