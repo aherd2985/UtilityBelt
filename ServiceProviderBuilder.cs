@@ -1,25 +1,25 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UtilityBelt.Models;
 
 namespace UtilityBelt
 {
-    public class ServiceProviderBuilder
+  public class ServiceProviderBuilder
+  {    
+    public static IServiceProvider GetServiceProvider(string[] args)
     {
-        public static IServiceProvider GetServiceProvider(string[] args)
-        {
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .AddUserSecrets(typeof(Program).Assembly)
-                .AddCommandLine(args)
-                .Build();
-            ServiceCollection services = new ServiceCollection();
+      IConfigurationRoot configuration = new ConfigurationBuilder()
+          .AddEnvironmentVariables()
+          .AddUserSecrets(typeof(Program).Assembly)
+          .AddCommandLine(args)
+          .Build();
+      ServiceCollection services = new ServiceCollection();
 
-            services.Configure<SecretsModel>(configuration.GetSection("SecretsModel"));
+      services.Configure<SecretsModel>(configuration.GetSection("SecretsModel"));
 
-            ServiceProvider provider = services.BuildServiceProvider();
-            return provider;
-        }
+      ServiceProvider provider = services.BuildServiceProvider();
+      return provider;
     }
+  }
 }
