@@ -71,6 +71,7 @@ namespace UtilityBelt
       Console.WriteLine("5) Bitcoin Prices");
       Console.WriteLine("6) Who is in Space");
       Console.WriteLine("7) Weather forecast");
+      Console.WriteLine("8) Country Information");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
