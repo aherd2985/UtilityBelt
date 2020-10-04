@@ -81,6 +81,7 @@ namespace UtilityBelt
       Console.WriteLine("10) Random Quote");
       Console.WriteLine("11) Random Insult");
       Console.WriteLine("12) Who Stole the Cookie");
+      Console.WriteLine("13) Random Taco Recipe");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -158,6 +159,11 @@ namespace UtilityBelt
         case "12":
         case "cookie":
           CookieAccusation();
+          break;
+
+        case "13":
+        case "taco":
+          RandomTaco();  
           break;
 
         default:
@@ -520,6 +526,26 @@ namespace UtilityBelt
     }
     #endregion
 
+    #region Random taco recipe
+
+    static void RandomTaco()
+    {
+      string content = string.Empty;
+      string tacoRandomizerUrl = "http://taco-randomizer.herokuapp.com/random/";
+      using (var wc = new WebClient())
+      {
+        content = wc.DownloadString(tacoRandomizerUrl);
+      }
+
+      TacoRecipeModel recipe = JsonSerializer.Deserialize<TacoRecipeModel>(content);
+      Console.WriteLine();
+      Console.WriteLine(@$"Why not try {recipe.BaseLayer.Name} with {recipe.Mixin.Name},");
+      Console.WriteLine(@$"seasoned with {recipe.Seasoning.Name}, topped off with {recipe.Condiment.Name}");
+      Console.WriteLine(@$"and wrapped in delicious {recipe.Shell.Name}.");
+
+      Console.WriteLine();
+    }
+
     #endregion
 
     #region Utility
@@ -541,11 +567,14 @@ namespace UtilityBelt
       FALSE = 0,
       N = 0
     }
+
     static bool FromString(string str)
     {
       return Convert.ToBoolean(Enum.Parse(typeof(BooleanAliases), str.ToUpper()));
     }
+  
+    #endregion
+        
     #endregion
   }
-
 }
