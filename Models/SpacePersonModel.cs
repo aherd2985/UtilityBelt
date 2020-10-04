@@ -1,16 +1,25 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace UtilityBelt.Models
 {
     class SpacePersonModel
     {
-        public int number { get; set; }
-        public List<SpacePerson> people { get; set; }
-        public string message { get; set; }
+        [JsonPropertyName("number")]
+        public int Number { get; set; }
+
+        [JsonPropertyName("people")]
+        public List<SpacePerson> People { get; set; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
     }
     public class SpacePerson
     {
-        public string craft { get; set; }
-        public string name { get; set; }
+        [JsonPropertyName("craft")]
+        public string Craft { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
     }
 }

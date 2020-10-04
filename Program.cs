@@ -1,15 +1,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
-using System.Net;
-using System.Net.Mail;
-using System.Text.Json;
-using UtilityBelt.Models;
-using UtilityBelt.Helpers;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
+using System.Text.Json;
 using System.Web;
+using UtilityBelt.Helpers;
+using UtilityBelt.Models;
 
 namespace UtilityBelt
 {
@@ -188,11 +188,11 @@ namespace UtilityBelt
             WeatherRoot wr = JsonSerializer.Deserialize<WeatherRoot>(resp);
 
             Console.WriteLine();
-            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C. Feels like: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C");
-            Console.WriteLine("Wind speed: " + wr.wind.speed + " m/s. Air pressure is " + wr.main.pressure + "mmHg or " + Math.Round(wr.main.pressure * 133.322, 1) + " Pascals.");
+            Console.WriteLine("Temperature: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C. Feels like: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C");
+            Console.WriteLine("Wind speed: " + wr.Wind.Speed + " m/s. Air pressure is " + wr.Main.Pressure + "mmHg or " + Math.Round(wr.Main.Pressure * 133.322, 1) + " Pascals.");
             long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            bool SunWhat = currentTime > wr.sys.sunrise;
-            long whatNext = SunWhat ? wr.sys.sunset : wr.sys.sunrise;
+            bool SunWhat = currentTime > wr.Sys.Sunrise;
+            long whatNext = SunWhat ? wr.Sys.Sunset : wr.Sys.Sunrise;
             long diff = whatNext - currentTime;
             var dto = DateTimeOffset.FromUnixTimeSeconds(diff);
             if (SunWhat) //If sun should be setting...
@@ -306,7 +306,7 @@ namespace UtilityBelt
             ChuckJokeModel chuckJoke = JsonSerializer.Deserialize<ChuckJokeModel>(content);
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(chuckJoke.value);
+            Console.WriteLine(chuckJoke.Value);
             Console.WriteLine();
         }
 
@@ -324,8 +324,8 @@ namespace UtilityBelt
             BitcoinPrice bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content);
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("As Of - " + bitFact.time.updated);
-            Console.WriteLine("USD - $ " + bitFact.bpi.USD.rate);
+            Console.WriteLine("As Of - " + bitFact.Time.Updated);
+            Console.WriteLine("USD - $ " + bitFact.Bpi.USD.Rate);
             Console.WriteLine();
         }
         #endregion
@@ -341,11 +341,11 @@ namespace UtilityBelt
             }
             CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content);
             Console.WriteLine();
-            if (catFact.status != null && catFact.status.verified)
+            if (catFact.Status != null && catFact.Status.Verified)
                 Console.ForegroundColor = ConsoleColor.Yellow;
             else
                 Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(catFact.text);
+            Console.WriteLine(catFact.Text);
             Console.WriteLine();
         }
         #endregion
@@ -362,67 +362,67 @@ namespace UtilityBelt
             SpacePersonModel spacePeopleFact = JsonSerializer.Deserialize<SpacePersonModel>(content);
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("There are " + spacePeopleFact.people.Count + " in space right now!");
-            foreach (SpacePerson spacePerson in spacePeopleFact.people)
+            Console.WriteLine("There are " + spacePeopleFact.People.Count + " in space right now!");
+            foreach (SpacePerson spacePerson in spacePeopleFact.People)
             {
-                Console.WriteLine(spacePerson.name + " is in " + spacePerson.craft);
+                Console.WriteLine(spacePerson.Name + " is in " + spacePerson.Craft);
             }
             Console.WriteLine();
         }
-    #endregion
+        #endregion
 
-    #region Country information
-    static void CountryInformation()
-    {
-      string content = string.Empty;
-      Console.WriteLine("");
-      Console.WriteLine("Please enter a country name:");
-
-      string countryName = Console.ReadLine().ToLower();
-      string url = $"https://restcountries.eu/rest/v2/name/{countryName}";
-
-      try
-      {
-        using (var wc = new WebClient())
+        #region Country information
+        static void CountryInformation()
         {
-          content = wc.DownloadString(url);
+            string content = string.Empty;
+            Console.WriteLine("");
+            Console.WriteLine("Please enter a country name:");
+
+            string countryName = Console.ReadLine().ToLower();
+            string url = $"https://restcountries.eu/rest/v2/name/{countryName}";
+
+            try
+            {
+                using (var wc = new WebClient())
+                {
+                    content = wc.DownloadString(url);
+                }
+
+                var countryInformationResult = JsonSerializer.Deserialize<List<CountryInformation>>(content);
+
+                foreach (var item in countryInformationResult)
+                {
+                    Console.WriteLine("===============================================");
+                    Console.WriteLine($"Country Name: {item.Name}");
+                    Console.WriteLine($"Capital: {item.Capital}");
+                    Console.WriteLine($"Region: {item.Region}");
+                    Console.WriteLine($"Population: {item.Population}");
+                    Console.WriteLine("currencies");
+                    Console.WriteLine("Currencies");
+                    foreach (var moneda in item.Currencies)
+                    {
+                        Console.WriteLine($"*Code:\t\t{moneda.Code}");
+                        Console.WriteLine($"*Name:\t\t{moneda.Name}");
+                        Console.WriteLine($"*Symbol:\t{moneda.Symbol}");
+                    }
+                    Console.WriteLine("Languages");
+                    foreach (var language in item.Languages)
+                    {
+                        Console.WriteLine($"* Name:\t\t{language.Name} / {language.NativeName}");
+                    }
+                    Console.WriteLine("===============================================");
+                }
+            }
+            catch (WebException)
+            {
+                Console.WriteLine("Country not found");
+            }
         }
+        #endregion
 
-        var countryInformationResult = JsonSerializer.Deserialize<List<CountryInformation>>(content);
+        #region Discord Sender
 
-        foreach (var item in countryInformationResult)
-        {
-          Console.WriteLine("===============================================");
-          Console.WriteLine($"Country Name: {item.name}");
-          Console.WriteLine($"Capital: {item.capital}");
-          Console.WriteLine($"Region: {item.region}");
-          Console.WriteLine($"Population: {item.population.ToString("N1")}");
-          Console.WriteLine($"Area: {item.area.ToString("N1")} km²");
-          Console.WriteLine("Currencies");
-          foreach (var moneda in item.currencies)
-          {
-            Console.WriteLine($"* Code:\t\t{moneda.code}");
-            Console.WriteLine($"* Name:\t\t{moneda.name}");
-            Console.WriteLine($"* Symbol:\t{moneda.symbol}");
-          }
-          Console.WriteLine("Languages");
-          foreach (var language in item.languages)
-          {
-            Console.WriteLine($"* Name:\t\t{language.name} / {language.nativeName}");
-          }
-          Console.WriteLine("===============================================");
-        }
-      }
-      catch (WebException)
-      {
-        Console.WriteLine($"Country not found");
-      }
-    }
-    #endregion
-
-    #region Discord Sender
-
-    static void DiscordWebhook(IOptions<SecretsModel> options)
+        static void DiscordWebhook(IOptions<SecretsModel> options)
         {
             string whook = options.Value.DiscordWebhook;
 
