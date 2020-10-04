@@ -1,14 +1,10 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
-using System.IO;
-using System.Text;
 using UtilityBelt.Models;
-using System.Linq;
-using System.Net.Http;
 
 namespace UtilityBelt
 {
@@ -65,6 +61,7 @@ namespace UtilityBelt
             Console.WriteLine("5) Bitcoin Prices");
             Console.WriteLine("6) Who is in Space");
             Console.WriteLine("7) Weather forecast");
+            Console.WriteLine("8) Random Quote");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -116,6 +113,11 @@ namespace UtilityBelt
                     WeatherForecast();
                     break;
 
+                case "8":
+                case "quote":
+                    RandomQuote();
+                    break;
+
                 default:
                     Console.WriteLine("Please make a valid option");
                     MenuOptions(options);
@@ -123,7 +125,21 @@ namespace UtilityBelt
 
             }
         }
+        static void RandomQuote()
+        {
+            string content = string.Empty;
+            string quoteUrl = "https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
+            using (var wc = new WebClient())
+            {
+                content = wc.DownloadString(quoteUrl);
+            }
+            QuoteModel quote = JsonSerializer.Deserialize<QuoteModel>(content);
+            Console.WriteLine();
+            Console.WriteLine(quote.QuoteText);
+            Console.WriteLine($"--{quote.QuoteAuthor}");
+            Console.WriteLine();
 
+        }
         static void WeatherForecast()
         {
             if (APIKEY.Length == 0) { Console.WriteLine("Whoops! API key is not defined."); return; }
