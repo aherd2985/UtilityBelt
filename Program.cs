@@ -80,6 +80,7 @@ namespace UtilityBelt
             Console.WriteLine("9) Discord sender");
             Console.WriteLine("10) Random Quote");
             Console.WriteLine("11) Random Insult");
+            Console.WriteLine("12) Who Stole the Cookie");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -152,6 +153,11 @@ namespace UtilityBelt
                 case "11":
                 case "insult":
                     RandomInsult();
+                    break;
+
+                case "12":
+                case "cookie":
+                    CookieAccusation();
                     break;
 
                 default:
@@ -488,6 +494,33 @@ namespace UtilityBelt
         }
 
         #endregion
+
+        #region Who stole the cookie
+        static void CookieAccusation()
+        {
+            string content = string.Empty;
+            string suspectUrl = "https://randomuser.me/api/?inc=name&format=json";
+            using (var wc = new WebClient())
+            {
+                content = wc.DownloadString(suspectUrl);
+            }
+            CookieSuspectModel cookieSuspect = JsonSerializer.Deserialize<CookieSuspectModel>(content);
+            string suspectFullName = cookieSuspect.results[0].name.first + " " + cookieSuspect.results[0].name.last;
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("");
+            Console.WriteLine("Jacques Clouseau: "+ suspectFullName +" stole the cookie from the cookie jar.");
+            Console.WriteLine("");
+            Console.WriteLine(suspectFullName+": Who, me?");
+            Console.WriteLine("");
+            Console.WriteLine("Jacques Clouseau: Yes, you!");
+            Console.WriteLine("");
+            Console.WriteLine(suspectFullName+": Couldn't be!");
+            Console.WriteLine("");
+            Console.WriteLine("Jacques Clouseau: Then who?");
+            Console.WriteLine();
+        }
+    #endregion
 
         #region Utility
         internal class WebHookContent
