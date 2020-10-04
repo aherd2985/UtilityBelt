@@ -1,52 +1,37 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace UtilityBelt.Models
 {
     public class BitcoinPrice
     {
-        public BitcoinTime time { get; set; }
-        public string disclaimer { get; set; }
-        public string chartName { get; set; }
-        public BitcoinBpi bpi { get; set; }
+        public BitcoinTime Time { get; set; }
+        public string Disclaimer { get; set; }
+        public string ChartName { get; set; }
+        public BitcoinBpi Bpi { get; set; }
     }
     public class BitcoinTime
     {
-        public string updated { get; set; }
-        public DateTime updatedISO { get; set; }
-        public string updateduk { get; set; }
+        public string Updated { get; set; }
+        public DateTime UpdatedISO { get; set; }
+        public string Updateduk { get; set; }
     }
-
-    public class BitcoinUSD
-    {
-        public string code { get; set; }
-        public string symbol { get; set; }
-        public string rate { get; set; }
-        public string description { get; set; }
-        public double rate_float { get; set; }
-    }
-
-    public class BitcoinGBP
-    {
-        public string code { get; set; }
-        public string symbol { get; set; }
-        public string rate { get; set; }
-        public string description { get; set; }
-        public double rate_float { get; set; }
-    }
-
-    public class BitcoinEUR
-    {
-        public string code { get; set; }
-        public string symbol { get; set; }
-        public string rate { get; set; }
-        public string description { get; set; }
-        public double rate_float { get; set; }
-    }
-
     public class BitcoinBpi
     {
-        public BitcoinUSD USD { get; set; }
-        public BitcoinGBP GBP { get; set; }
-        public BitcoinEUR EUR { get; set; }
+        [JsonPropertyName("USD")]
+        public Currency USD { get; set; }
+        [JsonPropertyName("GBP")]
+        public Currency GBP { get; set; }
+        [JsonPropertyName("EUR")]
+        public Currency EUR { get; set; }
+    }
+    public class Currency
+    {
+        public string Code { get; set; }
+        public string Symbol { get; set; }
+        public string Rate { get; set; }
+        public string Description { get; set; }
+        [JsonPropertyName("rate_float")]
+        public double RateFloat { get; set; }
     }
 }

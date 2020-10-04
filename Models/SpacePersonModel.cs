@@ -4,13 +4,13 @@ namespace UtilityBelt.Models
 {
     class SpacePersonModel
     {
-        public int number { get; set; }
-        public List<SpacePerson> people { get; set; }
-        public string message { get; set; }
+        public int Number { get; set; }
+        public List<SpacePerson> People { get; set; }
+        public string Message { get; set; }
     }
     public class SpacePerson
     {
-        public string craft { get; set; }
-        public string name { get; set; }
+        public string Craft { get; set; }
+        public string Name { get; set; }
     }
 }
