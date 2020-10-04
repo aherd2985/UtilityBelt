@@ -107,9 +107,19 @@ namespace UtilityBelt
           message.Subject = "This is my subject";
           message.Body = "This is the content";
 
-          client.Send(message);
-          Console.WriteLine("Sent");
-          Console.ReadLine();
+          try
+          {
+            client.Send(message);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Sent successfully");
+          }
+          catch {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Text Message failed");
+          }
+          
+          message.Dispose();
+          client.Dispose();
           break;
 
         case "3":
@@ -120,7 +130,6 @@ namespace UtilityBelt
           string content = string.Empty;
           string url = "https://api.chucknorris.io/jokes/random";
           WebRequest myReq = WebRequest.Create(url);
-
           using (WebResponse wr = myReq.GetResponse())
           using (Stream receiveStream = wr.GetResponseStream())
           using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
@@ -136,9 +145,8 @@ namespace UtilityBelt
         case "cat fact":
         case "cat":
           string catUrl = "https://cat-fact.herokuapp.com/facts/random";
-          WebRequest catReq = WebRequest.Create(catUrl);
-
-          using (WebResponse wr = catReq.GetResponse())
+          myReq = WebRequest.Create(catUrl);
+          using (WebResponse wr = myReq.GetResponse())
           using (Stream receiveStream = wr.GetResponseStream())
           using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
             content = sReader.ReadToEnd();
@@ -156,9 +164,8 @@ namespace UtilityBelt
         case "bitcoin prices":
         case "bitcoin":
           string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
-          WebRequest bitReq = WebRequest.Create(bitUrl);
-
-          using (WebResponse wr = bitReq.GetResponse())
+          myReq = WebRequest.Create(bitUrl);
+          using (WebResponse wr = myReq.GetResponse())
           using (Stream receiveStream = wr.GetResponseStream())
           using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
             content = sReader.ReadToEnd();
@@ -174,9 +181,8 @@ namespace UtilityBelt
         case "who is in space":
         case "space":
           string sapcePeopleUrl = "http://api.open-notify.org/astros.json";
-          WebRequest sapcePeopleReq = WebRequest.Create(sapcePeopleUrl);
-
-          using (WebResponse wr = sapcePeopleReq.GetResponse())
+          myReq = WebRequest.Create(sapcePeopleUrl);
+          using (WebResponse wr = myReq.GetResponse())
           using (Stream receiveStream = wr.GetResponseStream())
           using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
             content = sReader.ReadToEnd();
