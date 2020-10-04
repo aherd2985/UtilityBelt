@@ -22,6 +22,9 @@ Here is an example of the secrets.json file:
 }
 ```
 
+The Open Weather API key can be generated for free from their site:
+https://openweathermap.org/api
+
 Feel free to holler if you have any questions or concerns.
 
 Happy coding!
