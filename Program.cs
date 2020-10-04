@@ -1,8 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using UtilityBelt.Models;
 using UtilityBelt.Helpers;
