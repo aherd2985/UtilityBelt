@@ -18,7 +18,8 @@ Here is an example of the secrets.json file:
     "EmailPassword": "yourPassword",
     "DiscordWebhook": "yourWebhook"
   }
-}```
+}
+```
 
 Feel free to holler if you have any questions or concerns.
 
