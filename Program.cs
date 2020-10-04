@@ -38,8 +38,20 @@ namespace UtilityBelt
         {
             Console.WriteLine("");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("Would you like to run another option?: ");
-            string testUserInput = Console.ReadLine();
+
+            string testUserInput = null;
+            do
+            {
+                Console.Write("Would you like to run another option?: ");
+                testUserInput = Console.ReadLine();
+                if (int.TryParse(testUserInput, out _)) //If user input was a number...
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine("I am sorry, your answer could not be translated to a yes/no.");
+                    Console.WriteLine("Please try to reformat your answer.\n");
+                    testUserInput = null;
+                }
+            } while (testUserInput == null);
 
             try
             {
