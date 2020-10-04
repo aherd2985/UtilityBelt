@@ -16,6 +16,7 @@ Here is an example of the secrets.json file:
   "SecretsModel": {
     "Email": "yourEmail@gmail.com",
     "EmailPassword": "yourPassword",
+    "OpenWeatherMapApiKey": "yourApiKey",
     "DiscordWebhook": "yourWebhook"
   }
 }
