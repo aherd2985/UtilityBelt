@@ -1,86 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace UtilityBelt
 {
     public partial class WeatherRoot
     {
-        public Coord coord { get; set; }
-
-        public List<Weather> weather { get; set; }
-
-        public Main main { get; set; }
-
-        public long visibility { get; set; }
-
-        public Wind wind { get; set; }
-
-        public Clouds clouds { get; set; }
-
-        public long dt { get; set; }
-
-        public Sys sys { get; set; }
-
-        public long timezone { get; set; }
-
-        public long id { get; set; }
-
-        public string name { get; set; }
-
-        public long cod { get; set; }
+        [JsonPropertyName("coord")]
+        public Coord Coord { get; set; }
+        [JsonPropertyName("weather")]
+        public List<Weather> Weather { get; set; }
+        [JsonPropertyName("main")]
+        public Main Main { get; set; }
+        [JsonPropertyName("visibility")]
+        public long Visibility { get; set; }
+        [JsonPropertyName("wind")]
+        public Wind Wind { get; set; }
+        [JsonPropertyName("clouds")]
+        public Clouds Clouds { get; set; }
+        [JsonPropertyName("dt")]
+        public long Dt { get; set; }
+        [JsonPropertyName("sys")]
+        public Sys Sys { get; set; }
+        [JsonPropertyName("timezone")]
+        public long Timezone { get; set; }
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("cod")]
+        public long Cod { get; set; }
     }
 
     public partial class Clouds
     {
-        public long all { get; set; }
+        [JsonPropertyName("All")]
+        public long All { get; set; }
     }
 
     public partial class Coord
     {
-        public double lon { get; set; }
-
-        public double lat { get; set; }
+        [JsonPropertyName("lon")]
+        public double Lon { get; set; }
+        [JsonPropertyName("lat")]
+        public double Lat { get; set; }
     }
 
     public partial class Main
     {
-        public double temp { get; set; }
-
-        public double feels_like { get; set; }
-
-        public double temp_min { get; set; }
-
-        public double temp_max { get; set; }
-
-        public long pressure { get; set; }
-
-        public long humidity { get; set; }
+        [JsonPropertyName("temp")]
+        public double Temp { get; set; }
+        [JsonPropertyName("feels_like")]
+        public double FeelsLike { get; set; }
+        [JsonPropertyName("temp_min")]
+        public double TempMin { get; set; }
+        [JsonPropertyName("temp_max")]
+        public double TempMax { get; set; }
+        [JsonPropertyName("pressure")]
+        public long Pressure { get; set; }
+        [JsonPropertyName("humidity")]
+        public long Humidity { get; set; }
     }
 
     public partial class Sys
     {
-        public long type { get; set; }
-
-        public long id { get; set; }
-
-        public double message { get; set; }
-
-        public string country { get; set; }
-
-        public long sunrise { get; set; }
-
-        public long sunset { get; set; }
+        [JsonPropertyName("type")]
+        public long Type { get; set; }
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
+        [JsonPropertyName("message")]
+        public double Message { get; set; }
+        [JsonPropertyName("country")]
+        public string Country { get; set; }
+        [JsonPropertyName("sunrise")]
+        public long Sunrise { get; set; }
+        [JsonPropertyName("sunset")]
+        public long Sunset { get; set; }
     }
 
     public partial class Weather
     {
-        public long id { get; set; }
-
-        public string main { get; set; }
-
-        public string description { get; set; }
-
-        public string icon { get; set; }
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
+        [JsonPropertyName("main")]
+        public string Main { get; set; }
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+        [JsonPropertyName("icon")]
+        public string Icon { get; set; }
 
         internal static string KtoC(double temp)
         {
@@ -94,8 +101,9 @@ namespace UtilityBelt
 
     public partial class Wind
     {
-        public double speed { get; set; }
-
-        public long deg { get; set; }
+        [JsonPropertyName("speed")]
+        public double Speed { get; set; }
+        [JsonPropertyName("deg")]
+        public long Deg { get; set; }
     }
 }
