@@ -5,6 +5,7 @@ using System.Net.Mail;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 using UtilityBelt.Models;
+using System.Collections.Generic;
 
 namespace UtilityBelt
 {
@@ -70,6 +71,7 @@ namespace UtilityBelt
       Console.WriteLine("5) Bitcoin Prices");
       Console.WriteLine("6) Who is in Space");
       Console.WriteLine("7) Weather forecast");
+      Console.WriteLine("8) Country Information");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -294,43 +296,49 @@ namespace UtilityBelt
 
     static void CountryInformation()
     {
-      string content = string.Empty;
-      Console.WriteLine("");
-      Console.WriteLine("Please enter a country name:");
+        string content = string.Empty;
+        Console.WriteLine("");
+        Console.WriteLine("Please enter a country name:");
 
-      string countryName = Console.ReadLine().ToLower();
-      string url = $"https://restcountries.eu/rest/v2/name/{countryName}";
+        string countryName = Console.ReadLine().ToLower();
+        string url = $"https://restcountries.eu/rest/v2/name/{countryName}";
 
-      try
-      {
-        using (var wc = new WebClient())
+        try
         {
-          content = wc.DownloadString(url);
+            using (var wc = new WebClient())
+            {
+                content = wc.DownloadString(url);
+            }
+
+            var countryInformationResult = JsonSerializer.Deserialize<List<CountryInformation>>(content);
+
+            foreach (var item in countryInformationResult)
+            {
+                Console.WriteLine("===============================================");
+                Console.WriteLine($"Country Name: {item.name}");
+                Console.WriteLine($"Capital: {item.capital}");
+                Console.WriteLine($"Region: {item.region}");
+                Console.WriteLine($"Population: {item.population.ToString("N1")}");
+                Console.WriteLine($"Area: {item.area.ToString("N1")} km²");
+                Console.WriteLine("Currencies");
+                foreach (var moneda in item.currencies)
+                {
+                    Console.WriteLine($"* Code:\t\t{moneda.code}");
+                    Console.WriteLine($"* Name:\t\t{moneda.name}");
+                    Console.WriteLine($"* Symbol:\t{moneda.symbol}");
+                }
+                Console.WriteLine("Languages");
+                foreach (var language in item.languages)
+                {
+                    Console.WriteLine($"* Name:\t\t{language.name} / {language.nativeName}");
+                }
+                Console.WriteLine("===============================================");
+            }
         }
-
-        var countryInformationResult = JsonSerializer.Deserialize<List<CountryInformation>>(content);
-
-        foreach (var item in countryInformationResult)
+        catch (WebException)
         {
-          Console.WriteLine("===============================================");
-          Console.WriteLine($"Country Name: {item.name}");
-          Console.WriteLine($"Capital: {item.capital}");
-          Console.WriteLine($"Region: {item.region}");
-          Console.WriteLine($"Population: {item.population}");
-          Console.WriteLine("currencies");
-          foreach (var moneda in item.currencies)
-          {
-            Console.WriteLine($"*Code:\t\t{moneda.code}");
-            Console.WriteLine($"*Name:\t\t{moneda.name}");
-            Console.WriteLine($"*Symbol:\t{moneda.symbol}");
-          }
-          Console.WriteLine("===============================================");
+            Console.WriteLine($"Country not found");
         }
-      }
-      catch (WebException e)
-      {
-        Console.WriteLine("Country not found");
-      }
     }
 
     enum BooleanAliases
