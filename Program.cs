@@ -4,19 +4,13 @@ using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
-using System.IO;
-using System.Text;
 using UtilityBelt.Models;
-using System.Linq;
-using System.Net.Http;
+using System.Text;
 
 namespace UtilityBelt
 {
     class Program
     {
-        public const string APIKEY = "3ff37271b27fb7f1ff7db74cdd57a9c6";
-
-
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -125,7 +119,7 @@ namespace UtilityBelt
                 case "weather":
                 case "wf":
                 case "weather forecast":
-                    WeatherForecast();
+                    WeatherForecast(options);
                     break;
 
                 default:
@@ -136,9 +130,15 @@ namespace UtilityBelt
             }
         }
 
-        static void WeatherForecast()
+        static void WeatherForecast(IOptions<SecretsModel> options)
         {
-            if (APIKEY.Length == 0) { Console.WriteLine("Whoops! API key is not defined."); return; }
+            var openWeatherMapApiKey = options.Value.OpenWeatherMapApiKey;
+            
+            if (String.IsNullOrEmpty(openWeatherMapApiKey)) {
+                 Console.WriteLine("Whoops! API key is not defined."); 
+                 return;
+            }
+
             Console.Write("Enter your town name:");
             string town = Console.ReadLine();
 
@@ -146,12 +146,12 @@ namespace UtilityBelt
 
             using (var wc = new WebClient())
             {
-                resp = wc.DownloadString($"http://api.openweathermap.org/data/2.5/weather?q={town}&appid={APIKEY}");
+                resp = wc.DownloadString($"http://api.openweathermap.org/data/2.5/weather?q={town}&appid={openWeatherMapApiKey}");
             }
             WeatherRoot wr = JsonSerializer.Deserialize<WeatherRoot>(resp);
 
             Console.WriteLine();
-            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "캟 or " + Weather.KtoC(wr.main.temp) + "캜. Feels like: " + Weather.KtoF(wr.main.temp) + "캟 or " + Weather.KtoC(wr.main.temp) + "캜");
+            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "째F or " + Weather.KtoC(wr.main.temp) + "째C. Feels like: " + Weather.KtoF(wr.main.temp) + "째F or " + Weather.KtoC(wr.main.temp) + "째C");
             Console.WriteLine("Wind speed: " + wr.wind.speed + " m/s. Air pressure is " + wr.main.pressure + "mmHg or " + Math.Round(wr.main.pressure * 133.322, 1) + " Pascals.");
             long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             bool SunWhat = currentTime > wr.sys.sunrise;
