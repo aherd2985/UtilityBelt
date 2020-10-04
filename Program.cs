@@ -248,10 +248,15 @@ namespace UtilityBelt
             }
             CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content);
             Console.WriteLine();
-            if (catFact.status.verified)
+            if (catFact.status != null && catFact.status.verified)
+            {
                 Console.ForegroundColor = ConsoleColor.Yellow;
+
+            }
             else
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
+            }
             Console.WriteLine(catFact.text);
             Console.WriteLine();
         }
