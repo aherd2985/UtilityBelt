@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
 using System.Text.Json;
+using System.Web;
 using UtilityBelt.Helpers;
 using UtilityBelt.Models;
 
@@ -14,8 +15,6 @@ namespace UtilityBelt
 {
     class Program
     {
-        private static JsonSerializerOptions _jsonSerializerOptions;
-
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -24,11 +23,6 @@ namespace UtilityBelt
 
             IServiceProvider services = ServiceProviderBuilder.GetServiceProvider(args);
             IOptions<SecretsModel> options = services.GetRequiredService<IOptions<SecretsModel>>();
-
-            _jsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            };
             bool showMenu = true;
             do
             {
@@ -38,6 +32,7 @@ namespace UtilityBelt
 
         }
 
+        #region Choice Handler
         static bool RecursiveOptions()
         {
             Console.WriteLine("");
@@ -84,6 +79,7 @@ namespace UtilityBelt
             Console.WriteLine("8) Country Information");
             Console.WriteLine("9) Discord sender");
             Console.WriteLine("10) Random Quote");
+            Console.WriteLine("11) Random Insult");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -153,6 +149,11 @@ namespace UtilityBelt
                     RandomQuote();
                     break;
 
+                case "11":
+                case "insult":
+                    RandomInsult();
+                    break;
+
                 default:
                     Console.WriteLine("Please make a valid option");
                     MenuOptions(options);
@@ -160,7 +161,11 @@ namespace UtilityBelt
 
             }
         }
+        #endregion
 
+        #region Choice Processors
+
+        #region Weather
         static void WeatherForecast(IOptions<SecretsModel> options)
         {
             var openWeatherMapApiKey = options.Value.OpenWeatherMapApiKey;
@@ -183,11 +188,11 @@ namespace UtilityBelt
             WeatherRoot wr = JsonSerializer.Deserialize<WeatherRoot>(resp);
 
             Console.WriteLine();
-            Console.WriteLine("Temperature: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C. Feels like: " + Weather.KtoF(wr.main.temp) + "°F or " + Weather.KtoC(wr.main.temp) + "°C");
-            Console.WriteLine("Wind speed: " + wr.wind.speed + " m/s. Air pressure is " + wr.main.pressure + "mmHg or " + Math.Round(wr.main.pressure * 133.322, 1) + " Pascals.");
+            Console.WriteLine("Temperature: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C. Feels like: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C");
+            Console.WriteLine("Wind speed: " + wr.Wind.Speed + " m/s. Air pressure is " + wr.Main.Pressure + "mmHg or " + Math.Round(wr.Main.Pressure * 133.322, 1) + " Pascals.");
             long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            bool SunWhat = currentTime > wr.sys.sunrise;
-            long whatNext = SunWhat ? wr.sys.sunset : wr.sys.sunrise;
+            bool SunWhat = currentTime > wr.Sys.Sunrise;
+            long whatNext = SunWhat ? wr.Sys.Sunset : wr.Sys.Sunrise;
             long diff = whatNext - currentTime;
             var dto = DateTimeOffset.FromUnixTimeSeconds(diff);
             if (SunWhat) //If sun should be setting...
@@ -200,6 +205,9 @@ namespace UtilityBelt
             }
         }
 
+        #endregion
+
+        #region Port Scanner
         static void portScanner()
         {
             Console.Write("Please enter a domain:");
@@ -210,8 +218,11 @@ namespace UtilityBelt
             int highPort = int.Parse(Console.ReadLine());
 
             PortScanner.Scanner(domain, lowPort, highPort);
-        }
 
+        }
+        #endregion
+
+        #region Text Message
         static void TextMessage(IOptions<SecretsModel> options)
         {
             Console.WriteLine();
@@ -281,7 +292,9 @@ namespace UtilityBelt
 
             return result;
         }
+        #endregion
 
+        #region Chuck Norris Jokes
         static void RandomChuckNorrisJoke()
         {
             string content = string.Empty;
@@ -290,13 +303,16 @@ namespace UtilityBelt
             {
                 content = wc.DownloadString(url);
             }
-            ChuckJokeModel chuckJoke = JsonSerializer.Deserialize<ChuckJokeModel>(content, _jsonSerializerOptions);
+            ChuckJokeModel chuckJoke = JsonSerializer.Deserialize<ChuckJokeModel>(content);
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(chuckJoke.Value);
             Console.WriteLine();
         }
 
+        #endregion
+
+        #region Bitcoin Prices
         static void BitcoinPrices()
         {
             string content = string.Empty;
@@ -305,14 +321,16 @@ namespace UtilityBelt
             {
                 content = wc.DownloadString(bitUrl);
             }
-            BitcoinPrice bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content, _jsonSerializerOptions);
+            BitcoinPrice bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content);
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("As Of - " + bitFact.Time.Updated);
             Console.WriteLine("USD - $ " + bitFact.Bpi.USD.Rate);
             Console.WriteLine();
         }
+        #endregion
 
+        #region Cat facts
         static void CatFact()
         {
             string content = string.Empty;
@@ -321,7 +339,7 @@ namespace UtilityBelt
             {
                 content = wc.DownloadString(catUrl);
             }
-            CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content, _jsonSerializerOptions);
+            CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content);
             Console.WriteLine();
             if (catFact.Status != null && catFact.Status.Verified)
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -330,7 +348,9 @@ namespace UtilityBelt
             Console.WriteLine(catFact.Text);
             Console.WriteLine();
         }
+        #endregion
 
+        #region People in space
         static void Space()
         {
             string content = string.Empty;
@@ -339,7 +359,7 @@ namespace UtilityBelt
             {
                 content = wc.DownloadString(spacePeopleUrl);
             }
-            SpacePersonModel spacePeopleFact = JsonSerializer.Deserialize<SpacePersonModel>(content, _jsonSerializerOptions);
+            SpacePersonModel spacePeopleFact = JsonSerializer.Deserialize<SpacePersonModel>(content);
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("There are " + spacePeopleFact.People.Count + " in space right now!");
@@ -349,7 +369,9 @@ namespace UtilityBelt
             }
             Console.WriteLine();
         }
+        #endregion
 
+        #region Country information
         static void CountryInformation()
         {
             string content = string.Empty;
@@ -371,16 +393,22 @@ namespace UtilityBelt
                 foreach (var item in countryInformationResult)
                 {
                     Console.WriteLine("===============================================");
-                    Console.WriteLine($"Country Name: {item.name}");
-                    Console.WriteLine($"Capital: {item.capital}");
-                    Console.WriteLine($"Region: {item.region}");
-                    Console.WriteLine($"Population: {item.population}");
+                    Console.WriteLine($"Country Name: {item.Name}");
+                    Console.WriteLine($"Capital: {item.Capital}");
+                    Console.WriteLine($"Region: {item.Region}");
+                    Console.WriteLine($"Population: {item.Population}");
                     Console.WriteLine("currencies");
-                    foreach (var moneda in item.currencies)
+                    Console.WriteLine("Currencies");
+                    foreach (var moneda in item.Currencies)
                     {
-                        Console.WriteLine($"*Code:\t\t{moneda.code}");
-                        Console.WriteLine($"*Name:\t\t{moneda.name}");
-                        Console.WriteLine($"*Symbol:\t{moneda.symbol}");
+                        Console.WriteLine($"*Code:\t\t{moneda.Code}");
+                        Console.WriteLine($"*Name:\t\t{moneda.Name}");
+                        Console.WriteLine($"*Symbol:\t{moneda.Symbol}");
+                    }
+                    Console.WriteLine("Languages");
+                    foreach (var language in item.Languages)
+                    {
+                        Console.WriteLine($"* Name:\t\t{language.Name} / {language.NativeName}");
                     }
                     Console.WriteLine("===============================================");
                 }
@@ -390,6 +418,9 @@ namespace UtilityBelt
                 Console.WriteLine("Country not found");
             }
         }
+        #endregion
+
+        #region Discord Sender
 
         static void DiscordWebhook(IOptions<SecretsModel> options)
         {
@@ -418,11 +449,9 @@ namespace UtilityBelt
             }
             Console.WriteLine("Message sent!");
         }
+        #endregion
 
-        internal class WebHookContent
-        {
-            public string content { get; set; }
-        }
+        #region Random quote
         static void RandomQuote()
         {
             string content = string.Empty;
@@ -431,11 +460,39 @@ namespace UtilityBelt
             {
                 content = wc.DownloadString(quoteUrl);
             }
-            QuoteModel quote = JsonSerializer.Deserialize<QuoteModel>(content, _jsonSerializerOptions);
+            QuoteModel quote = JsonSerializer.Deserialize<QuoteModel>(content);
             Console.WriteLine();
             Console.WriteLine(quote.QuoteText);
             Console.WriteLine($"--{quote.QuoteAuthor}");
             Console.WriteLine();
+
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Random insult
+        static void RandomInsult()
+        {
+            string content = string.Empty;
+            string apiUrl = "https://evilinsult.com/generate_insult.php?lang=en&type=json";
+            using (var wc = new WebClient())
+            {
+                content = wc.DownloadString(apiUrl);
+            }
+            EvilInsultModel insultResponse = JsonSerializer.Deserialize<EvilInsultModel>(content);
+            Console.WriteLine();
+            Console.WriteLine(HttpUtility.HtmlDecode(insultResponse.Insult));
+            Console.WriteLine();
+        }
+
+        #endregion
+
+        #region Utility
+        internal class WebHookContent
+        {
+            public string content { get; set; }
         }
 
         enum BooleanAliases
@@ -455,6 +512,7 @@ namespace UtilityBelt
         {
             return Convert.ToBoolean(Enum.Parse(typeof(BooleanAliases), str.ToUpper()));
         }
-
+        #endregion
     }
+
 }

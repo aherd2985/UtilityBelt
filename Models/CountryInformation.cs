@@ -1,25 +1,52 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Text.Json.Serialization;
 
 namespace UtilityBelt.Models
 {
     class CountryInformation
     {
-        public string name { get; set; }
-        public string capital { get; set; }
-        public string region { get; set; }
-        public int population { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
-        public List<Currencies> currencies { get; set; }
+        [JsonPropertyName("capital")]
+        public string Capital { get; set; }
+
+        [JsonPropertyName("region")]
+        public string Region { get; set; }
+
+        [JsonPropertyName("population")]
+        public int Population { get; set; }
+
+        [JsonPropertyName("area")]
+        public decimal Area { get; set; }
+
+        [JsonPropertyName("currencies")]
+        public List<Currencies> Currencies { get; set; }
+
+        [JsonPropertyName("languages")]
+        public List<Languages> Languages { get; set; }
 
     }
 
     class Currencies
     {
-        public string code { get; set; }
-        public string name { get; set; }
-        public string symbol { get; set; }
+        [JsonPropertyName("code")]
+        public string Code { get; set; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("symbol")]
+        public string Symbol { get; set; }
+    }
+
+    class Languages
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("nativeName")]
+        public string NativeName { get; set; }
     }
 
 }
