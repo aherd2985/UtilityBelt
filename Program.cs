@@ -1,14 +1,10 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Net;
 using System.Net.Mail;
-using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
-using System.IO;
-using System.Text;
 using UtilityBelt.Models;
-using System.Linq;
-using System.Net.Http;
 
 namespace UtilityBelt
 {
