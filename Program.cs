@@ -8,6 +8,8 @@ using System.IO;
 using System.Text;
 using UtilityBelt.Models;
 using System.Linq;
+using System.Collections.Generic;
+
 
 namespace UtilityBelt
 {
@@ -59,6 +61,7 @@ namespace UtilityBelt
       Console.WriteLine("4) Random Cat Fact");
       Console.WriteLine("5) Bitcoin Prices");
       Console.WriteLine("6) Who is in Space");
+      Console.WriteLine("7) Country Information");
       Console.WriteLine("");
 
       string optionPicked = Console.ReadLine().ToLower();
@@ -101,6 +104,10 @@ namespace UtilityBelt
         case "space":
           Space();
           break;
+        case "7":
+        case "Country":
+            CountryInformation();
+            break;
         default:
           Console.WriteLine("Please make a valid option");
           MenuOptions(options);
@@ -234,6 +241,48 @@ namespace UtilityBelt
         Console.WriteLine(spacePerson.name + " is in " + spacePerson.craft);
       }
       Console.WriteLine("");
+    }
+    
+    static void CountryInformation()
+    {
+        string content = string.Empty;
+        Console.WriteLine("");
+        Console.WriteLine("Please enter a country name:");
+
+        string countryName = Console.ReadLine().ToLower();
+        string url = $"https://restcountries.eu/rest/v2/name/{countryName}";
+
+        try
+        {
+            WebRequest countryReq = WebRequest.Create(url);
+            using (WebResponse wr = countryReq.GetResponse())
+            using (Stream receiveStream = wr.GetResponseStream())
+            using (StreamReader sReader = new StreamReader(receiveStream, Encoding.UTF8))
+                content = sReader.ReadToEnd();
+
+            var countryInformationResult = JsonSerializer.Deserialize<List<CountryInformation>>(content);
+
+            foreach (var item in countryInformationResult)
+            {
+                Console.WriteLine("===============================================");
+                Console.WriteLine($"Country Name: {item.name}");
+                Console.WriteLine($"Capital: {item.capital}");
+                Console.WriteLine($"Region: {item.region}");
+                Console.WriteLine($"Population: {item.population}");
+                Console.WriteLine("currencies");
+                foreach (var moneda in item.currencies)
+                {
+                    Console.WriteLine($"*Code:\t\t{moneda.code}");
+                    Console.WriteLine($"*Name:\t\t{moneda.name}");
+                    Console.WriteLine($"*Symbol:\t{moneda.symbol}");
+                }
+                Console.WriteLine("===============================================");
+            }
+        }
+        catch (WebException e)
+        {
+            Console.WriteLine("Country not found");
+        }
     }
 
     enum BooleanAliases
