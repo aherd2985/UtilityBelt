@@ -10,8 +10,10 @@ namespace UtilityBelt.Models
         public string capital { get; set; }
         public string region { get; set; }
         public int population { get; set; }
+        public decimal area { get; set; }
 
         public List<Currencies> currencies { get; set; }
+        public List<Languages> languages { get; set; }
 
     }
 
@@ -20,6 +22,12 @@ namespace UtilityBelt.Models
         public string code { get; set; }
         public string name { get; set; }
         public string symbol { get; set; }
+    }
+    
+    class Languages
+    {
+        public string name { get; set; }
+        public string nativeName { get; set; }
     }
 
 }

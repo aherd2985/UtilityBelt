@@ -369,54 +369,60 @@ namespace UtilityBelt
             }
             Console.WriteLine();
         }
-        #endregion
+    #endregion
 
-        #region Country information
-        static void CountryInformation()
+    #region Country information
+    static void CountryInformation()
+    {
+      string content = string.Empty;
+      Console.WriteLine("");
+      Console.WriteLine("Please enter a country name:");
+
+      string countryName = Console.ReadLine().ToLower();
+      string url = $"https://restcountries.eu/rest/v2/name/{countryName}";
+
+      try
+      {
+        using (var wc = new WebClient())
         {
-            string content = string.Empty;
-            Console.WriteLine("");
-            Console.WriteLine("Please enter a country name:");
-
-            string countryName = Console.ReadLine().ToLower();
-            string url = $"https://restcountries.eu/rest/v2/name/{countryName}";
-
-            try
-            {
-                using (var wc = new WebClient())
-                {
-                    content = wc.DownloadString(url);
-                }
-
-                var countryInformationResult = JsonSerializer.Deserialize<List<CountryInformation>>(content);
-
-                foreach (var item in countryInformationResult)
-                {
-                    Console.WriteLine("===============================================");
-                    Console.WriteLine($"Country Name: {item.name}");
-                    Console.WriteLine($"Capital: {item.capital}");
-                    Console.WriteLine($"Region: {item.region}");
-                    Console.WriteLine($"Population: {item.population}");
-                    Console.WriteLine("currencies");
-                    foreach (var moneda in item.currencies)
-                    {
-                        Console.WriteLine($"*Code:\t\t{moneda.code}");
-                        Console.WriteLine($"*Name:\t\t{moneda.name}");
-                        Console.WriteLine($"*Symbol:\t{moneda.symbol}");
-                    }
-                    Console.WriteLine("===============================================");
-                }
-            }
-            catch (WebException e)
-            {
-                Console.WriteLine("Country not found");
-            }
+          content = wc.DownloadString(url);
         }
-        #endregion
 
-        #region Discord Sender
+        var countryInformationResult = JsonSerializer.Deserialize<List<CountryInformation>>(content);
 
-        static void DiscordWebhook(IOptions<SecretsModel> options)
+        foreach (var item in countryInformationResult)
+        {
+          Console.WriteLine("===============================================");
+          Console.WriteLine($"Country Name: {item.name}");
+          Console.WriteLine($"Capital: {item.capital}");
+          Console.WriteLine($"Region: {item.region}");
+          Console.WriteLine($"Population: {item.population.ToString("N1")}");
+          Console.WriteLine($"Area: {item.area.ToString("N1")} km²");
+          Console.WriteLine("Currencies");
+          foreach (var moneda in item.currencies)
+          {
+            Console.WriteLine($"* Code:\t\t{moneda.code}");
+            Console.WriteLine($"* Name:\t\t{moneda.name}");
+            Console.WriteLine($"* Symbol:\t{moneda.symbol}");
+          }
+          Console.WriteLine("Languages");
+          foreach (var language in item.languages)
+          {
+            Console.WriteLine($"* Name:\t\t{language.name} / {language.nativeName}");
+          }
+          Console.WriteLine("===============================================");
+        }
+      }
+      catch (WebException)
+      {
+        Console.WriteLine($"Country not found");
+      }
+    }
+    #endregion
+
+    #region Discord Sender
+
+    static void DiscordWebhook(IOptions<SecretsModel> options)
         {
             string whook = options.Value.DiscordWebhook;
 
