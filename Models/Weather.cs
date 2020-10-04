@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace UtilityBelt
 {
@@ -85,7 +84,7 @@ namespace UtilityBelt
 
         internal static string KtoC(double temp)
         {
-            return Math.Round(temp - 273.15,2).ToString();
+            return Math.Round(temp - 273.15, 2).ToString();
         }
         internal static string KtoF(double temp)
         {
