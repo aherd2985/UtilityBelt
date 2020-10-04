@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UtilityBelt.Models;
@@ -6,7 +6,8 @@ using UtilityBelt.Models;
 namespace UtilityBelt
 {
   public class ServiceProviderBuilder
-  {    public static IServiceProvider GetServiceProvider(string[] args)
+  {    
+    public static IServiceProvider GetServiceProvider(string[] args)
     {
       IConfigurationRoot configuration = new ConfigurationBuilder()
           .AddEnvironmentVariables()
