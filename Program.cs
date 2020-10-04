@@ -9,6 +9,7 @@ using UtilityBelt.Helpers;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web;
 
 namespace UtilityBelt
 {
@@ -476,7 +477,7 @@ namespace UtilityBelt
             }
             EvilInsultModel insultResponse = JsonSerializer.Deserialize<EvilInsultModel>(content);
             Console.WriteLine();
-            Console.WriteLine(insultResponse.Insult);
+            Console.WriteLine(HttpUtility.HtmlDecode(insultResponse.Insult));
             Console.WriteLine();
         }
 
