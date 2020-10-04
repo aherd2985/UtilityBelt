@@ -80,6 +80,7 @@ namespace UtilityBelt
       Console.WriteLine("9) Discord sender");
       Console.WriteLine("10) Random Quote");
       Console.WriteLine("11) Random Insult");
+      Console.WriteLine("12) Who Stole the Cookie");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
