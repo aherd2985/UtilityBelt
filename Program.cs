@@ -82,6 +82,7 @@ namespace UtilityBelt
       Console.WriteLine("11) Random Insult");
       Console.WriteLine("12) Who Stole the Cookie");
       Console.WriteLine("13) Random Taco Recipe");
+      Console.WriteLine("14) COVID-19 Information");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -164,6 +165,13 @@ namespace UtilityBelt
         case "13":
         case "taco":
           RandomTaco();  
+          break;
+
+        case "14":
+        case "covid":
+        case "covid19":
+        case "covid-19":
+          Covid19();
           break;
 
         default:
@@ -545,6 +553,67 @@ namespace UtilityBelt
 
       Console.WriteLine();
     }
+
+    #endregion
+
+    #region Covid-19
+        
+      static void Covid19()
+      {
+        Console.WriteLine("");
+        Console.WriteLine("Enter the country name to get the information. If you want to see the global information, type \"Global\". For the list of all countries type \"List\": ");
+        string country = Console.ReadLine();
+        Console.WriteLine("");
+
+        string content = string.Empty;
+        using (var wc = new WebClient())
+        {
+          content = wc.DownloadString("https://api.covid19api.com/summary");
+        }
+        CovidRoot summary = JsonSerializer.Deserialize<CovidRoot>(content);
+
+        if (country.Equals("List", StringComparison.InvariantCultureIgnoreCase))
+        {
+          foreach (CountriesInfoCovid countryJson in summary.Countries)
+          {
+            Console.WriteLine(countryJson.Country);
+          }
+          return;
+        }
+
+        else if (country.Equals("Global", StringComparison.InvariantCultureIgnoreCase))
+        {
+          ShowCovidInfo("Global", summary.Global.NewConfirmed, summary.Global.TotalConfirmed, summary.Global.NewDeaths, summary.Global.TotalDeaths, summary.Global.NewRecovered, summary.Global.TotalRecovered);
+        }
+
+        else
+        {
+          foreach (CountriesInfoCovid countryJson in summary.Countries)
+          {
+            if (country.Equals(countryJson.Country, StringComparison.InvariantCultureIgnoreCase))
+            {
+              ShowCovidInfo(countryJson.Country, countryJson.NewConfirmed, countryJson.TotalConfirmed, countryJson.NewDeaths, countryJson.TotalDeaths, countryJson.NewRecovered, countryJson.TotalRecovered);
+              return;
+            }
+          }
+        }
+        
+        Console.WriteLine("Country not found");
+      }
+
+      static void ShowCovidInfo(string countryName, long newConfirmed, long totalConfirmed, long newDeaths, long totalDeaths, long newRecovered, long totalRecovered)
+      {
+        Console.WriteLine("Statistics: " + countryName);
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("New Confirmed: " + newConfirmed);
+        Console.WriteLine("Total Confirmed: " + totalConfirmed);
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("New Deaths: " + newDeaths);
+        Console.WriteLine("Total Deaths: " + totalDeaths);
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("New Recovered: " + newRecovered);
+        Console.WriteLine("Total Recovered: " + totalRecovered);
+      }
 
     #endregion
 
