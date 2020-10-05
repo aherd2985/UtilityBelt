@@ -83,6 +83,7 @@ namespace UtilityBelt
       Console.WriteLine("12) Who Stole the Cookie");
       Console.WriteLine("13) Random Taco Recipe");
       Console.WriteLine("14) COVID-19 Statistics");
+      Console.WriteLine("15) Geek jokes");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -173,6 +174,11 @@ namespace UtilityBelt
         case "covid-19":
           Covid19();
           break;
+
+        case "15":
+        case "geek":
+            GeekJokes();
+            break;
 
         default:
           Console.WriteLine("Please make a valid option");
@@ -619,10 +625,31 @@ namespace UtilityBelt
         Console.WriteLine("Total Recovered: " + totalRecovered);
       }
 
-    #endregion
+        #endregion
 
-    #region Utility
-    internal class WebHookContent
+        #region
+        static void GeekJokes()
+        {
+            IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+            defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+
+            string content = string.Empty;
+            string geekJokeUrl = "https://geek-jokes.sameerkumar.website/api?format=json";
+            using (var wc = new WebClient() { Proxy = defaultWebProxy })
+            {
+                content = wc.DownloadString(geekJokeUrl);
+            }
+
+            GeekJokeModel joke = JsonSerializer.Deserialize<GeekJokeModel>(content);
+            Console.WriteLine();
+            Console.WriteLine(@$"The Geek says -- {joke.Joke}");
+
+            Console.WriteLine();
+        }
+        #endregion
+
+        #region Utility
+        internal class WebHookContent
     {
       public string content { get; set; }
     }
