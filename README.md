@@ -1,7 +1,7 @@
 # UtilityBelt
-Fun console application
+Fun console application.
 
-Learn the basics of Git and C#
+Learn the basics of Git and C#.
 
 Participate in Hacktoberfest.
 
