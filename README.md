@@ -29,3 +29,5 @@ https://openweathermap.org/api
 Feel free to holler if you have any questions or concerns.
 
 Happy coding!
+
+All the best.
