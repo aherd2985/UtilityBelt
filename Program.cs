@@ -700,8 +700,8 @@ namespace UtilityBelt
         content = wc.DownloadString(adviceUrl);
       }
       
-      AdviceModel slip = JsonSerializer.Deserialize<AdviceModel>(content);
-      Console.WriteLine(@$"Here's your advice: {slip.advice}");
+      AdviceModel randomAdvice = JsonSerializer.Deserialize<AdviceModel>(content);
+      Console.WriteLine(@$"Here's your advice: {randomAdvice.slip.advice}");
       Console.WriteLine();
     }
 
