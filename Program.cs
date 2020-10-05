@@ -572,11 +572,14 @@ namespace UtilityBelt
         }
         CovidRoot summary = JsonSerializer.Deserialize<CovidRoot>(content);
 
-        if (userInput.Equals("List", StringComparison.InvariantCultureIgnoreCase))
+        if (userInput.StartsWith("List", StringComparison.InvariantCultureIgnoreCase))
         {
+          userInput = userInput.Substring(4).TrimStart();
+          Console.WriteLine("Found countries: ");
           foreach (var countryJson in summary.Countries)
           {
-            Console.WriteLine(countryJson.Country);
+            if (countryJson.Country.StartsWith(userInput, StringComparison.InvariantCultureIgnoreCase))
+              Console.WriteLine(countryJson.Country);
           }
           return;
         }
