@@ -85,6 +85,7 @@ namespace UtilityBelt
       Console.WriteLine("14) COVID-19 Statistics");
       Console.WriteLine("15) Geek jokes");
       Console.WriteLine("16) Number Fact");
+      Console.WriteLine("17) Random Advice");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -185,7 +186,12 @@ namespace UtilityBelt
         case "numberfact":
             NumberFact();
             break;
-
+          
+        case "17":
+        case "advice":
+        case "random advice":
+            RandomAdvice();
+            break;
 
        default:
           Console.WriteLine("Please make a valid option");
@@ -682,9 +688,27 @@ namespace UtilityBelt
     }
 
     #endregion
+      
+    #region Random Advice
 
-        #region Utility
-        internal class WebHookContent
+    static void RandomAdvice()
+    {
+      string content = string.Empty;
+      string adviceUrl = "https://api.adviceslip.com/advice";
+      using (var wc = new WebClient())
+      {
+        content = wc.DownloadString(adviceUrl);
+      }
+      
+      AdviceModel slip = JsonSerializer.Deserialize<AdviceModel>(content);
+      Console.WriteLine(@$"Here's your advice: {slip.advice}");
+      Console.WriteLine();
+    }
+
+    #endregion
+
+    #region Utility
+    internal class WebHookContent
     {
       public string content { get; set; }
     }
