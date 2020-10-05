@@ -84,6 +84,7 @@ namespace UtilityBelt
       Console.WriteLine("13) Random Taco Recipe");
       Console.WriteLine("14) COVID-19 Statistics");
       Console.WriteLine("15) Geek jokes");
+      Console.WriteLine("16) Number Fact");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -180,7 +181,13 @@ namespace UtilityBelt
             GeekJokes();
             break;
 
-        default:
+        case "16":
+        case "numberfact":
+            NumberFact();
+            break;
+
+
+       default:
           Console.WriteLine("Please make a valid option");
           MenuOptions(options);
           break;
@@ -647,6 +654,34 @@ namespace UtilityBelt
             Console.WriteLine();
         }
         #endregion
+
+    #region NumberFact
+    static void NumberFact()
+    {
+        string content = string.Empty;
+        int numberEntered;
+
+        Console.WriteLine("Please enter an integer number");
+        String userInput = Console.ReadLine();
+
+        if (int.TryParse(userInput, out numberEntered))
+        {
+                string numberFactURL = $"http://numbersapi.com/{userInput}?format=json";
+                using (var wc = new WebClient())
+                {
+                    content = wc.DownloadString(numberFactURL);
+                }
+
+                Console.WriteLine("Random fact for number " + userInput + ":");
+                Console.WriteLine(content);
+            }
+        else
+        {
+            Console.WriteLine("Input was not an integer");
+        }
+    }
+
+    #endregion
 
         #region Utility
         internal class WebHookContent
