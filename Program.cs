@@ -82,7 +82,7 @@ namespace UtilityBelt
       Console.WriteLine("11) Random Insult");
       Console.WriteLine("12) Who Stole the Cookie");
       Console.WriteLine("13) Random Taco Recipe");
-      Console.WriteLine("14) COVID-19 Information");
+      Console.WriteLine("14) COVID-19 Statistics");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -562,7 +562,7 @@ namespace UtilityBelt
       {
         Console.WriteLine("");
         Console.WriteLine("Enter the country name to get the information. If you want to see the global information, type \"Global\". For the list of all countries type \"List\": ");
-        string country = Console.ReadLine();
+        string userInput = Console.ReadLine();
         Console.WriteLine("");
 
         string content = string.Empty;
@@ -572,16 +572,16 @@ namespace UtilityBelt
         }
         CovidRoot summary = JsonSerializer.Deserialize<CovidRoot>(content);
 
-        if (country.Equals("List", StringComparison.InvariantCultureIgnoreCase))
+        if (userInput.Equals("List", StringComparison.InvariantCultureIgnoreCase))
         {
-          foreach (CountriesInfoCovid countryJson in summary.Countries)
+          foreach (var countryJson in summary.Countries)
           {
             Console.WriteLine(countryJson.Country);
           }
           return;
         }
 
-        else if (country.Equals("Global", StringComparison.InvariantCultureIgnoreCase))
+        else if (userInput.Equals("Global", StringComparison.InvariantCultureIgnoreCase))
         {
           ShowCovidInfo("Global", summary.Global.NewConfirmed, summary.Global.TotalConfirmed, summary.Global.NewDeaths, summary.Global.TotalDeaths, summary.Global.NewRecovered, summary.Global.TotalRecovered);
           return;
@@ -589,9 +589,9 @@ namespace UtilityBelt
 
         else
         {
-          foreach (CountriesInfoCovid countryJson in summary.Countries)
+          foreach (var countryJson in summary.Countries)
           {
-            if (country.Equals(countryJson.Country, StringComparison.InvariantCultureIgnoreCase))
+            if (userInput.Equals(countryJson.Country, StringComparison.InvariantCultureIgnoreCase))
             {
               ShowCovidInfo(countryJson.Country, countryJson.NewConfirmed, countryJson.TotalConfirmed, countryJson.NewDeaths, countryJson.TotalDeaths, countryJson.NewRecovered, countryJson.TotalRecovered);
               return;
