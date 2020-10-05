@@ -584,6 +584,7 @@ namespace UtilityBelt
         else if (country.Equals("Global", StringComparison.InvariantCultureIgnoreCase))
         {
           ShowCovidInfo("Global", summary.Global.NewConfirmed, summary.Global.TotalConfirmed, summary.Global.NewDeaths, summary.Global.TotalDeaths, summary.Global.NewRecovered, summary.Global.TotalRecovered);
+          return;
         }
 
         else
@@ -597,7 +598,7 @@ namespace UtilityBelt
             }
           }
         }
-        
+
         Console.WriteLine("Country not found");
       }
 
