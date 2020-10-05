@@ -35,6 +35,7 @@ x86/
 *.user
 *.userosscache
 *.sln.docstates
+*.sln
 
 # Visual Studio 2015 cache/options directory
 .vs/
