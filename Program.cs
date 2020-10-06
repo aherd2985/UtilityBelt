@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -90,6 +91,7 @@ namespace UtilityBelt
             Console.WriteLine("19) Random Quote 2");
             Console.WriteLine("20) Console Calculator");
             Console.WriteLine("21) Gender from name");
+            Console.WriteLine("22) Random Dad Joke");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -202,12 +204,12 @@ namespace UtilityBelt
                 case "internation space station":
                     SpaceStationLocation();
                     break;
-                
+
                 case "19":
                 case "quote2":
                     RandomQuoteGarden();
-                    break;    
-                    
+                    break;
+
                 case "20":
                     ConsoleCalculator();
                     break;
@@ -215,6 +217,11 @@ namespace UtilityBelt
                 case "21":
                 case "gender from name":
                     GenderFromName();
+                    break;
+
+                case "22":
+                    case "dadjoke":
+                    DadJoke();
                     break;
 
                 default:
@@ -850,6 +857,48 @@ namespace UtilityBelt
             Console.WriteLine(@$"The gender is {genderResult.Gender} with a probability of {genderResult.Probability}");
 
             Console.WriteLine();
+        }
+        #endregion
+
+        #region Dad Joke
+        static void DadJoke()
+        {
+            WebRequest request = WebRequest.Create("https://icanhazdadjoke.com");
+
+            request.Headers.Add("User-Agent", "GitHub library https://github.com/aherd2985/UtilityBelt");
+            request.Headers.Add("Accept", "application/json");
+
+            // Get the response.
+            WebResponse response = request.GetResponse();
+
+            var status = ((HttpWebResponse)response).StatusCode;
+
+            if (status != HttpStatusCode.OK)
+            {
+                Console.WriteLine(@"There was an error retrieving the joke. Please try again later.");
+            }
+            else
+            {
+                using Stream dataStream = response.GetResponseStream();
+
+                if (dataStream != null)
+                {
+                    StreamReader reader = new StreamReader(dataStream);
+                    // Read the content.
+                    string responseFromServer = reader.ReadToEnd();
+                    // Display the content.
+                    DadJokeModel dadJoke = JsonSerializer.Deserialize<DadJokeModel>(responseFromServer);
+                    Console.WriteLine(@"Random Dad Joke:");
+                    Console.WriteLine(dadJoke.joke);
+                }
+                else
+                {
+                    Console.WriteLine(@"The joke data is null. This is probably bad.");
+                }
+            }
+
+            // Close the response.
+            response.Close();
         }
         #endregion
 
