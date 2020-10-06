@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
+using System.Net.Sockets;
 using System.Text.Json;
 using System.Web;
 using UtilityBelt.Helpers;
@@ -916,18 +917,31 @@ namespace UtilityBelt
             {
                 Console.Write("Please enter a hostname: ");
                 var hostname = Console.ReadLine();
-                if (string.IsNullOrEmpty(hostname))
+                if (string.IsNullOrEmpty(hostname) && Uri.CheckHostName(hostname) != UriHostNameType.Unknown)
                 {
                     continue;
                 }
 
                 Console.WriteLine($"Hostname: {hostname}");
-                var ipAddresses = Dns.GetHostAddresses(hostname);
-                for (var i = 0; i < ipAddresses.Length; i++)
+                try
                 {
-                    Console.WriteLine($"IP[{i + 1}]: {ipAddresses[i]}");
+                    var ipAddresses = Dns.GetHostAddresses(hostname);
+                    for (var i = 0; i < ipAddresses.Length; i++)
+                    {
+                        Console.WriteLine($"IP[{i + 1}]: {ipAddresses[i]}");
+                    }
+
+                    break;
                 }
-                break;
+                catch (SocketException e)
+                {
+                    Console.WriteLine("Invalid hostname - " + e.Message);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("An error occurred: " + e.Message);
+                }
             }
         }
 
