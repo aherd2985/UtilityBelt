@@ -98,6 +98,7 @@ namespace UtilityBelt
       Console.WriteLine("24) Fun Ghost Game");
       Console.WriteLine("25) Dns Hostname to IP Address");
       Console.WriteLine("26) Panda Fact");
+      Console.WriteLine("27) Random User Generator");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -248,6 +249,11 @@ namespace UtilityBelt
         case "panda fact":
         case "panda":
           RandomPandaFact();
+          break;
+        
+        case "27":
+        case "random user generator":
+          RandomUserGenerator();
           break;
 
         default:
@@ -1046,6 +1052,32 @@ namespace UtilityBelt
       Console.WriteLine();
     }
     #endregion
+    #endregion
+
+    #region Random User Generator
+    static void RandomUserGenerator()
+    {  
+        string content = string.Empty;
+        string randomUserUrl = @"https://randomuser.me/api";
+        using (var wc = new WebClient())
+        {
+            content = wc.DownloadString(randomUserUrl);
+        }
+
+        RandomUser randomUser = JsonSerializer.Deserialize<RandomUser>(content);
+        Console.WriteLine();
+        Console.ForegroundColor = ConsoleColor.Cyan;
+
+        foreach(var user in randomUser.results)
+        {
+            Console.WriteLine($"Gender: {user.gender}");
+            Console.WriteLine($"Name: {user.name.first} {user.name.last}");
+            Console.WriteLine($"Email: {user.email}");
+            Console.WriteLine($"Phone: {user.phone}");
+        }
+
+        Console.WriteLine();
+    }
     #endregion
 
     #region Utility
