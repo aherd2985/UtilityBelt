@@ -181,12 +181,12 @@ namespace UtilityBelt
 
                 case "15":
                 case "geek":
-                    GeekJokes();
+                    GeekJokes(defaultWebProxy);
                     break;
 
                 default:
                     Console.WriteLine("Please make a valid option");
-                    MenuOptions(options);
+                    MenuOptions(options, defaultWebProxy);
                     break;
 
             }
