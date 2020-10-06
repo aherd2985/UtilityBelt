@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -92,6 +93,7 @@ namespace UtilityBelt
             Console.WriteLine("20) Console Calculator");
             Console.WriteLine("21) Gender from name");
             Console.WriteLine("22) Random Dad Joke");
+            Console.WriteLine("23) Breaking Bad");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -223,6 +225,12 @@ namespace UtilityBelt
                     case "dadjoke":
                     DadJoke();
                     break;
+
+                case "23":
+                case "breaking bad":
+                    BreakingBadQuotes();
+                    break;
+
 
                 default:
                     Console.WriteLine("Please make a valid option");
@@ -899,6 +907,28 @@ namespace UtilityBelt
 
             // Close the response.
             response.Close();
+        }
+        #endregion
+
+        #region Breaking Bad Quotes
+        static void BreakingBadQuotes()
+        {
+            IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+            defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+
+            string content = string.Empty;
+            string breakingBadQuoteUrl = $"https://breaking-bad-quotes.herokuapp.com/v1/quotes";
+            using (var wc = new WebClient() { Proxy = defaultWebProxy })
+            {
+                content = wc.DownloadString(breakingBadQuoteUrl);
+            }
+
+            List<BreakingBadQuoteModel> quote = JsonSerializer.Deserialize<List<BreakingBadQuoteModel>>(content);
+            Console.WriteLine();
+            Console.WriteLine(@$"Quote -- {quote.FirstOrDefault().Quote}");
+            Console.WriteLine(@$"From -- {quote.FirstOrDefault().Author}");
+
+            Console.WriteLine();
         }
         #endregion
 
