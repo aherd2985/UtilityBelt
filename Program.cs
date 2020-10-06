@@ -243,8 +243,6 @@ namespace UtilityBelt
         #endregion
 
 
-    #endregion
-
     #region Choice Processors
 
     #region Weather
@@ -1039,6 +1037,5 @@ namespace UtilityBelt
 
     #endregion
 
-    #endregion
   }
 }
