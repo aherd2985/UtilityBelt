@@ -1,8 +1,4 @@
-  
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace UtilityBelt.Models
 {
@@ -11,9 +7,9 @@ namespace UtilityBelt.Models
         [JsonPropertyName("slip")]
         public SlipModel Slip { get; set; }
     }
-    
+
     public class SlipModel
-    {        
+    {
         [JsonPropertyName("id")]
         public int Id { get; set; }
         [JsonPropertyName("advice")]
