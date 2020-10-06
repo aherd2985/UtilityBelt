@@ -45,8 +45,6 @@ namespace UtilityBelt
                 else if (portNbr == maxPort - 1)
                     Console.WriteLine($"There are no ports open for {host} between {minPort} and {maxPort}.");
             }
-
-            
         }
 
         /// <summary>
