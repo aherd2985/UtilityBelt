@@ -89,6 +89,7 @@ namespace UtilityBelt
             Console.WriteLine("18) International Space Station Location");
             Console.WriteLine("19) Random Quote 2");
             Console.WriteLine("20) Console Calculator");
+            Console.WriteLine("21) Gender from name");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -204,11 +205,16 @@ namespace UtilityBelt
                 
                 case "19":
                 case "quote2":
-                  RandomQuoteGarden();
-                  break;    
+                    RandomQuoteGarden();
+                    break;    
                     
                 case "20":
                     ConsoleCalculator();
+                    break;
+
+                case "21":
+                case "gender from name":
+                    GenderFromName();
                     break;
 
                 default:
@@ -813,6 +819,37 @@ namespace UtilityBelt
             // Wait for the user to respond before closing.
             Console.Write("Press any key to close the Calculator console app...");
             Console.ReadKey();
+        }
+        #endregion
+
+        #region Gender from name
+        static void GenderFromName()
+        {
+            Console.Write("Type the name, and then press Enter: ");
+            string enteredName = Console.ReadLine().ToLower();
+
+            if (string.IsNullOrEmpty(enteredName))
+            {
+                Console.WriteLine("No name provided!");
+                Console.WriteLine();
+                return;
+            }
+
+            IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+            defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+
+            string content = string.Empty;
+            string genderizatorUrl = $"https://api.genderize.io?name={enteredName}";
+            using (var wc = new WebClient() { Proxy = defaultWebProxy })
+            {
+                content = wc.DownloadString(genderizatorUrl);
+            }
+
+            GenderizatorModel genderResult = JsonSerializer.Deserialize<GenderizatorModel>(content);
+            Console.WriteLine();
+            Console.WriteLine(@$"The gender is {genderResult.Gender} with a probability of {genderResult.Probability}");
+
+            Console.WriteLine();
         }
         #endregion
 
