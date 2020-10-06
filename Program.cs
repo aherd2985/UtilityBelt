@@ -92,6 +92,7 @@ namespace UtilityBelt
             Console.WriteLine("20) Console Calculator");
             Console.WriteLine("21) Gender from name");
             Console.WriteLine("22) Random Dad Joke");
+            Console.WriteLine("24) Fun Ghost Game");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -223,7 +224,11 @@ namespace UtilityBelt
                     case "dadjoke":
                     DadJoke();
                     break;
-
+                
+                case "24":
+                    GhostGame();
+                    break;
+                
                 default:
                     Console.WriteLine("Please make a valid option");
                     MenuOptions(options);
@@ -231,6 +236,7 @@ namespace UtilityBelt
 
             }
         }
+
         #endregion
 
         #region Choice Processors
@@ -899,6 +905,40 @@ namespace UtilityBelt
 
             // Close the response.
             response.Close();
+        }
+        #endregion
+
+        #region Ghost Game
+        private static void GhostGame()
+        {
+            Random rNumber = new Random();
+            int score = 0;
+            int randomNum = rNumber.Next(0, 4);
+            int numberInput;
+            
+            while (true)
+            {
+                Console.WriteLine("\nThere are three doors ahead! \n");
+                Console.WriteLine("A ghost is behind one of them :O! \n");
+                Console.WriteLine("Which door do you open?!?! \n");
+                Console.WriteLine("1, 2 or 3?\n");
+                numberInput = int.Parse(Console.ReadLine());
+
+                if (numberInput == randomNum)
+                {
+                    Console.WriteLine("\nBoo!! GHOST!");
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("\nNo ghost, Phew!");
+                    Console.WriteLine("\nPress any key to enter the next room!");
+                    Console.ReadKey();
+                    score += 1;
+                }
+            }
+            Console.WriteLine("Run!!!!!");
+            Console.WriteLine("\nGame Over! Score: " + score);
         }
         #endregion
 
