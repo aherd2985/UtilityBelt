@@ -922,10 +922,10 @@ namespace UtilityBelt
                 }
 
                 Console.WriteLine($"Hostname: {hostname}");
-                IPAddress[] ipAddresses = Dns.GetHostAddresses(hostname);
-                foreach (var ipAddress in ipAddresses)
+                var ipAddresses = Dns.GetHostAddresses(hostname);
+                for (var i = 0; i < ipAddresses.Length; i++)
                 {
-                    Console.WriteLine($"IP: {ipAddress}");
+                    Console.WriteLine($"IP[{i + 1}]: {ipAddresses[i]}");
                 }
                 break;
             }
