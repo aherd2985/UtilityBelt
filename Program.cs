@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
+using System.Net.Sockets;
 using System.Text.Json;
 using System.Web;
 using UtilityBelt.Helpers;
@@ -67,181 +68,180 @@ namespace UtilityBelt
       }
     }
 
-    static void MenuOptions(IOptions<SecretsModel> options)
-    {
-      Console.WriteLine("");
-      Console.WriteLine("Select the Tool");
-      Console.WriteLine("1) Port Scanner");
-      Console.WriteLine("2) Text Message");
-      Console.WriteLine("3) Random Chuck Norris Joke");
-      Console.WriteLine("4) Random Cat Fact");
-      Console.WriteLine("5) Bitcoin Prices");
-      Console.WriteLine("6) Who is in Space");
-      Console.WriteLine("7) Weather forecast");
-      Console.WriteLine("8) Country Information");
-      Console.WriteLine("9) Discord sender");
-      Console.WriteLine("10) Random Quote");
-      Console.WriteLine("11) Random Insult");
-      Console.WriteLine("12) Who Stole the Cookie");
-      Console.WriteLine("13) Random Taco Recipe");
-      Console.WriteLine("14) COVID-19 Statistics");
-      Console.WriteLine("15) Geek jokes");
-      Console.WriteLine("16) Number Fact");
-      Console.WriteLine("17) Random Advice");
-      Console.WriteLine("18) International Space Station Location");
-      Console.WriteLine("19) Random Quote 2");
-      Console.WriteLine("20) Console Calculator");
-      Console.WriteLine("21) Gender from name");
-      Console.WriteLine("22) Random Dad Joke");
-      Console.WriteLine("23) Breaking Bad");
-      Console.WriteLine("24) Fun Ghost Game");
-      Console.WriteLine("");
+        static void MenuOptions(IOptions<SecretsModel> options)
+        {
+            Console.WriteLine("");
+            Console.WriteLine("Select the Tool");
+            Console.WriteLine("1) Port Scanner");
+            Console.WriteLine("2) Text Message");
+            Console.WriteLine("3) Random Chuck Norris Joke");
+            Console.WriteLine("4) Random Cat Fact");
+            Console.WriteLine("5) Bitcoin Prices");
+            Console.WriteLine("6) Who is in Space");
+            Console.WriteLine("7) Weather forecast");
+            Console.WriteLine("8) Country Information");
+            Console.WriteLine("9) Discord sender");
+            Console.WriteLine("10) Random Quote");
+            Console.WriteLine("11) Random Insult");
+            Console.WriteLine("12) Who Stole the Cookie");
+            Console.WriteLine("13) Random Taco Recipe");
+            Console.WriteLine("14) COVID-19 Statistics");
+            Console.WriteLine("15) Geek jokes");
+            Console.WriteLine("16) Number Fact");
+            Console.WriteLine("17) Random Advice");
+            Console.WriteLine("18) International Space Station Location");
+            Console.WriteLine("19) Random Quote 2");
+            Console.WriteLine("20) Console Calculator");
+            Console.WriteLine("21) Gender from name");
+            Console.WriteLine("22) Random Dad Joke");
+            Console.WriteLine("25) Dns Hostname to IP Address");
+            Console.WriteLine("");
 
-      Console.Write("Your choice:");
-      string optionPicked = Console.ReadLine().ToLower();
-      switch (optionPicked)
-      {
+            Console.Write("Your choice:");
+            string optionPicked = Console.ReadLine().ToLower();
+            switch (optionPicked)
+            {
 
-        case "1":
-        case "port":
-        case "port scanner":
-          portScanner();
-          break;
+                case "1":
+                case "port":
+                case "port scanner":
+                    portScanner();
+                    break;
 
-        case "2":
-        case "ssms":
-        case "text":
-        case "text message":
-          TextMessage(options);
-          break;
-        case "3":
-        case "random chuck norris joke":
-        case "chuck norris joke":
-        case "chuck norris":
-        case "joke":
-          RandomChuckNorrisJoke();
-          break;
-        case "4":
-        case "cat fact":
-        case "cat":
-          CatFact();
-          break;
+                case "2":
+                case "ssms":
+                case "text":
+                case "text message":
+                    TextMessage(options);
+                    break;
+                case "3":
+                case "random chuck norris joke":
+                case "chuck norris joke":
+                case "chuck norris":
+                case "joke":
+                    RandomChuckNorrisJoke();
+                    break;
+                case "4":
+                case "cat fact":
+                case "cat":
+                    CatFact();
+                    break;
 
-        case "5":
-        case "bitcoin prices":
-        case "bitcoin":
-          BitcoinPrices();
-          break;
+                case "5":
+                case "bitcoin prices":
+                case "bitcoin":
+                    BitcoinPrices();
+                    break;
 
-        case "6":
-        case "who is in space":
-        case "space":
-          Space();
-          break;
+                case "6":
+                case "who is in space":
+                case "space":
+                    Space();
+                    break;
 
-        case "7":
-        case "weather":
-        case "wf":
-        case "weather forecast":
-          WeatherForecast(options);
-          break;
+                case "7":
+                case "weather":
+                case "wf":
+                case "weather forecast":
+                    WeatherForecast(options);
+                    break;
 
-        case "8":
-        case "Country":
-          CountryInformation();
-          break;
+                case "8":
+                case "Country":
+                    CountryInformation();
+                    break;
 
-        case "9":
-        case "discord":
-        case "ds":
-        case "webhook":
-        case "wh":
-          DiscordWebhook(options);
-          break;
+                case "9":
+                case "discord":
+                case "ds":
+                case "webhook":
+                case "wh":
+                    DiscordWebhook(options);
+                    break;
 
-        case "10":
-        case "quote":
-          RandomQuote();
-          break;
+                case "10":
+                case "quote":
+                    RandomQuote();
+                    break;
 
-        case "11":
-        case "insult":
-          RandomInsult();
-          break;
+                case "11":
+                case "insult":
+                    RandomInsult();
+                    break;
 
-        case "12":
-        case "cookie":
-          CookieAccusation();
-          break;
+                case "12":
+                case "cookie":
+                    CookieAccusation();
+                    break;
 
-        case "13":
-        case "taco":
-          RandomTaco();
-          break;
+                case "13":
+                case "taco":
+                    RandomTaco();
+                    break;
 
-        case "14":
-        case "covid":
-        case "covid19":
-        case "covid-19":
-          Covid19();
-          break;
+                case "14":
+                case "covid":
+                case "covid19":
+                case "covid-19":
+                    Covid19();
+                    break;
 
-        case "15":
-        case "geek":
-          GeekJokes();
-          break;
+                case "15":
+                case "geek":
+                    GeekJokes();
+                    break;
 
-        case "16":
-        case "numberfact":
-          NumberFact();
-          break;
+                case "16":
+                case "numberfact":
+                    NumberFact();
+                    break;
 
-        case "17":
-        case "advice":
-        case "random advice":
-          RandomAdvice();
-          break;
+                case "17":
+                case "advice":
+                case "random advice":
+                    RandomAdvice();
+                    break;
 
-        case "18":
-        case "space station location":
-        case "internation space station":
-          SpaceStationLocation();
-          break;
+                case "18":
+                case "space station location":
+                case "internation space station":
+                    SpaceStationLocation();
+                    break;
 
-        case "19":
-        case "quote2":
-          RandomQuoteGarden();
-          break;
+                case "19":
+                case "quote2":
+                    RandomQuoteGarden();
+                    break;
 
-        case "20":
-          ConsoleCalculator();
-          break;
+                case "20":
+                    ConsoleCalculator();
+                    break;
 
-        case "21":
-        case "gender from name":
-          GenderFromName();
-          break;
+                case "21":
+                case "gender from name":
+                    GenderFromName();
+                    break;
 
-        case "22":
-        case "dadjoke":
-          DadJoke();
-          break;
+                case "22":
+                case "dadjoke":
+                    DadJoke();
+                    break;
 
-        case "23":
-        case "breaking bad":
-          BreakingBadQuotes();
-          break;
+                case "25":
+                case "hosttoip":
+                    HostToIp();
+                    break;
 
-        case "24":
-          GhostGame();
-          break;
-        default:
-          Console.WriteLine("Please make a valid option");
-          MenuOptions(options);
-          break;
+                default:
+                    Console.WriteLine("Please make a valid option");
+                    MenuOptions(options);
+                    break;
 
-      }
-    }
+            }
+        }
+
+        #endregion
+
 
     #endregion
 
@@ -913,6 +913,48 @@ namespace UtilityBelt
       response.Close();
     }
     #endregion
+        
+        
+        #endregion
+
+        #region HostToIp
+
+        private static void HostToIp()
+        {
+            while (true)
+            {
+                Console.Write("Please enter a hostname: ");
+                var hostname = Console.ReadLine();
+                if (string.IsNullOrEmpty(hostname) && Uri.CheckHostName(hostname) != UriHostNameType.Unknown)
+                {
+                    continue;
+                }
+
+                Console.WriteLine($"Hostname: {hostname}");
+                try
+                {
+                    var ipAddresses = Dns.GetHostAddresses(hostname);
+                    for (var i = 0; i < ipAddresses.Length; i++)
+                    {
+                        Console.WriteLine($"IP[{i + 1}]: {ipAddresses[i]}");
+                    }
+
+                    break;
+                }
+                catch (SocketException e)
+                {
+                    Console.WriteLine("Invalid hostname - " + e.Message);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("An error occurred: " + e.Message);
+                }
+            }
+        }
+
+        #endregion
+
 
     #region Ghost Game
     private static void GhostGame()
