@@ -42,7 +42,7 @@ namespace UtilityBelt
                     openPorts.Add(portNbr);
                     Console.WriteLine($"Port {portNbr} is open!");
                 }
-                else if (portNbr == maxPort - 1)
+                else if (portNbr == maxPort && openPorts.Count() == 0)
                     Console.WriteLine($"There are no ports open for {host} between {minPort} and {maxPort}.");
             }
         }
