@@ -21,12 +21,15 @@ namespace UtilityBelt
             Console.WriteLine(Properties.Resources.ASCIIart);
             Console.WriteLine("Loading...");
 
+            IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+            defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+
             IServiceProvider services = ServiceProviderBuilder.GetServiceProvider(args);
             IOptions<SecretsModel> options = services.GetRequiredService<IOptions<SecretsModel>>();
             bool showMenu = true;
             do
             {
-                MenuOptions(options);
+                MenuOptions(options, defaultWebProxy);
                 showMenu = RecursiveOptions();
             } while (showMenu);
 
@@ -65,7 +68,7 @@ namespace UtilityBelt
             }
         }
 
-        static void MenuOptions(IOptions<SecretsModel> options)
+        static void MenuOptions(IOptions<SecretsModel> options, IWebProxy defaultWebProxy)
         {
             Console.WriteLine("");
             Console.WriteLine("Select the Tool");
@@ -180,7 +183,7 @@ namespace UtilityBelt
 
                 case "15":
                 case "geek":
-                    GeekJokes();
+                    GeekJokes(defaultWebProxy);
                     break;
 
                 case "16":
@@ -202,7 +205,7 @@ namespace UtilityBelt
 
                 default:
                     Console.WriteLine("Please make a valid option");
-                    MenuOptions(options);
+                    MenuOptions(options, defaultWebProxy);
                     break;
 
             }
@@ -648,11 +651,8 @@ namespace UtilityBelt
         #endregion
 
         #region GeekJokes
-        static void GeekJokes()
+        static void GeekJokes(IWebProxy defaultWebProxy)
         {
-            IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
-            defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
-
             string content = string.Empty;
             string geekJokeUrl = "https://geek-jokes.sameerkumar.website/api?format=json";
             using (var wc = new WebClient() { Proxy = defaultWebProxy })
