@@ -87,7 +87,8 @@ namespace UtilityBelt
             Console.WriteLine("16) Number Fact");
             Console.WriteLine("17) Random Advice");
             Console.WriteLine("18) International Space Station Location");
-            Console.WriteLine("19) Console Calculator");
+            Console.WriteLine("19) Random Quote 2");
+            Console.WriteLine("20) Console Calculator");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
@@ -200,7 +201,13 @@ namespace UtilityBelt
                 case "internation space station":
                     SpaceStationLocation();
                     break;
+                
                 case "19":
+                case "quote2":
+                  RandomQuoteGarden();
+                  break;    
+                    
+                case "20":
                     ConsoleCalculator();
                     break;
 
@@ -735,6 +742,30 @@ namespace UtilityBelt
             Console.Write("That's so cool!");
             Console.WriteLine();
         }
+        #endregion
+
+        #region Random quote
+
+        static void RandomQuoteGarden()
+        {
+          IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+          defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+
+          string content = string.Empty;
+          string randomQuoteUrl = "https://quote-garden.herokuapp.com/api/v2/quotes/random";
+          using (var wc = new WebClient() { Proxy = defaultWebProxy })
+          {
+            content = wc.DownloadString(randomQuoteUrl);
+          }
+
+          RandomQuoteModel quote = JsonSerializer.Deserialize<RandomQuoteModel>(content);
+          Console.WriteLine();
+          Console.WriteLine(@$"Quote -- {quote.Quote.Text}");
+          Console.WriteLine(@$"From -- {quote.Quote.Author}");
+
+          Console.WriteLine();
+        }
+
         #endregion
 
         #region Console Calculator
