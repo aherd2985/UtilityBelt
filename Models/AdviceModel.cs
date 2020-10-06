@@ -4,7 +4,7 @@ namespace UtilityBelt.Models
 {
     public class AdviceModel
     {
-        [JsonPropertyName("slip")]
+        [JsonPropertyName("slippy")]
         public SlipModel Slip { get; set; }
     }
 
