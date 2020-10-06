@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace UtilityBelt
@@ -42,6 +40,8 @@ namespace UtilityBelt
                     openPorts.Add(portNbr);
                     Console.WriteLine($"Port {portNbr} is open!");
                 }
+                else if (portNbr == maxPort && openPorts.Count == 0)
+                    Console.WriteLine($"There are no ports open for {host} between {minPort} and {maxPort}.");
             }
         }
 
@@ -54,7 +54,7 @@ namespace UtilityBelt
         private static bool IsPortOpenAsync(string host, int port)
         {
             Socket socket = null;
-            
+
             try
             {
                 // make a TCP based socket
@@ -64,7 +64,7 @@ namespace UtilityBelt
                 // connect
                 bool connected = false;
                 Task result = socket.ConnectAsync(host, port);
-                int index = Task.WaitAny(new[] { result }, 100 );
+                int index = Task.WaitAny(new[] { result }, 100);
                 connected = socket.Connected;
                 socket.Close();
                 if (!connected)
