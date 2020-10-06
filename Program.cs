@@ -220,8 +220,13 @@ namespace UtilityBelt
                     break;
 
                 case "22":
-                    case "dadjoke":
+                case "dadjoke":
                     DadJoke();
+                    break;
+
+                case "25":
+                case "hosttoip":
+                    HostToIp();
                     break;
 
                 default:
@@ -231,6 +236,7 @@ namespace UtilityBelt
 
             }
         }
+
         #endregion
 
         #region Choice Processors
@@ -900,6 +906,31 @@ namespace UtilityBelt
             // Close the response.
             response.Close();
         }
+        #endregion
+
+        #region HostToIp
+
+        private static void HostToIp()
+        {
+            while (true)
+            {
+                Console.Write("Please enter a hostname: ");
+                var hostname = Console.ReadLine();
+                if (string.IsNullOrEmpty(hostname))
+                {
+                    continue;
+                }
+
+                Console.WriteLine($"Hostname: {hostname}");
+                IPAddress[] ipAddresses = Dns.GetHostAddresses(hostname);
+                foreach (var ipAddress in ipAddresses)
+                {
+                    Console.WriteLine($"IP: {ipAddress}");
+                }
+                break;
+            }
+        }
+
         #endregion
 
         #region Utility
