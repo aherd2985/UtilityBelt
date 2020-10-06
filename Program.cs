@@ -93,6 +93,7 @@ namespace UtilityBelt
             Console.WriteLine("20) Console Calculator");
             Console.WriteLine("21) Gender from name");
             Console.WriteLine("22) Random Dad Joke");
+            Console.WriteLine("25) Dns Hostname to IP Address");
             Console.WriteLine("");
 
             Console.Write("Your choice:");
