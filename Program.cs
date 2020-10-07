@@ -340,10 +340,12 @@ namespace UtilityBelt
         EnableSsl = true
       };
 
-      MailMessage message = new MailMessage();
-      message.From = new MailAddress(options.Value.Email);
+            MailMessage message = new MailMessage
+            {
+                From = new MailAddress(options.Value.Email)
+            };
 
-      var carrierType = MenuEnum<CarrierType>("Carrier");
+            var carrierType = MenuEnum<CarrierType>("Carrier");
       var meta = EnumHelper.GetAttributeOfType<CarrierMetaAttribute>(carrierType);
 
       message.To.Add(new MailAddress(send2Number + $"@{meta?.Domain}"));
