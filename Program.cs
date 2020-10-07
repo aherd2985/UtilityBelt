@@ -15,14 +15,54 @@ using UtilityBelt.Helpers;
 using UtilityBelt.Models;
 using Microsoft.Extensions.Logging;
 using UtilityBelt.Logging;
+using System.Composition;
+using System.Composition.Hosting;
+using System.Reflection;
 
 namespace UtilityBelt
 {
-  class Program
+  internal class Program
   {
     private static ILogger logger;
 
-    static void Main(string[] args)
+    [ImportMany]
+    private static IEnumerable<IUtility> utilities { get; set; }
+
+    private static Dictionary<string, IUtility> menu;
+    private static Dictionary<string, IUtility> commands;
+
+    private static void Compose()
+    {
+      var configuration = new ContainerConfiguration()
+          .WithAssembly(typeof(Program).GetTypeInfo().Assembly);
+      using (var container = configuration.CreateContainer())
+      {
+        utilities = container.GetExports<IUtility>();
+      }
+    }
+
+    private static void GenerateMenu()
+    {
+      menu = new Dictionary<string, IUtility>();
+      foreach (var item in utilities)
+      {
+        menu.Add(item.Name, item);
+      }
+    }
+
+    private static void GenerateCommands()
+    {
+      commands = new Dictionary<string, IUtility>();
+      foreach (var item in utilities)
+      {
+        foreach (var c in item.Commands)
+        {
+          commands.Add(c, item);
+        }
+      }
+    }
+
+    private static void Main(string[] args)
     {
       // Logger
       logger = Logger.InitLogger<Program>();
@@ -34,6 +74,13 @@ namespace UtilityBelt
 
       IServiceProvider services = ServiceProviderBuilder.GetServiceProvider(args);
       IOptions<SecretsModel> options = services.GetRequiredService<IOptions<SecretsModel>>();
+
+      // load all utilities from the current assembly into Utilities list
+      // and generate future menu and command list
+      Compose();
+      GenerateMenu();
+      GenerateCommands();
+
       bool showMenu = true;
       do
       {
@@ -41,11 +88,11 @@ namespace UtilityBelt
         MenuOptions(options);
         showMenu = RecursiveOptions();
       } while (showMenu);
-
     }
 
     #region Choice Handler
-    static bool RecursiveOptions()
+
+    private static bool RecursiveOptions()
     {
       Console.WriteLine("");
       Console.ForegroundColor = ConsoleColor.Green;
@@ -80,7 +127,7 @@ namespace UtilityBelt
       }
     }
 
-    static void MenuOptions(IOptions<SecretsModel> options)
+    private static void MenuOptions(IOptions<SecretsModel> options)
     {
       logger.LogInformation("Loading Menu Options");
       Console.WriteLine("");
@@ -121,7 +168,6 @@ namespace UtilityBelt
       logger.LogInformation($"User Choice : {optionPicked}");
       switch (optionPicked)
       {
-
         case "1":
         case "port":
         case "port scanner":
@@ -134,6 +180,7 @@ namespace UtilityBelt
         case "text message":
           TextMessage(options);
           break;
+
         case "3":
         case "random chuck norris joke":
         case "chuck norris joke":
@@ -141,6 +188,7 @@ namespace UtilityBelt
         case "joke":
           RandomChuckNorrisJoke();
           break;
+
         case "4":
         case "cat fact":
         case "cat":
@@ -269,7 +317,7 @@ namespace UtilityBelt
 
         case "27":
         case "fox fact":
-        case "fox": 
+        case "fox":
           RandomFoxFact();
           break;
 
@@ -287,17 +335,16 @@ namespace UtilityBelt
           Console.WriteLine("Please make a valid option");
           MenuOptions(options);
           break;
-
       }
     }
 
-    #endregion
-
+    #endregion Choice Handler
 
     #region Choice Processors
 
     #region Weather
-    static void WeatherForecast(IOptions<SecretsModel> options)
+
+    private static void WeatherForecast(IOptions<SecretsModel> options)
     {
       logger.LogInformation($"User Choice : {nameof(WeatherForecast)}");
       var openWeatherMapApiKey = options.Value.OpenWeatherMapApiKey;
@@ -337,10 +384,11 @@ namespace UtilityBelt
       }
     }
 
-    #endregion
+    #endregion Weather
 
     #region Port Scanner
-    static void portScanner()
+
+    private static void portScanner()
     {
       logger.LogInformation($"User Choice : {nameof(portScanner)}");
       Console.Write("Please enter a domain:");
@@ -351,12 +399,13 @@ namespace UtilityBelt
       int highPort = int.Parse(Console.ReadLine());
 
       PortScanner.Scanner(domain, lowPort, highPort);
-
     }
-    #endregion
+
+    #endregion Port Scanner
 
     #region Text Message
-    static void TextMessage(IOptions<SecretsModel> options)
+
+    private static void TextMessage(IOptions<SecretsModel> options)
     {
       logger.LogInformation($"User Choice : {nameof(TextMessage)}");
       Console.WriteLine();
@@ -396,7 +445,7 @@ namespace UtilityBelt
       client.Dispose();
     }
 
-    static T MenuEnum<T>(string subject)
+    private static T MenuEnum<T>(string subject)
             where T : struct, Enum
     {
       Console.WriteLine("");
@@ -428,10 +477,12 @@ namespace UtilityBelt
 
       return result;
     }
-    #endregion
+
+    #endregion Text Message
 
     #region Chuck Norris Jokes
-    static void RandomChuckNorrisJoke()
+
+    private static void RandomChuckNorrisJoke()
     {
       logger.LogInformation($"User Choice : {nameof(RandomChuckNorrisJoke)}");
       string content = string.Empty;
@@ -447,10 +498,11 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-    #endregion
+    #endregion Chuck Norris Jokes
 
     #region Bitcoin Prices
-    static void BitcoinPrices()
+
+    private static void BitcoinPrices()
     {
       logger.LogInformation($"User Choice : {nameof(BitcoinPrices)}");
       string content = string.Empty;
@@ -466,10 +518,12 @@ namespace UtilityBelt
       Console.WriteLine("USD - $ " + bitFact.Bpi.USD.Rate);
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion Bitcoin Prices
 
     #region Cat facts
-    static void CatFact()
+
+    private static void CatFact()
     {
       logger.LogInformation($"User Choice : {nameof(CatFact)}");
       string content = string.Empty;
@@ -487,10 +541,12 @@ namespace UtilityBelt
       Console.WriteLine(catFact.Text);
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion Cat facts
 
     #region People in space
-    static void Space()
+
+    private static void Space()
     {
       logger.LogInformation($"User Choice : {nameof(Space)}");
       string content = string.Empty;
@@ -509,10 +565,12 @@ namespace UtilityBelt
       }
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion People in space
 
     #region Country information
-    static void CountryInformation()
+
+    private static void CountryInformation()
     {
       logger.LogInformation($"User Choice : {nameof(CountryInformation)}");
       string content = string.Empty;
@@ -560,11 +618,12 @@ namespace UtilityBelt
         Console.WriteLine("Country not found");
       }
     }
-    #endregion
+
+    #endregion Country information
 
     #region Discord Sender
 
-    static void DiscordWebhook(IOptions<SecretsModel> options)
+    private static void DiscordWebhook(IOptions<SecretsModel> options)
     {
       logger.LogInformation($"User Choice : {nameof(DiscordWebhook)}");
       string whook = options.Value.DiscordWebhook;
@@ -592,10 +651,12 @@ namespace UtilityBelt
       }
       Console.WriteLine("Message sent!");
     }
-    #endregion
+
+    #endregion Discord Sender
 
     #region Random quote
-    static void RandomQuote()
+
+    private static void RandomQuote()
     {
       logger.LogInformation($"User Choice : {nameof(RandomQuote)}");
       string content = string.Empty;
@@ -609,13 +670,13 @@ namespace UtilityBelt
       Console.WriteLine(quote.QuoteText);
       Console.WriteLine($"--{quote.QuoteAuthor}");
       Console.WriteLine();
-
     }
 
-    #endregion
+    #endregion Random quote
 
     #region Random insult
-    static void RandomInsult()
+
+    private static void RandomInsult()
     {
       logger.LogInformation($"User Choice : {nameof(RandomInsult)}");
       string content = string.Empty;
@@ -630,10 +691,11 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-    #endregion
+    #endregion Random insult
 
     #region Who stole the cookie
-    static void CookieAccusation()
+
+    private static void CookieAccusation()
     {
       logger.LogInformation($"User Choice : {nameof(CookieAccusation)}");
       string content = string.Empty;
@@ -658,11 +720,12 @@ namespace UtilityBelt
       Console.WriteLine("Jacques Clouseau: Then who?");
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion Who stole the cookie
 
     #region Random taco recipe
 
-    static void RandomTaco()
+    private static void RandomTaco()
     {
       logger.LogInformation($"User Choice : {nameof(RandomTaco)}");
       string content = string.Empty;
@@ -681,11 +744,11 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-    #endregion
+    #endregion Random taco recipe
 
     #region Covid-19
 
-    static void Covid19()
+    private static void Covid19()
     {
       logger.LogInformation($"User Choice : {nameof(Covid19)}");
       while (true)
@@ -715,12 +778,10 @@ namespace UtilityBelt
               Console.WriteLine(countryJson.Country);
           }
         }
-
         else if (userInput.Equals("Global", StringComparison.InvariantCultureIgnoreCase))
         {
           ShowCovidInfo("Global", summary.Global.NewConfirmed, summary.Global.TotalConfirmed, summary.Global.NewDeaths, summary.Global.TotalDeaths, summary.Global.NewRecovered, summary.Global.TotalRecovered);
         }
-
         else
         {
           bool countryExists = false;
@@ -737,13 +798,10 @@ namespace UtilityBelt
           if (countryExists == false)
             Console.WriteLine("Country does not exist. Type \"List\" to see the list of available countries.");
         }
-
-
-
       }
     }
 
-    static void ShowCovidInfo(string countryName, long newConfirmed, long totalConfirmed, long newDeaths, long totalDeaths, long newRecovered, long totalRecovered)
+    private static void ShowCovidInfo(string countryName, long newConfirmed, long totalConfirmed, long newDeaths, long totalDeaths, long newRecovered, long totalRecovered)
     {
       Console.WriteLine("Statistics: " + countryName);
       Console.ForegroundColor = ConsoleColor.Cyan;
@@ -757,10 +815,11 @@ namespace UtilityBelt
       Console.WriteLine("Total Recovered: " + totalRecovered);
     }
 
-    #endregion
+    #endregion Covid-19
 
     #region GeekJokes
-    static void GeekJokes()
+
+    private static void GeekJokes()
     {
       logger.LogInformation($"User Choice : {nameof(GeekJokes)}");
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
@@ -779,10 +838,12 @@ namespace UtilityBelt
 
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion GeekJokes
 
     #region NumberFact
-    static void NumberFact()
+
+    private static void NumberFact()
     {
       logger.LogInformation($"User Choice : {nameof(NumberFact)}");
       string content = string.Empty;
@@ -808,10 +869,11 @@ namespace UtilityBelt
       }
     }
 
-    #endregion
+    #endregion NumberFact
 
     #region Random Advice
-    static void RandomAdvice()
+
+    private static void RandomAdvice()
     {
       logger.LogInformation($"User Choice : {nameof(RandomAdvice)}");
       string content = string.Empty;
@@ -827,10 +889,12 @@ namespace UtilityBelt
       Console.WriteLine(randomAdvice.Slip.Advice);
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion Random Advice
 
     #region Space Station Location
-    static void SpaceStationLocation()
+
+    private static void SpaceStationLocation()
     {
       logger.LogInformation($"User Choice : {nameof(SpaceStationLocation)}");
       string content = string.Empty;
@@ -847,11 +911,12 @@ namespace UtilityBelt
       Console.Write("That's so cool!");
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion Space Station Location
 
     #region Random quote
 
-    static void RandomQuoteGarden()
+    private static void RandomQuoteGarden()
     {
       logger.LogInformation($"User Choice : {nameof(RandomQuoteGarden)}");
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
@@ -872,10 +937,11 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-    #endregion
+    #endregion Random quote
 
     #region Console Calculator
-    static void ConsoleCalculator()
+
+    private static void ConsoleCalculator()
     {
       logger.LogInformation($"User Choice : {nameof(ConsoleCalculator)}");
       // Declare variables and then initialize to zero.
@@ -907,12 +973,15 @@ namespace UtilityBelt
         case "a":
           Console.WriteLine($"Your result: {num1} + {num2} = " + (num1 + num2));
           break;
+
         case "s":
           Console.WriteLine($"Your result: {num1} - {num2} = " + (num1 - num2));
           break;
+
         case "m":
           Console.WriteLine($"Your result: {num1} * {num2} = " + (num1 * num2));
           break;
+
         case "d":
           Console.WriteLine($"Your result: {num1} / {num2} = " + (num1 / num2));
           break;
@@ -921,10 +990,12 @@ namespace UtilityBelt
       Console.Write("Press any key to close the Calculator console app...");
       Console.ReadKey();
     }
-    #endregion
+
+    #endregion Console Calculator
 
     #region Gender from name
-    static void GenderFromName()
+
+    private static void GenderFromName()
     {
       logger.LogInformation($"User Choice : {nameof(GenderFromName)}");
       Console.Write("Type the name, and then press Enter: ");
@@ -953,10 +1024,12 @@ namespace UtilityBelt
 
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion Gender from name
 
     #region Dad Joke
-    static void DadJoke()
+
+    private static void DadJoke()
     {
       logger.LogInformation($"User Choice : {nameof(DadJoke)}");
       WebRequest request = WebRequest.Create("https://icanhazdadjoke.com");
@@ -996,13 +1069,12 @@ namespace UtilityBelt
       // Close the response.
       response.Close();
     }
-    #endregion
 
-
+    #endregion Dad Joke
 
     #region Random pada fact
 
-    static void RandomPandaFact()
+    private static void RandomPandaFact()
     {
       logger.LogInformation($"User Choice : {nameof(RandomPandaFact)}");
       string content;
@@ -1019,11 +1091,11 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-    #endregion
+    #endregion Random pada fact
 
     #region Random fox fact
 
-    static void RandomFoxFact()
+    private static void RandomFoxFact()
     {
       logger.LogInformation($"User Choice : {nameof(RandomFoxFact)}");
       string content;
@@ -1040,7 +1112,7 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-    #endregion
+    #endregion Random fox fact
 
     #region HostToIp
 
@@ -1079,10 +1151,10 @@ namespace UtilityBelt
       }
     }
 
-    #endregion
-
+    #endregion HostToIp
 
     #region Ghost Game
+
     private static void GhostGame()
     {
       logger.LogInformation($"User Choice : {nameof(GhostGame)}");
@@ -1141,10 +1213,12 @@ namespace UtilityBelt
       Console.WriteLine("Run!!!!!");
       Console.WriteLine("\nGame Over! Score: " + score);
     }
-    #endregion
+
+    #endregion Ghost Game
 
     #region Breaking Bad Quotes
-    static void BreakingBadQuotes()
+
+    private static void BreakingBadQuotes()
     {
       logger.LogInformation($"User Choice : {nameof(BreakingBadQuotes)}");
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
@@ -1164,10 +1238,12 @@ namespace UtilityBelt
 
       Console.WriteLine();
     }
-    #endregion
+
+    #endregion Breaking Bad Quotes
 
     #region Digital Ocean
-    static void DigitalOceanStatus()
+
+    private static void DigitalOceanStatus()
     {
       logger.LogInformation($"User Choice : {nameof(DigitalOceanStatus)}");
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
@@ -1187,11 +1263,12 @@ namespace UtilityBelt
 
       Console.WriteLine();
     }
-    #endregion
 
+    #endregion Digital Ocean
 
     #region Random User Generator
-    static void RandomUserGenerator()
+
+    private static void RandomUserGenerator()
     {
       logger.LogInformation($"User Choice : {nameof(RandomUserGenerator)}");
       string content = string.Empty;
@@ -1219,17 +1296,19 @@ namespace UtilityBelt
 
       Console.WriteLine();
     }
-    #endregion
 
-    #endregion
+    #endregion Random User Generator
+
+    #endregion Choice Processors
 
     #region Utility
+
     internal class WebHookContent
     {
       public string content { get; set; }
     }
 
-    enum BooleanAliases
+    private enum BooleanAliases
     {
       YES = 1,
       AYE = 1,
@@ -1243,12 +1322,11 @@ namespace UtilityBelt
       N = 0
     }
 
-    static bool FromString(string str)
+    private static bool FromString(string str)
     {
       return Convert.ToBoolean(Enum.Parse(typeof(BooleanAliases), str.ToUpper()));
     }
 
-    #endregion
-
+    #endregion Utility
   }
 }

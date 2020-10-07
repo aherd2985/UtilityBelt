@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityBelt", "UtilityBelt.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{7F989A21-E331-4A3F-B708-0B52F378264B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityBeltxUnitTests", "Tests\UtilityBeltxUnitTests\UtilityBeltxUnitTests.csproj", "{F2E50A6F-DAE2-4628-85D3-243C8BDFD745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityBeltxUnitTests", "Tests\UtilityBeltxUnitTests\UtilityBeltxUnitTests.csproj", "{F2E50A6F-DAE2-4628-85D3-243C8BDFD745}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B6CF242-EA65-43AF-A2FF-CAE735A70849}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
