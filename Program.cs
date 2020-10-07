@@ -644,49 +644,59 @@ namespace UtilityBelt
 
     static void Covid19()
     {
-      Console.WriteLine("");
-      Console.WriteLine("Enter the country name to get the information. If you want to see the global information, type \"Global\". For the list of all countries type \"List\": ");
-      string userInput = Console.ReadLine();
-      Console.WriteLine("");
-
-      string content = string.Empty;
-      using (var wc = new WebClient())
+      while (true)
       {
-        content = wc.DownloadString("https://api.covid19api.com/summary");
-      }
-      CovidRoot summary = JsonSerializer.Deserialize<CovidRoot>(content);
+        Console.WriteLine("");
+        Console.WriteLine("Enter the country name to get the information. If you want to see the global information, type \"Global\". For the list of all countries type \"List\". To exit Covid-19 Statistics type \"Exit\": ");
+        string userInput = Console.ReadLine();
+        Console.WriteLine("");
 
-      if (userInput.StartsWith("List", StringComparison.InvariantCultureIgnoreCase))
-      {
-        userInput = userInput.Substring(4).TrimStart();
-        Console.WriteLine("Found countries: ");
-        foreach (var countryJson in summary.Countries)
+        if (userInput == "Exit")
+          return;
+
+        string content = string.Empty;
+        using (var wc = new WebClient())
         {
-          if (countryJson.Country.StartsWith(userInput, StringComparison.InvariantCultureIgnoreCase))
-            Console.WriteLine(countryJson.Country);
+          content = wc.DownloadString("https://api.covid19api.com/summary");
         }
-        return;
-      }
+        CovidRoot summary = JsonSerializer.Deserialize<CovidRoot>(content);
 
-      else if (userInput.Equals("Global", StringComparison.InvariantCultureIgnoreCase))
-      {
-        ShowCovidInfo("Global", summary.Global.NewConfirmed, summary.Global.TotalConfirmed, summary.Global.NewDeaths, summary.Global.TotalDeaths, summary.Global.NewRecovered, summary.Global.TotalRecovered);
-        return;
-      }
-
-      else
-      {
-        foreach (var countryJson in summary.Countries)
+        if (userInput.StartsWith("List", StringComparison.InvariantCultureIgnoreCase))
         {
-          if (userInput.Equals(countryJson.Country, StringComparison.InvariantCultureIgnoreCase))
+          userInput = userInput.Substring(4).TrimStart();
+          Console.WriteLine("Found countries: ");
+          foreach (var countryJson in summary.Countries)
           {
-            ShowCovidInfo(countryJson.Country, countryJson.NewConfirmed, countryJson.TotalConfirmed, countryJson.NewDeaths, countryJson.TotalDeaths, countryJson.NewRecovered, countryJson.TotalRecovered);
-            return;
+            if (countryJson.Country.StartsWith(userInput, StringComparison.InvariantCultureIgnoreCase))
+              Console.WriteLine(countryJson.Country);
           }
         }
-      }
 
-      Console.WriteLine("Country not found");
+        else if (userInput.Equals("Global", StringComparison.InvariantCultureIgnoreCase))
+        {
+          ShowCovidInfo("Global", summary.Global.NewConfirmed, summary.Global.TotalConfirmed, summary.Global.NewDeaths, summary.Global.TotalDeaths, summary.Global.NewRecovered, summary.Global.TotalRecovered);
+        }
+
+        else
+        {
+          bool countryExists = false;
+
+          foreach (var countryJson in summary.Countries)
+          {
+            if (userInput.Equals(countryJson.Country, StringComparison.InvariantCultureIgnoreCase))
+            {
+              ShowCovidInfo(countryJson.Country, countryJson.NewConfirmed, countryJson.TotalConfirmed, countryJson.NewDeaths, countryJson.TotalDeaths, countryJson.NewRecovered, countryJson.TotalRecovered);
+              countryExists = true;
+            }
+          }
+
+          if (countryExists == false)
+            Console.WriteLine("Country does not exist. Type \"List\" to see the list of available countries.");
+        }
+
+
+
+      }
     }
 
     static void ShowCovidInfo(string countryName, long newConfirmed, long totalConfirmed, long newDeaths, long totalDeaths, long newRecovered, long totalRecovered)
