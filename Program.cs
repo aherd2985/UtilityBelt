@@ -735,8 +735,7 @@ namespace UtilityBelt
 
             Console.WriteLine("Please enter an integer number");
             String userInput = Console.ReadLine();
-
-      if (int.TryParse(userInput, out int numberEntered))
+            if (int.TryParse(userInput, out _))
       {
         string numberFactURL = $"http://numbersapi.com/{userInput}?format=json";
         using (var wc = new WebClient())
