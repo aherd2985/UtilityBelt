@@ -41,8 +41,8 @@ namespace UtilityBelt
       Console.WriteLine("");
       Console.ForegroundColor = ConsoleColor.Green;
 
-      string testUserInput = null;
-      do
+            string testUserInput;
+            do
       {
         Console.Write("Would you like to run another option?: ");
         testUserInput = Console.ReadLine();
