@@ -5,21 +5,21 @@ using UtilityBelt.Models;
 
 namespace UtilityBelt
 {
-  public class ServiceProviderBuilder
-  {
-    public static IServiceProvider GetServiceProvider(string[] args)
+    public class ServiceProviderBuilder
     {
-      IConfigurationRoot configuration = new ConfigurationBuilder()
-          .AddEnvironmentVariables()
-          .AddUserSecrets(typeof(Program).Assembly)
-          .AddCommandLine(args)
-          .Build();
-      ServiceCollection services = new ServiceCollection();
+        public static IServiceProvider GetServiceProvider(string[] args)
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddUserSecrets(typeof(Program).Assembly)
+                .AddCommandLine(args)
+                .Build();
+            ServiceCollection services = new ServiceCollection();
 
-      services.Configure<SecretsModel>(configuration.GetSection("SecretsModel"));
+            services.Configure<SecretsModel>(configuration.GetSection("SecretsModel"));
 
-      ServiceProvider provider = services.BuildServiceProvider();
-      return provider;
+            ServiceProvider provider = services.BuildServiceProvider();
+            return provider;
+        }
     }
-  }
 }

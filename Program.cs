@@ -99,6 +99,7 @@ namespace UtilityBelt
       Console.WriteLine("25) Dns Hostname to IP Address");
       Console.WriteLine("26) Panda Fact");
       Console.WriteLine("27) Random User Generator");
+      Console.WriteLine("28) DigitalOcean status");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
@@ -254,6 +255,11 @@ namespace UtilityBelt
         case "27":
         case "random user generator":
           RandomUserGenerator();
+          break;
+
+        case "28":
+        case "digital ocean":
+		  DigitalOceanStatus();
           break;
 
         default:
@@ -1087,7 +1093,29 @@ namespace UtilityBelt
       Console.WriteLine();
     }
     #endregion
-    #endregion
+	
+	#region Digital Ocean
+        static void DigitalOceanStatus()
+        {
+            IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+            defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+
+            string content = string.Empty;
+            string digitalOceanStatusUrl = $"https://s2k7tnzlhrpw.statuspage.io/api/v2/status.json";
+            using (var wc = new WebClient() { Proxy = defaultWebProxy })
+            {
+                content = wc.DownloadString(digitalOceanStatusUrl);
+            }
+
+            DigitalOceanStatusModel digitalOceanStatus = JsonSerializer.Deserialize<DigitalOceanStatusModel>(content);
+            Console.WriteLine();
+            Console.WriteLine(@$"Indicator -- {digitalOceanStatus.Status.Indicator}");
+            Console.WriteLine(@$"Description -- {digitalOceanStatus.Status.Description}");
+
+            Console.WriteLine();
+        }
+        #endregion
+	
 
     #region Random User Generator
     static void RandomUserGenerator()
@@ -1113,6 +1141,8 @@ namespace UtilityBelt
 
         Console.WriteLine();
     }
+    #endregion
+	
     #endregion
 
     #region Utility
