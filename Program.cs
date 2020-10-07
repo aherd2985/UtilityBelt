@@ -1205,12 +1205,16 @@ namespace UtilityBelt
       Console.WriteLine();
       Console.ForegroundColor = ConsoleColor.Cyan;
 
+      int cnt = 1;
+
       foreach (var user in randomUser.results)
       {
+        Console.WriteLine($"User Generated Nbr: {cnt}");
         Console.WriteLine($"Gender: {user.Gender}");
         Console.WriteLine($"Name: {user.Name.First} {user.Name.Last}");
         Console.WriteLine($"Email: {user.Email}");
         Console.WriteLine($"Phone: {user.Phone}");
+        Console.WriteLine("");
       }
 
       Console.WriteLine();
