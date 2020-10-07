@@ -312,27 +312,6 @@ namespace UtilityBelt
 
     #endregion Text Message
 
-    #region Bitcoin Prices
-
-    private static void BitcoinPrices()
-    {
-      logger.LogInformation($"User Choice : {nameof(BitcoinPrices)}");
-      string content = string.Empty;
-      string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
-      using (var wc = new WebClient())
-      {
-        content = wc.DownloadString(bitUrl);
-      }
-      BitcoinPrice bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content);
-      Console.WriteLine();
-      Console.ForegroundColor = ConsoleColor.Yellow;
-      Console.WriteLine("As Of - " + bitFact.Time.Updated);
-      Console.WriteLine("USD - $ " + bitFact.Bpi.USD.Rate);
-      Console.WriteLine();
-    }
-
-    #endregion Bitcoin Prices
-
     #region Cat facts
 
     private static void CatFact()
