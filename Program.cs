@@ -135,6 +135,7 @@ namespace UtilityBelt
       foreach (var item in menu.Keys)
       {
         Console.WriteLine($"{itemNumber}) {menu[item].Name}");
+        itemNumber++;
       }
 
       Console.WriteLine("");
@@ -306,26 +307,6 @@ namespace UtilityBelt
     }
 
     #endregion Text Message
-
-    #region Chuck Norris Jokes
-
-    private static void RandomChuckNorrisJoke()
-    {
-      logger.LogInformation($"User Choice : {nameof(RandomChuckNorrisJoke)}");
-      string content = string.Empty;
-      string url = "https://api.chucknorris.io/jokes/random";
-      using (var wc = new WebClient())
-      {
-        content = wc.DownloadString(url);
-      }
-      ChuckJokeModel chuckJoke = JsonSerializer.Deserialize<ChuckJokeModel>(content);
-      Console.WriteLine();
-      Console.ForegroundColor = ConsoleColor.Yellow;
-      Console.WriteLine(chuckJoke.Value);
-      Console.WriteLine();
-    }
-
-    #endregion Chuck Norris Jokes
 
     #region Bitcoin Prices
 
