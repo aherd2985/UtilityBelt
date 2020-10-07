@@ -732,12 +732,11 @@ namespace UtilityBelt
     static void NumberFact()
     {
       string content = string.Empty;
-      int numberEntered;
 
-      Console.WriteLine("Please enter an integer number");
-      String userInput = Console.ReadLine();
+            Console.WriteLine("Please enter an integer number");
+            String userInput = Console.ReadLine();
 
-      if (int.TryParse(userInput, out numberEntered))
+      if (int.TryParse(userInput, out int numberEntered))
       {
         string numberFactURL = $"http://numbersapi.com/{userInput}?format=json";
         using (var wc = new WebClient())
