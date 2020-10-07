@@ -26,8 +26,8 @@ namespace UtilityBelt
 
       IServiceProvider services = ServiceProviderBuilder.GetServiceProvider(args);
       IOptions<SecretsModel> options = services.GetRequiredService<IOptions<SecretsModel>>();
-      bool showMenu = true;
-      do
+            bool showMenu;
+            do
       {
         MenuOptions(options);
         showMenu = RecursiveOptions();
@@ -292,7 +292,7 @@ namespace UtilityBelt
       WeatherRoot wr = JsonSerializer.Deserialize<WeatherRoot>(resp);
 
       Console.WriteLine();
-      Console.WriteLine("Temperature: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C. Feels like: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C");
+      Console.WriteLine("Temperature: " + Weather.KtoF(wr.Main.Temperature) + "°F or " + Weather.KtoC(wr.Main.Temperature) + "°C. Feels like: " + Weather.KtoF(wr.Main.Temperature) + "°F or " + Weather.KtoC(wr.Main.Temperature) + "°C");
       Console.WriteLine("Wind speed: " + wr.Wind.Speed + " m/s. Air pressure is " + wr.Main.Pressure + "mmHg or " + Math.Round(wr.Main.Pressure * 133.322, 1) + " Pascals.");
       long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
       bool SunWhat = currentTime > wr.Sys.Sunrise;
@@ -601,7 +601,7 @@ namespace UtilityBelt
         content = wc.DownloadString(suspectUrl);
       }
       CookieSuspectModel cookieSuspect = JsonSerializer.Deserialize<CookieSuspectModel>(content);
-      string suspectFullName = cookieSuspect.results[0].name.first + " " + cookieSuspect.results[0].name.last;
+      string suspectFullName = cookieSuspect.Results[0].Name.First + " " + cookieSuspect.Results[0].Name.Last;
       Console.WriteLine();
       Console.ForegroundColor = ConsoleColor.Yellow;
       Console.WriteLine("");
@@ -923,7 +923,7 @@ namespace UtilityBelt
           // Display the content.
           DadJokeModel dadJoke = JsonSerializer.Deserialize<DadJokeModel>(responseFromServer);
           Console.WriteLine(@"Random Dad Joke:");
-          Console.WriteLine(dadJoke.joke);
+          Console.WriteLine(dadJoke.Joke);
         }
         else
         {
@@ -1095,10 +1095,10 @@ namespace UtilityBelt
 
         foreach(var user in randomUser.results)
         {
-            Console.WriteLine($"Gender: {user.gender}");
-            Console.WriteLine($"Name: {user.name.first} {user.name.last}");
-            Console.WriteLine($"Email: {user.email}");
-            Console.WriteLine($"Phone: {user.phone}");
+            Console.WriteLine($"Gender: {user.Gender}");
+            Console.WriteLine($"Name: {user.Name.First} {user.Name.Last}");
+            Console.WriteLine($"Email: {user.Email}");
+            Console.WriteLine($"Phone: {user.Phone}");
         }
 
         Console.WriteLine();
