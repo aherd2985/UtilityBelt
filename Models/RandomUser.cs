@@ -6,27 +6,27 @@ namespace UtilityBelt.Models
 {
     public class Name    
     {
-        public string title { get; set; }
-        public string first { get; set; }
-        public string last { get; set; }
+        public string Title { get; set; }
+        public string First { get; set; }
+        public string Last { get; set; }
     }
 
     public class Result    
     {
-        public string gender { get; set; }
-        public Name name { get; set; }
-        public string email { get; set; }
-        public string phone { get; set; } 
-        public string cell { get; set; }
-        public string nat { get; set; }
+        public string Gender { get; set; }
+        public Name Name { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; } 
+        public string Cell { get; set; }
+        public string Nat { get; set; }
     }
 
     public class Info    
     {
-        public string seed { get; set; } 
-        public int results { get; set; } 
-        public int page { get; set; }
-        public string version { get; set; }
+        public string Seed { get; set; } 
+        public int Results { get; set; } 
+        public int Page { get; set; }
+        public string Version { get; set; }
     }
 
     public class RandomUser    
@@ -34,7 +34,7 @@ namespace UtilityBelt.Models
         [JsonPropertyName("results")]
         public List<Result> results { get; set; }
         [JsonPropertyName("info")]
-        public Info info { get; set; }
+        public Info Info { get; set; }
     }
 
     
