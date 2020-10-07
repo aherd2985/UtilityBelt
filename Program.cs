@@ -1002,7 +1002,7 @@ namespace UtilityBelt
     {
       Random rNumber = new Random();
       int score = 0;
-      int randomNum = rNumber.Next(0, 4);
+      int randomNum = rNumber.Next(1, 4);
       int numberInput;
       bool validDoor= false;
       bool validNumber;
