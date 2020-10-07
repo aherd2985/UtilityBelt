@@ -7,7 +7,7 @@ namespace UtilityBelt
     public partial class WeatherRoot
     {
         [JsonPropertyName("coord")]
-        public Coord Coord { get; set; }
+        public Coordinates Coord { get; set; }
         [JsonPropertyName("weather")]
         public List<Weather> Weather { get; set; }
         [JsonPropertyName("main")]
@@ -38,18 +38,18 @@ namespace UtilityBelt
         public long All { get; set; }
     }
 
-    public partial class Coord
+    public partial class Coordinates
     {
         [JsonPropertyName("lon")]
-        public double Lon { get; set; }
+        public double Longitude { get; set; }
         [JsonPropertyName("lat")]
-        public double Lat { get; set; }
+        public double Latitude { get; set; }
     }
 
     public partial class Main
     {
         [JsonPropertyName("temp")]
-        public double Temp { get; set; }
+        public double Temperature { get; set; }
         [JsonPropertyName("feels_like")]
         public double FeelsLike { get; set; }
         [JsonPropertyName("temp_min")]
@@ -104,6 +104,6 @@ namespace UtilityBelt
         [JsonPropertyName("speed")]
         public double Speed { get; set; }
         [JsonPropertyName("deg")]
-        public long Deg { get; set; }
+        public long Degrees { get; set; }
     }
 }
