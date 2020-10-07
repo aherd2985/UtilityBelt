@@ -109,7 +109,7 @@ namespace UtilityBelt
         case "1":
         case "port":
         case "port scanner":
-          portScanner();
+          PortScanner();
           break;
 
         case "2":
@@ -312,7 +312,7 @@ namespace UtilityBelt
     #endregion
 
     #region Port Scanner
-    static void portScanner()
+    static void PortScanner()
     {
       Console.Write("Please enter a domain:");
       string domain = Console.ReadLine().ToLower();
@@ -321,7 +321,7 @@ namespace UtilityBelt
       Console.Write("Please enter an ending Port Number:");
       int highPort = int.Parse(Console.ReadLine());
 
-      PortScanner.Scanner(domain, lowPort, highPort);
+            UtilityBelt.PortScanner.Scanner(domain, lowPort, highPort);
 
     }
     #endregion
