@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,20 @@ using System.Net.Sockets;
 using System.Text.Json;
 using System.Web;
 using UtilityBelt.Helpers;
+using UtilityBelt.Logging;
 using UtilityBelt.Models;
 
 namespace UtilityBelt
 {
   class Program
   {
+    private static ILogger logger;
     static void Main(string[] args)
     {
+      // Logger
+      logger = Logger.InitLogger<Program>();
+
+      logger.LogInformation("Starting Application");
       Console.ForegroundColor = ConsoleColor.Green;
       Console.WriteLine(Properties.Resources.ASCIIart);
       Console.WriteLine("Loading...");
@@ -29,6 +36,7 @@ namespace UtilityBelt
             bool showMenu;
             do
       {
+        logger.LogInformation("Load Menu Options");
         MenuOptions(options);
         showMenu = RecursiveOptions();
       } while (showMenu);
@@ -48,6 +56,7 @@ namespace UtilityBelt
         testUserInput = Console.ReadLine();
         if (int.TryParse(testUserInput, out _)) //If user input was a number...
         {
+          logger.LogWarning("Answer could not be translated to a yes/no");
           Console.WriteLine("");
           Console.WriteLine("I am sorry, your answer could not be translated to a yes/no.");
           Console.WriteLine("Please try to reformat your answer.\n");
@@ -57,10 +66,12 @@ namespace UtilityBelt
 
       try
       {
+        logger.LogInformation($"Get user Input : {testUserInput}");
         return FromString(testUserInput);
       }
       catch
       {
+        logger.LogWarning($"Answer could not be translated to a yes/no : {testUserInput}");
         Console.WriteLine("");
         Console.WriteLine("I am sorry, your answer could not be translated to a yes/no.");
         Console.WriteLine("Please try to reformat your answer.");
@@ -70,6 +81,7 @@ namespace UtilityBelt
 
     static void MenuOptions(IOptions<SecretsModel> options)
     {
+      logger.LogInformation("Loading Menu Options");
       Console.WriteLine("");
       Console.WriteLine("Select the Tool");
       Console.WriteLine("1) Port Scanner");
@@ -104,6 +116,7 @@ namespace UtilityBelt
 
       Console.Write("Your choice:");
       string optionPicked = Console.ReadLine().ToLower();
+      logger.LogInformation($"User Choice : {optionPicked}");
       switch (optionPicked)
       {
 
@@ -278,6 +291,7 @@ namespace UtilityBelt
     #region Weather
     static void WeatherForecast(IOptions<SecretsModel> options)
     {
+      logger.LogInformation($"User Choice : {nameof(WeatherForecast)}");
       var openWeatherMapApiKey = options.Value.OpenWeatherMapApiKey;
 
       if (String.IsNullOrEmpty(openWeatherMapApiKey))
@@ -320,6 +334,7 @@ namespace UtilityBelt
     #region Port Scanner
     static void PortScanner()
     {
+      logger.LogInformation($"User Choice : {nameof(PortScanner)}");
       Console.Write("Please enter a domain:");
       string domain = Console.ReadLine().ToLower();
       Console.Write("Please enter a starting Port Number:");
@@ -335,6 +350,7 @@ namespace UtilityBelt
     #region Text Message
     static void TextMessage(IOptions<SecretsModel> options)
     {
+      logger.LogInformation($"User Choice : {nameof(TextMessage)}");
       Console.WriteLine();
       Console.Write("Input number to receive message:");
 
@@ -393,11 +409,13 @@ namespace UtilityBelt
 
       Console.Write("Your choice:");
       string optionPicked = Console.ReadLine().ToLower();
+      logger.LogInformation($"User Choice : {optionPicked}");
 
       bool isValid = Enum.TryParse(optionPicked, true, out T result);
 
       if (!isValid || !Enum.IsDefined(typeof(T), result))
       {
+        logger.LogWarning($"Invalid User Choice : {optionPicked}");
         Console.WriteLine("Please select a valid option");
         return MenuEnum<T>(subject);
       }
@@ -409,6 +427,7 @@ namespace UtilityBelt
     #region Chuck Norris Jokes
     static void RandomChuckNorrisJoke()
     {
+      logger.LogInformation($"User Choice : {nameof(RandomChuckNorrisJoke)}");
       string content = string.Empty;
       string url = "https://api.chucknorris.io/jokes/random";
       using (var wc = new WebClient())
@@ -427,6 +446,7 @@ namespace UtilityBelt
     #region Bitcoin Prices
     static void BitcoinPrices()
     {
+      logger.LogInformation($"User Choice : {nameof(BitcoinPrices)}");
       string content = string.Empty;
       string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
       using (var wc = new WebClient())
@@ -445,6 +465,7 @@ namespace UtilityBelt
     #region Cat facts
     static void CatFact()
     {
+      logger.LogInformation($"User Choice : {nameof(CatFact)}");
       string content = string.Empty;
       string catUrl = "https://cat-fact.herokuapp.com/facts/random";
       using (var wc = new WebClient())
@@ -465,6 +486,7 @@ namespace UtilityBelt
     #region People in space
     static void Space()
     {
+      logger.LogInformation($"User Choice : {nameof(Space)}");
       string content = string.Empty;
       string spacePeopleUrl = "http://api.open-notify.org/astros.json";
       using (var wc = new WebClient())
@@ -486,6 +508,7 @@ namespace UtilityBelt
     #region Country information
     static void CountryInformation()
     {
+      logger.LogInformation($"User Choice : {nameof(CountryInformation)}");
       string content = string.Empty;
       Console.WriteLine("");
       Console.WriteLine("Please enter a country name:");
@@ -527,6 +550,7 @@ namespace UtilityBelt
       }
       catch (WebException)
       {
+        logger.LogWarning("Country not found");
         Console.WriteLine("Country not found");
       }
     }
@@ -536,6 +560,7 @@ namespace UtilityBelt
 
     static void DiscordWebhook(IOptions<SecretsModel> options)
     {
+      logger.LogInformation($"User Choice : {nameof(DiscordWebhook)}");
       string whook = options.Value.DiscordWebhook;
 
       if (String.IsNullOrEmpty(whook))
@@ -566,6 +591,7 @@ namespace UtilityBelt
     #region Random quote
     static void RandomQuote()
     {
+      logger.LogInformation($"User Choice : {nameof(RandomQuote)}");
       string content = string.Empty;
       string quoteUrl = "https://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json";
       using (var wc = new WebClient())
@@ -585,6 +611,7 @@ namespace UtilityBelt
     #region Random insult
     static void RandomInsult()
     {
+      logger.LogInformation($"User Choice : {nameof(RandomInsult)}");
       string content = string.Empty;
       string apiUrl = "https://evilinsult.com/generate_insult.php?lang=en&type=json";
       using (var wc = new WebClient())
@@ -602,6 +629,7 @@ namespace UtilityBelt
     #region Who stole the cookie
     static void CookieAccusation()
     {
+      logger.LogInformation($"User Choice : {nameof(CookieAccusation)}");
       string content = string.Empty;
       string suspectUrl = "https://randomuser.me/api/?inc=name&format=json";
       using (var wc = new WebClient())
@@ -630,6 +658,7 @@ namespace UtilityBelt
 
     static void RandomTaco()
     {
+      logger.LogInformation($"User Choice : {nameof(RandomTaco)}");
       string content = string.Empty;
       string tacoRandomizerUrl = "http://taco-randomizer.herokuapp.com/random/";
       using (var wc = new WebClient())
@@ -654,6 +683,7 @@ namespace UtilityBelt
     {
       while (true)
       {
+        logger.LogInformation($"User Choice : {nameof(Covid19)}");
         Console.WriteLine("");
         Console.WriteLine("Enter the country name to get the information. If you want to see the global information, type \"Global\". For the list of all countries type \"List\". To exit Covid-19 Statistics type \"Exit\": ");
         string userInput = Console.ReadLine();
@@ -726,6 +756,7 @@ namespace UtilityBelt
     #region GeekJokes
     static void GeekJokes()
     {
+      logger.LogInformation($"User Choice : {nameof(GeekJokes)}");
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
       defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
@@ -747,6 +778,7 @@ namespace UtilityBelt
     #region NumberFact
     static void NumberFact()
     {
+      logger.LogInformation($"User Choice : {nameof(NumberFact)}");
       string content = string.Empty;
 
             Console.WriteLine("Please enter an integer number");
@@ -773,6 +805,7 @@ namespace UtilityBelt
     #region Random Advice
     static void RandomAdvice()
     {
+      logger.LogInformation($"User Choice : {nameof(RandomAdvice)}");
       string content = string.Empty;
       string adviceUrl = "https://api.adviceslip.com/advice";
       using (var wc = new WebClient())
@@ -791,6 +824,7 @@ namespace UtilityBelt
     #region Space Station Location
     static void SpaceStationLocation()
     {
+      logger.LogInformation($"User Choice : {nameof(SpaceStationLocation)}");
       string content = string.Empty;
       string adviceUrl = "http://api.open-notify.org/iss-now.json";
       using (var wc = new WebClient())
@@ -811,6 +845,7 @@ namespace UtilityBelt
 
     static void RandomQuoteGarden()
     {
+      logger.LogInformation($"User Choice : {nameof(RandomQuoteGarden)}");
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
       defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
@@ -834,7 +869,7 @@ namespace UtilityBelt
         #region Console Calculator
         static void ConsoleCalculator()
         {
-
+            logger.LogInformation($"User Choice : {nameof(ConsoleCalculator)}");
             // Display title as the C# console calculator app.
             Console.WriteLine("Console Calculator in C#\r");
             Console.WriteLine("------------------------\n");
@@ -881,6 +916,7 @@ namespace UtilityBelt
         #region Gender from name
         static void GenderFromName()
     {
+      logger.LogInformation($"User Choice : {nameof(GenderFromName)}");
       Console.Write("Type the name, and then press Enter: ");
       string enteredName = Console.ReadLine().ToLower();
 
@@ -912,6 +948,7 @@ namespace UtilityBelt
     #region Dad Joke
     static void DadJoke()
     {
+      logger.LogInformation($"User Choice : {nameof(DadJoke)}");
       WebRequest request = WebRequest.Create("https://icanhazdadjoke.com");
 
       request.Headers.Add("User-Agent", "GitHub library https://github.com/aherd2985/UtilityBelt");
@@ -957,6 +994,7 @@ namespace UtilityBelt
 
     static void RandomPandaFact()
     {
+      logger.LogInformation($"User Choice : {nameof(RandomPandaFact)}");
       string content;
       string url = "https://some-random-api.ml/facts/panda";
       using (var wc = new WebClient())
@@ -979,6 +1017,7 @@ namespace UtilityBelt
     {
       while (true)
       {
+        logger.LogInformation($"User Choice : {nameof(HostToIp)}");
         Console.Write("Please enter a hostname: ");
         var hostname = Console.ReadLine();
         if (string.IsNullOrEmpty(hostname) && Uri.CheckHostName(hostname) != UriHostNameType.Unknown)
@@ -1015,6 +1054,7 @@ namespace UtilityBelt
     #region Ghost Game
     private static void GhostGame()
     {
+      logger.LogInformation($"User Choice : {nameof(GhostGame)}");
       Random rNumber = new Random();
       int score = 0;
       int randomNum = rNumber.Next(1, 4);
@@ -1075,6 +1115,7 @@ namespace UtilityBelt
     #region Breaking Bad Quotes
     static void BreakingBadQuotes()
     {
+      logger.LogInformation($"User Choice : {nameof(BreakingBadQuotes)}");
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
       defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
@@ -1097,6 +1138,7 @@ namespace UtilityBelt
 	#region Digital Ocean
         static void DigitalOceanStatus()
         {
+            logger.LogInformation($"User Choice : {nameof(DigitalOceanStatus)}");
             IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
             defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
@@ -1120,6 +1162,7 @@ namespace UtilityBelt
     #region Random User Generator
     static void RandomUserGenerator()
     {  
+        logger.LogInformation($"User Choice : {nameof(RandomUserGenerator)}");
         string content = string.Empty;
         string randomUserUrl = @"https://randomuser.me/api";
         using (var wc = new WebClient())
