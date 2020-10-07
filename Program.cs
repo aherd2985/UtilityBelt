@@ -137,6 +137,7 @@ namespace UtilityBelt
         Console.WriteLine($"{itemNumber}) {menu[item].Name}");
         itemNumber++;
       }
+      Console.WriteLine("0) Exit");
 
       Console.WriteLine("");
 
@@ -149,6 +150,9 @@ namespace UtilityBelt
       IUtility util = null;
       if (isNumberPicked)
       {
+        if (optionNumber == 0)
+          Environment.Exit(0);
+
         if (optionNumber > 0 && optionNumber <= menu.Keys.ToList().Count)
         {
           var key = menu.Keys.ToList()[optionNumber - 1];
