@@ -542,7 +542,7 @@ namespace UtilityBelt
 
       WebHookContent cont = new WebHookContent()
       {
-        content = msg
+        Content = msg
       };
       string json = JsonSerializer.Serialize(cont);
 
@@ -1108,7 +1108,7 @@ namespace UtilityBelt
     #region Utility
     internal class WebHookContent
     {
-      public string content { get; set; }
+      public string Content { get; set; }
     }
 
     enum BooleanAliases
