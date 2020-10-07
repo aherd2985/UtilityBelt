@@ -267,11 +267,17 @@ namespace UtilityBelt
           break;
 
         case "27":
+        case "fox fact":
+        case "fox": 
+          RandomFoxFact();
+          break;
+
+        case "28":
         case "random user generator":
           RandomUserGenerator();
           break;
 
-        case "28":
+        case "29":
         case "digital ocean":
           DigitalOceanStatus();
           break;
@@ -1009,6 +1015,27 @@ namespace UtilityBelt
       Console.WriteLine();
       Console.ForegroundColor = ConsoleColor.Yellow;
       Console.WriteLine(pandaFact.Fact);
+      Console.WriteLine();
+    }
+
+    #endregion
+
+    #region Random fox fact
+
+    static void RandomFoxFact()
+    {
+      logger.LogInformation($"User Choice : {nameof(RandomFoxFact)}");
+      string content;
+      string url = "https://some-random-api.ml/facts/fox";
+      using (var wc = new WebClient())
+      {
+        content = wc.DownloadString(url);
+      }
+
+      PandaFactModel foxFact = JsonSerializer.Deserialize<PandaFactModel>(content);
+      Console.WriteLine();
+      Console.ForegroundColor = ConsoleColor.Yellow;
+      Console.WriteLine(foxFact.Fact);
       Console.WriteLine();
     }
 
