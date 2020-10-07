@@ -26,8 +26,8 @@ namespace UtilityBelt
 
       IServiceProvider services = ServiceProviderBuilder.GetServiceProvider(args);
       IOptions<SecretsModel> options = services.GetRequiredService<IOptions<SecretsModel>>();
-      bool showMenu = true;
-      do
+            bool showMenu;
+            do
       {
         MenuOptions(options);
         showMenu = RecursiveOptions();
@@ -41,8 +41,8 @@ namespace UtilityBelt
       Console.WriteLine("");
       Console.ForegroundColor = ConsoleColor.Green;
 
-      string testUserInput = null;
-      do
+            string testUserInput;
+            do
       {
         Console.Write("Would you like to run another option?: ");
         testUserInput = Console.ReadLine();
@@ -110,7 +110,7 @@ namespace UtilityBelt
         case "1":
         case "port":
         case "port scanner":
-          portScanner();
+          PortScanner();
           break;
 
         case "2":
@@ -298,7 +298,7 @@ namespace UtilityBelt
       WeatherRoot wr = JsonSerializer.Deserialize<WeatherRoot>(resp);
 
       Console.WriteLine();
-      Console.WriteLine("Temperature: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C. Feels like: " + Weather.KtoF(wr.Main.Temp) + "°F or " + Weather.KtoC(wr.Main.Temp) + "°C");
+      Console.WriteLine("Temperature: " + Weather.KtoF(wr.Main.Temperature) + "°F or " + Weather.KtoC(wr.Main.Temperature) + "°C. Feels like: " + Weather.KtoF(wr.Main.Temperature) + "°F or " + Weather.KtoC(wr.Main.Temperature) + "°C");
       Console.WriteLine("Wind speed: " + wr.Wind.Speed + " m/s. Air pressure is " + wr.Main.Pressure + "mmHg or " + Math.Round(wr.Main.Pressure * 133.322, 1) + " Pascals.");
       long currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
       bool SunWhat = currentTime > wr.Sys.Sunrise;
@@ -318,7 +318,7 @@ namespace UtilityBelt
     #endregion
 
     #region Port Scanner
-    static void portScanner()
+    static void PortScanner()
     {
       Console.Write("Please enter a domain:");
       string domain = Console.ReadLine().ToLower();
@@ -327,7 +327,7 @@ namespace UtilityBelt
       Console.Write("Please enter an ending Port Number:");
       int highPort = int.Parse(Console.ReadLine());
 
-      PortScanner.Scanner(domain, lowPort, highPort);
+            UtilityBelt.PortScanner.Scanner(domain, lowPort, highPort);
 
     }
     #endregion
@@ -346,10 +346,12 @@ namespace UtilityBelt
         EnableSsl = true
       };
 
-      MailMessage message = new MailMessage();
-      message.From = new MailAddress(options.Value.Email);
+            MailMessage message = new MailMessage
+            {
+                From = new MailAddress(options.Value.Email)
+            };
 
-      var carrierType = MenuEnum<CarrierType>("Carrier");
+            var carrierType = MenuEnum<CarrierType>("Carrier");
       var meta = EnumHelper.GetAttributeOfType<CarrierMetaAttribute>(carrierType);
 
       message.To.Add(new MailAddress(send2Number + $"@{meta?.Domain}"));
@@ -506,8 +508,8 @@ namespace UtilityBelt
           Console.WriteLine($"Country Name: {item.Name}");
           Console.WriteLine($"Capital: {item.Capital}");
           Console.WriteLine($"Region: {item.Region}");
-          Console.WriteLine($"Population: {item.Population.ToString("N1")}");
-          Console.WriteLine($"Area: {item.Area.ToString("N1")} km²");
+          Console.WriteLine($"Population: {item.Population:N1}");
+          Console.WriteLine($"Area: {item.Area:N1} km²");
           Console.WriteLine("Currencies");
           foreach (var moneda in item.Currencies)
           {
@@ -546,7 +548,7 @@ namespace UtilityBelt
 
       WebHookContent cont = new WebHookContent()
       {
-        content = msg
+        Content = msg
       };
       string json = JsonSerializer.Serialize(cont);
 
@@ -607,7 +609,7 @@ namespace UtilityBelt
         content = wc.DownloadString(suspectUrl);
       }
       CookieSuspectModel cookieSuspect = JsonSerializer.Deserialize<CookieSuspectModel>(content);
-      string suspectFullName = cookieSuspect.results[0].name.first + " " + cookieSuspect.results[0].name.last;
+      string suspectFullName = cookieSuspect.Results[0].Name.First + " " + cookieSuspect.Results[0].Name.Last;
       Console.WriteLine();
       Console.ForegroundColor = ConsoleColor.Yellow;
       Console.WriteLine("");
@@ -746,12 +748,10 @@ namespace UtilityBelt
     static void NumberFact()
     {
       string content = string.Empty;
-      int numberEntered;
 
-      Console.WriteLine("Please enter an integer number");
-      String userInput = Console.ReadLine();
-
-      if (int.TryParse(userInput, out numberEntered))
+            Console.WriteLine("Please enter an integer number");
+            String userInput = Console.ReadLine();
+            if (int.TryParse(userInput, out _))
       {
         string numberFactURL = $"http://numbersapi.com/{userInput}?format=json";
         using (var wc = new WebClient())
@@ -829,58 +829,57 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-    #endregion
+        #endregion
 
-    #region Console Calculator
-    static void ConsoleCalculator()
-    {
-      // Declare variables and then initialize to zero.
-      int num1 = 0; int num2 = 0;
+        #region Console Calculator
+        static void ConsoleCalculator()
+        {
 
-      // Display title as the C# console calculator app.
-      Console.WriteLine("Console Calculator in C#\r");
-      Console.WriteLine("------------------------\n");
+            // Display title as the C# console calculator app.
+            Console.WriteLine("Console Calculator in C#\r");
+            Console.WriteLine("------------------------\n");
 
-      // Ask the user to type the first number.
-      Console.WriteLine("Type a number, and then press Enter");
-      num1 = Convert.ToInt32(Console.ReadLine());
+            // Ask the user to type the first number.
+            Console.WriteLine("Type a number, and then press Enter");
+            // Declare variables and then initialize to zero.
+            int num1 = Convert.ToInt32(Console.ReadLine());
 
-      // Ask the user to type the second number.
-      Console.WriteLine("Type another number, and then press Enter");
-      num2 = Convert.ToInt32(Console.ReadLine());
+            // Ask the user to type the second number.
+            Console.WriteLine("Type another number, and then press Enter");
+            int num2 = Convert.ToInt32(Console.ReadLine());
 
-      // Ask the user to choose an option.
-      Console.WriteLine("Choose an option from the following list:");
-      Console.WriteLine("\ta - Add");
-      Console.WriteLine("\ts - Subtract");
-      Console.WriteLine("\tm - Multiply");
-      Console.WriteLine("\td - Divide");
-      Console.Write("Your option? ");
+            // Ask the user to choose an option.
+            Console.WriteLine("Choose an option from the following list:");
+            Console.WriteLine("\ta - Add");
+            Console.WriteLine("\ts - Subtract");
+            Console.WriteLine("\tm - Multiply");
+            Console.WriteLine("\td - Divide");
+            Console.Write("Your option? ");
 
-      // Use a switch statement to do the math.
-      switch (Console.ReadLine())
-      {
-        case "a":
-          Console.WriteLine($"Your result: {num1} + {num2} = " + (num1 + num2));
-          break;
-        case "s":
-          Console.WriteLine($"Your result: {num1} - {num2} = " + (num1 - num2));
-          break;
-        case "m":
-          Console.WriteLine($"Your result: {num1} * {num2} = " + (num1 * num2));
-          break;
-        case "d":
-          Console.WriteLine($"Your result: {num1} / {num2} = " + (num1 / num2));
-          break;
-      }
-      // Wait for the user to respond before closing.
-      Console.Write("Press any key to close the Calculator console app...");
-      Console.ReadKey();
-    }
-    #endregion
+            // Use a switch statement to do the math.
+            switch (Console.ReadLine())
+            {
+                case "a":
+                    Console.WriteLine($"Your result: {num1} + {num2} = " + (num1 + num2));
+                    break;
+                case "s":
+                    Console.WriteLine($"Your result: {num1} - {num2} = " + (num1 - num2));
+                    break;
+                case "m":
+                    Console.WriteLine($"Your result: {num1} * {num2} = " + (num1 * num2));
+                    break;
+                case "d":
+                    Console.WriteLine($"Your result: {num1} / {num2} = " + (num1 / num2));
+                    break;
+            }
+            // Wait for the user to respond before closing.
+            Console.Write("Press any key to close the Calculator console app...");
+            Console.ReadKey();
+        }
+        #endregion
 
-    #region Gender from name
-    static void GenderFromName()
+        #region Gender from name
+        static void GenderFromName()
     {
       Console.Write("Type the name, and then press Enter: ");
       string enteredName = Console.ReadLine().ToLower();
@@ -939,7 +938,7 @@ namespace UtilityBelt
           // Display the content.
           DadJokeModel dadJoke = JsonSerializer.Deserialize<DadJokeModel>(responseFromServer);
           Console.WriteLine(@"Random Dad Joke:");
-          Console.WriteLine(dadJoke.joke);
+          Console.WriteLine(dadJoke.Joke);
         }
         else
         {
@@ -1020,7 +1019,6 @@ namespace UtilityBelt
       int score = 0;
       int randomNum = rNumber.Next(1, 4);
       int numberInput;
-      bool validDoor= false;
       bool validNumber;
 
       while (true)
@@ -1030,30 +1028,32 @@ namespace UtilityBelt
         Console.WriteLine("Which door do you open?!?! \n");
         Console.WriteLine("1, 2 or 3?\n");
 
-        do
-        {
-          validNumber = int.TryParse(Console.ReadLine(), out numberInput);
+                bool validDoor;
+                do
+                {
+                    validNumber = int.TryParse(Console.ReadLine(), out numberInput);
 
-          if ( Enumerable.Range(1,3).Contains(numberInput) && validNumber)//If user selected a valid door ...
-          {
-            validDoor = true;
-          }
-          else
-          {
-            Console.WriteLine("");
-            if(validNumber){
-              Console.WriteLine("\nThere are only three doors ahead. \n");
-            }
-            else
-            {
-              Console.WriteLine("Input was not an integer.");
-            }
-            Console.WriteLine("Please select door 1, 2, or 3.\n");
-            validDoor = false;
-          }
-        } while (validDoor == false);
+                    if (Enumerable.Range(1, 3).Contains(numberInput) && validNumber)//If user selected a valid door ...
+                    {
+                        validDoor = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("");
+                        if (validNumber)
+                        {
+                            Console.WriteLine("\nThere are only three doors ahead. \n");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Input was not an integer.");
+                        }
+                        Console.WriteLine("Please select door 1, 2, or 3.\n");
+                        validDoor = false;
+                    }
+                } while (validDoor == false);
 
-        if (numberInput == randomNum)
+                if (numberInput == randomNum)
         {
           Console.WriteLine("\nBoo!! GHOST!");
           break;
@@ -1133,10 +1133,10 @@ namespace UtilityBelt
 
         foreach(var user in randomUser.results)
         {
-            Console.WriteLine($"Gender: {user.gender}");
-            Console.WriteLine($"Name: {user.name.first} {user.name.last}");
-            Console.WriteLine($"Email: {user.email}");
-            Console.WriteLine($"Phone: {user.phone}");
+            Console.WriteLine($"Gender: {user.Gender}");
+            Console.WriteLine($"Name: {user.Name.First} {user.Name.Last}");
+            Console.WriteLine($"Email: {user.Email}");
+            Console.WriteLine($"Phone: {user.Phone}");
         }
 
         Console.WriteLine();
@@ -1148,7 +1148,7 @@ namespace UtilityBelt
     #region Utility
     internal class WebHookContent
     {
-      public string content { get; set; }
+      public string Content { get; set; }
     }
 
     enum BooleanAliases
