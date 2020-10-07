@@ -502,8 +502,8 @@ namespace UtilityBelt
           Console.WriteLine($"Country Name: {item.Name}");
           Console.WriteLine($"Capital: {item.Capital}");
           Console.WriteLine($"Region: {item.Region}");
-          Console.WriteLine($"Population: {item.Population.ToString("N1")}");
-          Console.WriteLine($"Area: {item.Area.ToString("N1")} km²");
+          Console.WriteLine($"Population: {item.Population:N1}");
+          Console.WriteLine($"Area: {item.Area:N1} km²");
           Console.WriteLine("Currencies");
           foreach (var moneda in item.Currencies)
           {
