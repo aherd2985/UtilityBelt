@@ -1047,6 +1047,7 @@ namespace UtilityBelt
           Console.WriteLine("\nNo ghost, Phew!");
           Console.WriteLine("\nPress any key to enter the next room!");
           Console.ReadKey();
+          randomNum = rNumber.Next(1, 4);
           score += 1;
         }
       }
