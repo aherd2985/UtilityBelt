@@ -26,8 +26,8 @@ namespace UtilityBelt
 
       IServiceProvider services = ServiceProviderBuilder.GetServiceProvider(args);
       IOptions<SecretsModel> options = services.GetRequiredService<IOptions<SecretsModel>>();
-            bool showMenu;
-            do
+      bool showMenu = true;
+      do
       {
         MenuOptions(options);
         showMenu = RecursiveOptions();
@@ -41,8 +41,8 @@ namespace UtilityBelt
       Console.WriteLine("");
       Console.ForegroundColor = ConsoleColor.Green;
 
-            string testUserInput;
-            do
+      string testUserInput = null;
+      do
       {
         Console.Write("Would you like to run another option?: ");
         testUserInput = Console.ReadLine();
@@ -110,7 +110,7 @@ namespace UtilityBelt
         case "1":
         case "port":
         case "port scanner":
-          PortScanner();
+          portScanner();
           break;
 
         case "2":
@@ -251,7 +251,7 @@ namespace UtilityBelt
         case "panda":
           RandomPandaFact();
           break;
-        
+
         case "27":
         case "random user generator":
           RandomUserGenerator();
@@ -259,7 +259,7 @@ namespace UtilityBelt
 
         case "28":
         case "digital ocean":
-		  DigitalOceanStatus();
+          DigitalOceanStatus();
           break;
 
         default:
@@ -318,7 +318,7 @@ namespace UtilityBelt
     #endregion
 
     #region Port Scanner
-    static void PortScanner()
+    static void portScanner()
     {
       Console.Write("Please enter a domain:");
       string domain = Console.ReadLine().ToLower();
@@ -327,7 +327,7 @@ namespace UtilityBelt
       Console.Write("Please enter an ending Port Number:");
       int highPort = int.Parse(Console.ReadLine());
 
-            UtilityBelt.PortScanner.Scanner(domain, lowPort, highPort);
+      PortScanner.Scanner(domain, lowPort, highPort);
 
     }
     #endregion
@@ -346,12 +346,10 @@ namespace UtilityBelt
         EnableSsl = true
       };
 
-            MailMessage message = new MailMessage
-            {
-                From = new MailAddress(options.Value.Email)
-            };
+      MailMessage message = new MailMessage();
+      message.From = new MailAddress(options.Value.Email);
 
-            var carrierType = MenuEnum<CarrierType>("Carrier");
+      var carrierType = MenuEnum<CarrierType>("Carrier");
       var meta = EnumHelper.GetAttributeOfType<CarrierMetaAttribute>(carrierType);
 
       message.To.Add(new MailAddress(send2Number + $"@{meta?.Domain}"));
@@ -508,8 +506,8 @@ namespace UtilityBelt
           Console.WriteLine($"Country Name: {item.Name}");
           Console.WriteLine($"Capital: {item.Capital}");
           Console.WriteLine($"Region: {item.Region}");
-          Console.WriteLine($"Population: {item.Population:N1}");
-          Console.WriteLine($"Area: {item.Area:N1} km²");
+          Console.WriteLine($"Population: {item.Population.ToString("N1")}");
+          Console.WriteLine($"Area: {item.Area.ToString("N1")} km²");
           Console.WriteLine("Currencies");
           foreach (var moneda in item.Currencies)
           {
@@ -548,7 +546,7 @@ namespace UtilityBelt
 
       WebHookContent cont = new WebHookContent()
       {
-        Content = msg
+        content = msg
       };
       string json = JsonSerializer.Serialize(cont);
 
@@ -748,10 +746,12 @@ namespace UtilityBelt
     static void NumberFact()
     {
       string content = string.Empty;
+      int numberEntered;
 
-            Console.WriteLine("Please enter an integer number");
-            String userInput = Console.ReadLine();
-            if (int.TryParse(userInput, out _))
+      Console.WriteLine("Please enter an integer number");
+      String userInput = Console.ReadLine();
+
+      if (int.TryParse(userInput, out numberEntered))
       {
         string numberFactURL = $"http://numbersapi.com/{userInput}?format=json";
         using (var wc = new WebClient())
@@ -829,57 +829,58 @@ namespace UtilityBelt
       Console.WriteLine();
     }
 
-        #endregion
+    #endregion
 
-        #region Console Calculator
-        static void ConsoleCalculator()
-        {
+    #region Console Calculator
+    static void ConsoleCalculator()
+    {
+      // Declare variables and then initialize to zero.
+      int num1 = 0; int num2 = 0;
 
-            // Display title as the C# console calculator app.
-            Console.WriteLine("Console Calculator in C#\r");
-            Console.WriteLine("------------------------\n");
+      // Display title as the C# console calculator app.
+      Console.WriteLine("Console Calculator in C#\r");
+      Console.WriteLine("------------------------\n");
 
-            // Ask the user to type the first number.
-            Console.WriteLine("Type a number, and then press Enter");
-            // Declare variables and then initialize to zero.
-            int num1 = Convert.ToInt32(Console.ReadLine());
+      // Ask the user to type the first number.
+      Console.WriteLine("Type a number, and then press Enter");
+      num1 = Convert.ToInt32(Console.ReadLine());
 
-            // Ask the user to type the second number.
-            Console.WriteLine("Type another number, and then press Enter");
-            int num2 = Convert.ToInt32(Console.ReadLine());
+      // Ask the user to type the second number.
+      Console.WriteLine("Type another number, and then press Enter");
+      num2 = Convert.ToInt32(Console.ReadLine());
 
-            // Ask the user to choose an option.
-            Console.WriteLine("Choose an option from the following list:");
-            Console.WriteLine("\ta - Add");
-            Console.WriteLine("\ts - Subtract");
-            Console.WriteLine("\tm - Multiply");
-            Console.WriteLine("\td - Divide");
-            Console.Write("Your option? ");
+      // Ask the user to choose an option.
+      Console.WriteLine("Choose an option from the following list:");
+      Console.WriteLine("\ta - Add");
+      Console.WriteLine("\ts - Subtract");
+      Console.WriteLine("\tm - Multiply");
+      Console.WriteLine("\td - Divide");
+      Console.Write("Your option? ");
 
-            // Use a switch statement to do the math.
-            switch (Console.ReadLine())
-            {
-                case "a":
-                    Console.WriteLine($"Your result: {num1} + {num2} = " + (num1 + num2));
-                    break;
-                case "s":
-                    Console.WriteLine($"Your result: {num1} - {num2} = " + (num1 - num2));
-                    break;
-                case "m":
-                    Console.WriteLine($"Your result: {num1} * {num2} = " + (num1 * num2));
-                    break;
-                case "d":
-                    Console.WriteLine($"Your result: {num1} / {num2} = " + (num1 / num2));
-                    break;
-            }
-            // Wait for the user to respond before closing.
-            Console.Write("Press any key to close the Calculator console app...");
-            Console.ReadKey();
-        }
-        #endregion
+      // Use a switch statement to do the math.
+      switch (Console.ReadLine())
+      {
+        case "a":
+          Console.WriteLine($"Your result: {num1} + {num2} = " + (num1 + num2));
+          break;
+        case "s":
+          Console.WriteLine($"Your result: {num1} - {num2} = " + (num1 - num2));
+          break;
+        case "m":
+          Console.WriteLine($"Your result: {num1} * {num2} = " + (num1 * num2));
+          break;
+        case "d":
+          Console.WriteLine($"Your result: {num1} / {num2} = " + (num1 / num2));
+          break;
+      }
+      // Wait for the user to respond before closing.
+      Console.Write("Press any key to close the Calculator console app...");
+      Console.ReadKey();
+    }
+    #endregion
 
-        #region Gender from name
-        static void GenderFromName()
+    #region Gender from name
+    static void GenderFromName()
     {
       Console.Write("Type the name, and then press Enter: ");
       string enteredName = Console.ReadLine().ToLower();
@@ -1019,6 +1020,7 @@ namespace UtilityBelt
       int score = 0;
       int randomNum = rNumber.Next(1, 4);
       int numberInput;
+      bool validDoor = false;
       bool validNumber;
 
       while (true)
@@ -1028,32 +1030,31 @@ namespace UtilityBelt
         Console.WriteLine("Which door do you open?!?! \n");
         Console.WriteLine("1, 2 or 3?\n");
 
-                bool validDoor;
-                do
-                {
-                    validNumber = int.TryParse(Console.ReadLine(), out numberInput);
+        do
+        {
+          validNumber = int.TryParse(Console.ReadLine(), out numberInput);
 
-                    if (Enumerable.Range(1, 3).Contains(numberInput) && validNumber)//If user selected a valid door ...
-                    {
-                        validDoor = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("");
-                        if (validNumber)
-                        {
-                            Console.WriteLine("\nThere are only three doors ahead. \n");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Input was not an integer.");
-                        }
-                        Console.WriteLine("Please select door 1, 2, or 3.\n");
-                        validDoor = false;
-                    }
-                } while (validDoor == false);
+          if (Enumerable.Range(1, 3).Contains(numberInput) && validNumber)//If user selected a valid door ...
+          {
+            validDoor = true;
+          }
+          else
+          {
+            Console.WriteLine("");
+            if (validNumber)
+            {
+              Console.WriteLine("\nThere are only three doors ahead. \n");
+            }
+            else
+            {
+              Console.WriteLine("Input was not an integer.");
+            }
+            Console.WriteLine("Please select door 1, 2, or 3.\n");
+            validDoor = false;
+          }
+        } while (validDoor == false);
 
-                if (numberInput == randomNum)
+        if (numberInput == randomNum)
         {
           Console.WriteLine("\nBoo!! GHOST!");
           break;
@@ -1093,62 +1094,62 @@ namespace UtilityBelt
       Console.WriteLine();
     }
     #endregion
-	
-	#region Digital Ocean
-        static void DigitalOceanStatus()
-        {
-            IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
-            defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
-            string content = string.Empty;
-            string digitalOceanStatusUrl = $"https://s2k7tnzlhrpw.statuspage.io/api/v2/status.json";
-            using (var wc = new WebClient() { Proxy = defaultWebProxy })
-            {
-                content = wc.DownloadString(digitalOceanStatusUrl);
-            }
+    #region Digital Ocean
+    static void DigitalOceanStatus()
+    {
+      IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+      defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
-            DigitalOceanStatusModel digitalOceanStatus = JsonSerializer.Deserialize<DigitalOceanStatusModel>(content);
-            Console.WriteLine();
-            Console.WriteLine(@$"Indicator -- {digitalOceanStatus.Status.Indicator}");
-            Console.WriteLine(@$"Description -- {digitalOceanStatus.Status.Description}");
+      string content = string.Empty;
+      string digitalOceanStatusUrl = $"https://s2k7tnzlhrpw.statuspage.io/api/v2/status.json";
+      using (var wc = new WebClient() { Proxy = defaultWebProxy })
+      {
+        content = wc.DownloadString(digitalOceanStatusUrl);
+      }
 
-            Console.WriteLine();
-        }
-        #endregion
-	
+      DigitalOceanStatusModel digitalOceanStatus = JsonSerializer.Deserialize<DigitalOceanStatusModel>(content);
+      Console.WriteLine();
+      Console.WriteLine(@$"Indicator -- {digitalOceanStatus.Status.Indicator}");
+      Console.WriteLine(@$"Description -- {digitalOceanStatus.Status.Description}");
+
+      Console.WriteLine();
+    }
+    #endregion
+
 
     #region Random User Generator
     static void RandomUserGenerator()
-    {  
-        string content = string.Empty;
-        string randomUserUrl = @"https://randomuser.me/api";
-        using (var wc = new WebClient())
-        {
-            content = wc.DownloadString(randomUserUrl);
-        }
+    {
+      string content = string.Empty;
+      string randomUserUrl = @"https://randomuser.me/api";
+      using (var wc = new WebClient())
+      {
+        content = wc.DownloadString(randomUserUrl);
+      }
 
-        RandomUser randomUser = JsonSerializer.Deserialize<RandomUser>(content);
-        Console.WriteLine();
-        Console.ForegroundColor = ConsoleColor.Cyan;
+      RandomUser randomUser = JsonSerializer.Deserialize<RandomUser>(content);
+      Console.WriteLine();
+      Console.ForegroundColor = ConsoleColor.Cyan;
 
-        foreach(var user in randomUser.results)
-        {
-            Console.WriteLine($"Gender: {user.Gender}");
-            Console.WriteLine($"Name: {user.Name.First} {user.Name.Last}");
-            Console.WriteLine($"Email: {user.Email}");
-            Console.WriteLine($"Phone: {user.Phone}");
-        }
+      foreach (var user in randomUser.results)
+      {
+        Console.WriteLine($"Gender: {user.Gender}");
+        Console.WriteLine($"Name: {user.Name.First} {user.Name.Last}");
+        Console.WriteLine($"Email: {user.Email}");
+        Console.WriteLine($"Phone: {user.Phone}");
+      }
 
-        Console.WriteLine();
+      Console.WriteLine();
     }
     #endregion
-	
+
     #endregion
 
     #region Utility
     internal class WebHookContent
     {
-      public string Content { get; set; }
+      public string content { get; set; }
     }
 
     enum BooleanAliases
