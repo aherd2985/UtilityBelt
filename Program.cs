@@ -111,8 +111,9 @@ namespace UtilityBelt
       Console.WriteLine("24) Fun Ghost Game");
       Console.WriteLine("25) Dns Hostname to IP Address");
       Console.WriteLine("26) Panda Fact");
-      Console.WriteLine("27) Random User Generator");
-      Console.WriteLine("28) DigitalOcean status");
+      Console.WriteLine("27) Fox Fact");
+      Console.WriteLine("28) Random User Generator");
+      Console.WriteLine("29) DigitalOcean status");
       Console.WriteLine("");
 
       Console.Write("Your choice:");
