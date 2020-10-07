@@ -1004,6 +1004,8 @@ namespace UtilityBelt
       int score = 0;
       int randomNum = rNumber.Next(0, 4);
       int numberInput;
+      bool validDoor= false;
+      bool validNumber;
 
       while (true)
       {
@@ -1011,7 +1013,29 @@ namespace UtilityBelt
         Console.WriteLine("A ghost is behind one of them :O! \n");
         Console.WriteLine("Which door do you open?!?! \n");
         Console.WriteLine("1, 2 or 3?\n");
-        numberInput = int.Parse(Console.ReadLine());
+
+        do
+        {
+          validNumber = int.TryParse(Console.ReadLine(), out numberInput);
+
+          if ( Enumerable.Range(1,3).Contains(numberInput) && validNumber)//If user selected a valid door ...
+          {
+            validDoor = true;
+          }
+          else
+          {
+            Console.WriteLine("");
+            if(validNumber){
+              Console.WriteLine("\nThere are only three doors ahead. \n");
+            }
+            else
+            {
+              Console.WriteLine("Input was not an integer.");
+            }
+            Console.WriteLine("Please select door 1, 2, or 3.\n");
+            validDoor = false;
+          }
+        } while (validDoor == false);
 
         if (numberInput == randomNum)
         {
