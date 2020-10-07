@@ -171,7 +171,9 @@ namespace UtilityBelt
 
       if (util != null)
       {
+        logger.LogInformation($"User Choice : {util.Name}");
         util.Configure(options);
+        util.Run();
       }
       else
       {
@@ -227,23 +229,6 @@ namespace UtilityBelt
     }
 
     #endregion Weather
-
-    #region Port Scanner
-
-    private static void portScanner()
-    {
-      logger.LogInformation($"User Choice : {nameof(portScanner)}");
-      Console.Write("Please enter a domain:");
-      string domain = Console.ReadLine().ToLower();
-      Console.Write("Please enter a starting Port Number:");
-      int lowPort = int.Parse(Console.ReadLine());
-      Console.Write("Please enter an ending Port Number:");
-      int highPort = int.Parse(Console.ReadLine());
-
-      PortScanner.Scanner(domain, lowPort, highPort);
-    }
-
-    #endregion Port Scanner
 
     #region Text Message
 
