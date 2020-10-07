@@ -46,7 +46,7 @@ namespace UtilityBelt
       menu = new Dictionary<string, IUtility>();
       foreach (var item in utilities)
       {
-        menu.Add(item.Name, item);
+        menu.Add(item.Name.ToLower(), item);
       }
     }
 
@@ -129,212 +129,54 @@ namespace UtilityBelt
 
     private static void MenuOptions(IOptions<SecretsModel> options)
     {
-      logger.LogInformation("Loading Menu Options");
-      Console.WriteLine("");
-      Console.WriteLine("Select the Tool");
-      Console.WriteLine("1) Port Scanner");
-      Console.WriteLine("2) Text Message");
-      Console.WriteLine("3) Random Chuck Norris Joke");
-      Console.WriteLine("4) Random Cat Fact");
-      Console.WriteLine("5) Bitcoin Prices");
-      Console.WriteLine("6) Who is in Space");
-      Console.WriteLine("7) Weather forecast");
-      Console.WriteLine("8) Country Information");
-      Console.WriteLine("9) Discord sender");
-      Console.WriteLine("10) Random Quote");
-      Console.WriteLine("11) Random Insult");
-      Console.WriteLine("12) Who Stole the Cookie");
-      Console.WriteLine("13) Random Taco Recipe");
-      Console.WriteLine("14) COVID-19 Statistics");
-      Console.WriteLine("15) Geek jokes");
-      Console.WriteLine("16) Number Fact");
-      Console.WriteLine("17) Random Advice");
-      Console.WriteLine("18) International Space Station Location");
-      Console.WriteLine("19) Random Quote 2");
-      Console.WriteLine("20) Console Calculator");
-      Console.WriteLine("21) Gender from name");
-      Console.WriteLine("22) Random Dad Joke");
-      Console.WriteLine("23) Breaking Bad");
-      Console.WriteLine("24) Fun Ghost Game");
-      Console.WriteLine("25) Dns Hostname to IP Address");
-      Console.WriteLine("26) Panda Fact");
-      Console.WriteLine("27) Fox Fact");
-      Console.WriteLine("28) Random User Generator");
-      Console.WriteLine("29) DigitalOcean status");
+      logger.LogInformation("Showing Menu Options");
+
+      var itemNumber = 1;
+      foreach (var item in menu.Keys)
+      {
+        Console.WriteLine($"{itemNumber}) {menu[item].Name}");
+      }
+
       Console.WriteLine("");
 
       Console.Write("Your choice:");
       string optionPicked = Console.ReadLine().ToLower();
       logger.LogInformation($"User Choice : {optionPicked}");
-      switch (optionPicked)
+
+      var isNumberPicked = int.TryParse(optionPicked, out int optionNumber);
+
+      IUtility util = null;
+      if (isNumberPicked)
       {
-        case "1":
-        case "port":
-        case "port scanner":
-          portScanner();
-          break;
+        if (optionNumber > 0 && optionNumber <= menu.Keys.ToList().Count)
+        {
+          var key = menu.Keys.ToList()[optionNumber - 1];
+          util = menu[key];
+        }
+      }
+      else
+      {
+        if (menu.ContainsKey(optionPicked))
+        {
+          util = menu[optionPicked];
+        }
+        else
+        {
+          if (commands.ContainsKey(optionPicked))
+          {
+            util = commands[optionPicked];
+          }
+        }
+      }
 
-        case "2":
-        case "ssms":
-        case "text":
-        case "text message":
-          TextMessage(options);
-          break;
-
-        case "3":
-        case "random chuck norris joke":
-        case "chuck norris joke":
-        case "chuck norris":
-        case "joke":
-          RandomChuckNorrisJoke();
-          break;
-
-        case "4":
-        case "cat fact":
-        case "cat":
-          CatFact();
-          break;
-
-        case "5":
-        case "bitcoin prices":
-        case "bitcoin":
-          BitcoinPrices();
-          break;
-
-        case "6":
-        case "who is in space":
-        case "space":
-          Space();
-          break;
-
-        case "7":
-        case "weather":
-        case "wf":
-        case "weather forecast":
-          WeatherForecast(options);
-          break;
-
-        case "8":
-        case "Country":
-          CountryInformation();
-          break;
-
-        case "9":
-        case "discord":
-        case "ds":
-        case "webhook":
-        case "wh":
-          DiscordWebhook(options);
-          break;
-
-        case "10":
-        case "quote":
-          RandomQuote();
-          break;
-
-        case "11":
-        case "insult":
-          RandomInsult();
-          break;
-
-        case "12":
-        case "cookie":
-          CookieAccusation();
-          break;
-
-        case "13":
-        case "taco":
-          RandomTaco();
-          break;
-
-        case "14":
-        case "covid":
-        case "covid19":
-        case "covid-19":
-          Covid19();
-          break;
-
-        case "15":
-        case "geek":
-          GeekJokes();
-          break;
-
-        case "16":
-        case "numberfact":
-          NumberFact();
-          break;
-
-        case "17":
-        case "advice":
-        case "random advice":
-          RandomAdvice();
-          break;
-
-        case "18":
-        case "space station location":
-        case "internation space station":
-          SpaceStationLocation();
-          break;
-
-        case "19":
-        case "quote2":
-          RandomQuoteGarden();
-          break;
-
-        case "20":
-          ConsoleCalculator();
-          break;
-
-        case "21":
-        case "gender from name":
-          GenderFromName();
-          break;
-
-        case "22":
-        case "dadjoke":
-          DadJoke();
-          break;
-
-        case "23":
-        case "breaking bad":
-          BreakingBadQuotes();
-          break;
-
-        case "24":
-          GhostGame();
-          break;
-
-        case "25":
-        case "hosttoip":
-          HostToIp();
-          break;
-
-        case "26":
-        case "panda fact":
-        case "panda":
-          RandomPandaFact();
-          break;
-
-        case "27":
-        case "fox fact":
-        case "fox":
-          RandomFoxFact();
-          break;
-
-        case "28":
-        case "random user generator":
-          RandomUserGenerator();
-          break;
-
-        case "29":
-        case "digital ocean":
-          DigitalOceanStatus();
-          break;
-
-        default:
-          Console.WriteLine("Please make a valid option");
-          MenuOptions(options);
-          break;
+      if (util != null)
+      {
+        util.Configure(options);
+      }
+      else
+      {
+        Console.WriteLine("Please make a valid option");
+        MenuOptions(options);
       }
     }
 
