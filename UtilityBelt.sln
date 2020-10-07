@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityBelt", "UtilityBelt\UtilityBelt.csproj", "{98202908-F941-43DF-A20F-1B86DCAAE46C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityBeltxUnitTests", "UtilityBeltxUnitTests\UtilityBeltxUnitTests.csproj", "{D441B178-CBAA-40D8-8540-FB8E91A4385E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityBelt", "UtilityBelt.csproj", "{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{98202908-F941-43DF-A20F-1B86DCAAE46C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98202908-F941-43DF-A20F-1B86DCAAE46C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98202908-F941-43DF-A20F-1B86DCAAE46C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98202908-F941-43DF-A20F-1B86DCAAE46C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D441B178-CBAA-40D8-8540-FB8E91A4385E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D441B178-CBAA-40D8-8540-FB8E91A4385E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D441B178-CBAA-40D8-8540-FB8E91A4385E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D441B178-CBAA-40D8-8540-FB8E91A4385E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
