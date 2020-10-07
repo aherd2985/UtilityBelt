@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityBelt", "UtilityBelt.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{7F989A21-E331-4A3F-B708-0B52F378264B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityBeltxUnitTests", "Tests\UtilityBeltxUnitTests\UtilityBeltxUnitTests.csproj", "{F2E50A6F-DAE2-4628-85D3-243C8BDFD745}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,9 +19,16 @@ Global
 		{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E51EB3B6-ED87-4DDF-B1BC-1743BF2C3EC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2E50A6F-DAE2-4628-85D3-243C8BDFD745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2E50A6F-DAE2-4628-85D3-243C8BDFD745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2E50A6F-DAE2-4628-85D3-243C8BDFD745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2E50A6F-DAE2-4628-85D3-243C8BDFD745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F2E50A6F-DAE2-4628-85D3-243C8BDFD745} = {7F989A21-E331-4A3F-B708-0B52F378264B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9A8EBA26-7553-4D25-AFEC-C777A509F23B}
