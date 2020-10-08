@@ -1090,6 +1090,30 @@ namespace UtilityBelt
 
     #endregion Random User Generator
 
+    #region Random Programmer Quote
+
+    private static void RandomProgrammerQuote()
+    {
+      logger.LogInformation($"User Choice : {nameof(RandomProgrammerQuote)}");
+      IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
+      defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
+
+      string content = string.Empty;
+      string programmerQuoteUrl = $"https://programming-quotes-api.herokuapp.com/quotes/random";
+      using (var wc = new WebClient() { Proxy = defaultWebProxy })
+      {
+        content = wc.DownloadString(programmerQuoteUrl);
+      }
+
+      ProgrammingQuoteModel programmingQuote = JsonSerializer.Deserialize<ProgrammingQuoteModel>(content);
+      Console.WriteLine();
+      Console.WriteLine(@$"{programmingQuote.Quote}");
+      Console.WriteLine(@$"by {programmingQuote.Author}");
+      Console.WriteLine();
+    }
+
+    #endregion Random Programmer Quote
+
     #endregion Choice Processors
 
     #region Utility
