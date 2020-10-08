@@ -8,7 +8,7 @@ using UtilityBelt.Models;
 
 namespace UtilityBelt.Utilities
 {
-    [Export(typeof(IUtility))]
+  [Export(typeof(IUtility))]
   internal class WeatherForecastUtility : IUtility
   {
     public IList<string> Commands => new List<string> { "weather", "weather forecast"};
