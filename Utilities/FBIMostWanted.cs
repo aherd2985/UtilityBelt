@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using UtilityBelt.Models;
 
 namespace UtilityBelt.Utilities
 {
   [Export(typeof(IUtility))]
-  internal class FBITopTen
+  internal class FBIMostWanted : IUtility
   {
     public IList<string> Commands => new List<string> { "FBI", "FBI Top Ten" };
     public string Name => "FBI Top Ten Most Wanted";
@@ -27,6 +28,12 @@ namespace UtilityBelt.Utilities
       {
         content = wc.DownloadString(fbiUrl);
       }
+      FBIMostWantedModel mostWanted = JsonSerializer.Deserialize<FBIMostWantedModel>(content);
+      Console.WriteLine();
+      FBISuspect topSuspect = mostWanted.Suspects[0];
+      Console.WriteLine($"Reward: {topSuspect.Reward}");
+      Console.WriteLine($"Details: { topSuspect.Details}");
+      Console.WriteLine();
     }      
   }
 }
