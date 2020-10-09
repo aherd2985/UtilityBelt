@@ -27,5 +27,4 @@ namespace UtilityBelt
         public long NewRecovered {get; set;}
         public long TotalRecovered {get; set;}
     }
-    
 }
