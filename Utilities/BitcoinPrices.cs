@@ -10,7 +10,7 @@ using UtilityBelt.Models;
 namespace UtilityBelt.Utilities
 {
   [Export(typeof(IUtility))]
-  internal class BitcoinPrices : IUtility
+  public class BitcoinPrices : IUtility
   {
     public IList<string> Commands => new List<string> { "bitcoin", "bitcoin price" };
 
@@ -24,7 +24,8 @@ namespace UtilityBelt.Utilities
     {
       string content = string.Empty;
       string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
-      using (var wc = new WebClient())
+
+      using (var wc = GetWebClient())
       {
         content = wc.DownloadString(bitUrl);
       }
@@ -34,6 +35,11 @@ namespace UtilityBelt.Utilities
       Console.WriteLine("As Of - " + bitFact.Time.Updated);
       Console.WriteLine("USD - $ " + bitFact.Bpi.USD.Rate);
       Console.WriteLine();
+    }
+
+    protected virtual WebClient GetWebClient()
+    {
+      return new WebClient();
     }
   }
 }
