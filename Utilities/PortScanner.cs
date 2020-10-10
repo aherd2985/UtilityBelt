@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Composition;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 using UtilityBelt.Models;
 
@@ -56,18 +58,23 @@ namespace UtilityBelt.Utilities
             $"Max port cannot be less than {PORT_MIN_VALUE} " +
             $"or greater than {PORT_MAX_VALUE}");
 
-      List<int> openPorts = new List<int>();
-
-      for (int portNbr = minPort; portNbr <= maxPort; portNbr++)
+      ConcurrentBag<int> openPorts = new ConcurrentBag<int>();
+      var portList = Enumerable.Range(minPort, maxPort - minPort + 1);
+      var timer = new Stopwatch();
+      timer.Start();
+      Parallel.ForEach(portList, new ParallelOptions{MaxDegreeOfParallelism = 10}, port =>
       {
-        if (IsPortOpenAsync(host, portNbr))
+        if (IsPortOpenAsync(host, port))
         {
-          openPorts.Add(portNbr);
-          Console.WriteLine($"Port {portNbr} is open!");
+          openPorts.Add(port);
+          Console.WriteLine($"Port {port} is open!");
         }
-        else if (portNbr == maxPort && openPorts.Count == 0)
-          Console.WriteLine($"There are no ports open for {host} between {minPort} and {maxPort}.");
+      });
+      if (openPorts.IsEmpty)
+      {
+        Console.WriteLine($"There are no ports open for {host} between {minPort} and {maxPort}.");
       }
+      Console.WriteLine($"Port Scan takes {timer.ElapsedMilliseconds} ms.");
     }
 
     /// <summary>
