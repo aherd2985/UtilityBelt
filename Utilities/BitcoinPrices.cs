@@ -27,11 +27,12 @@ namespace UtilityBelt.Utilities
       string content = string.Empty;
       string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
       BitcoinPrice bitFact = new BitcoinPrice();
-      using (var wc = GetWebClient())
-      {
-        content = wc.DownloadString(bitUrl);
-      }
-      try { 
+      
+      try {
+        using (var wc = GetWebClient())
+        {
+          content = wc.DownloadString(bitUrl);
+        }
         bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content);
       }
       catch{
