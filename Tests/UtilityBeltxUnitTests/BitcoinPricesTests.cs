@@ -4,6 +4,7 @@ using System;
 using System.Net;
 using System.Text.Json;
 using UtilityBelt;
+using UtilityBelt.Interfaces;
 using UtilityBelt.Models;
 using UtilityBelt.Utilities;
 using Xunit;
@@ -12,7 +13,7 @@ namespace UtilityBeltxUnitTests
 {
   public class BitCoinPricesTests
   {
-    private readonly Mock<WebClient> webClient = new Mock<WebClient>();
+    private readonly Mock<IWebClient> webClient = new Mock<IWebClient>();
 
     public BitCoinPricesTests()
     {
@@ -24,6 +25,16 @@ namespace UtilityBeltxUnitTests
     [Fact]
     public void BitCoinPricesReturnsPrice()
     {
+      var bitCoinClient = new TestableBitcoinPrices(webClient.Object);
+      bitCoinClient.Run();
+      this.webClient.Verify(x => x.DownloadString(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public void BitCoinPricesDoesNotThrowsIfNoResult()
+    {
+      this.webClient.Setup(x => x.DownloadString(It.IsAny<string>())).Returns("");
+
       var bitCoinClient = new TestableBitcoinPrices(webClient.Object);
       bitCoinClient.Run();
       this.webClient.Verify(x => x.DownloadString(It.IsAny<string>()), Times.Once);
@@ -53,14 +64,14 @@ namespace UtilityBeltxUnitTests
 
     private class TestableBitcoinPrices : BitcoinPrices
     {
-      public WebClient webClient { get; set; }
+      public IWebClient webClient { get; set; }
 
-      public TestableBitcoinPrices(WebClient webClient) : base()
+      public TestableBitcoinPrices(IWebClient webClient) : base()
       {
         this.webClient = webClient;
       }
 
-      protected override WebClient GetWebClient() => this.webClient;
+      protected override IWebClient GetWebClient() => this.webClient;
     }
   }
 }

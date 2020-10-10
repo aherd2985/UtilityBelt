@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using UtilityBelt.Interfaces;
 using UtilityBelt.Models;
 
 namespace UtilityBelt.Utilities
@@ -24,22 +26,29 @@ namespace UtilityBelt.Utilities
     {
       string content = string.Empty;
       string bitUrl = "https://api.coindesk.com/v1/bpi/currentprice.json";
-
+      BitcoinPrice bitFact = new BitcoinPrice();
       using (var wc = GetWebClient())
       {
         content = wc.DownloadString(bitUrl);
       }
-      BitcoinPrice bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content);
-      Console.WriteLine();
+      try { 
+        bitFact = JsonSerializer.Deserialize<BitcoinPrice>(content);
+      }
+      catch{
+        Console.WriteLine("Got no result or couldn't convert to bitcoin pricing");
+      }
+      
       Console.ForegroundColor = ConsoleColor.Yellow;
-      Console.WriteLine("As Of - " + bitFact.Time.Updated);
-      Console.WriteLine("USD - $ " + bitFact.Bpi.USD.Rate);
+      Console.WriteLine(bitFact?.Disclaimer);
+      Console.WriteLine("As Of - " + bitFact?.Time?.Updated);
+      Console.WriteLine("USD - $ " + bitFact?.Bpi?.USD?.Rate);
       Console.WriteLine();
     }
 
-    protected virtual WebClient GetWebClient()
+    protected virtual IWebClient GetWebClient()
     {
-      return new WebClient();
+      var factory = new SystemWebClientFactory();
+      return factory.Create();
     }
   }
 }
