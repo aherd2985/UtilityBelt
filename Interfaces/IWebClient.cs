@@ -10,9 +10,11 @@ namespace UtilityBelt.Interfaces
     byte[] DownloadData(Uri address);
 
     byte[] UploadData(Uri address, byte[] data);
+
+    string DownloadString(string address);
   }
 
-  internal interface IWebClientFactory
+  public interface IWebClientFactory
   {
     IWebClient Create();
   }
