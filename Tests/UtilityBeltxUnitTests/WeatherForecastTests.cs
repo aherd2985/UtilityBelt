@@ -32,8 +32,10 @@ namespace UtilityBeltxUnitTests
       var jsonresult = JsonSerializer.Serialize(mockWeatherRootResult);
       this.webClient.Setup(x => x.DownloadString(It.IsAny<string>())).Returns(jsonresult);
       var weatherForecastClient = new TestableWeatherForecast(webClient.Object);
+      var optionsMock = new Mock<IOptions<SecretsModel>>();
+      optionsMock.SetupGet(o => o.Value).Returns(new SecretsModel() {OpenWeatherMapApiKey="mykey123"});
 
-      weatherForecastClient.Configure(this.options);
+      weatherForecastClient.Configure(optionsMock.Object);
       weatherForecastClient.Run("atlanta");
 
       this.webClient.Verify(x => x.DownloadString(It.IsAny<string>()), Times.Once);

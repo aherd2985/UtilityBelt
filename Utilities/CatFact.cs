@@ -5,12 +5,13 @@ using System.Composition;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using UtilityBelt.Interfaces;
 using UtilityBelt.Models;
 
 namespace UtilityBelt.Utilities
 {
   [Export(typeof(IUtility))]
-  internal class CatFact : IUtility
+  public class CatFact : IUtility
   {
     public IList<string> Commands => new List<string> { "cat", "cat fact" };
 
@@ -24,11 +25,22 @@ namespace UtilityBelt.Utilities
     {
       string content = string.Empty;
       string catUrl = "https://cat-fact.herokuapp.com/facts/random";
-      using (var wc = new WebClient())
+      CatFactModel catFact = new CatFactModel();
+
+      try
       {
-        content = wc.DownloadString(catUrl);
+        using (var wc = GetWebClient())
+        {
+          content = wc.DownloadString(catUrl);
+        }
+        catFact = JsonSerializer.Deserialize<CatFactModel>(content);
       }
-      CatFactModel catFact = JsonSerializer.Deserialize<CatFactModel>(content);
+      catch
+      {
+        Console.WriteLine("Got no result or couldn't convert to a cat fact");
+        return;
+      }
+      
       Console.WriteLine();
       if (catFact.Status != null && catFact.Status.Verified)
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -37,5 +49,12 @@ namespace UtilityBelt.Utilities
       Console.WriteLine(catFact.Text);
       Console.WriteLine();
     }
+
+    protected virtual IWebClient GetWebClient()
+    {
+      var factory = new SystemWebClientFactory();
+      return factory.Create();
+    }
+
   }
 }
