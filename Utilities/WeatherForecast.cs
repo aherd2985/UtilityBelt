@@ -30,6 +30,8 @@ namespace UtilityBelt.Utilities
       if (String.IsNullOrEmpty(_openWeatherMapKey))
       {
         Console.WriteLine("Whoops! API key is not defined.");
+        Console.WriteLine("Get an API key from https://home.openweathermap.org/api_keys then..");
+        Console.WriteLine("run dotnet user-secrets set \"SecretsModel: OpenWeatherMapApiKey\" \"12345\" to specify your key");
         return;
       }
 
