@@ -40,14 +40,28 @@ namespace UtilityBeltxUnitTests
     }
 
     [Fact]
+    public void WeatherForecastDoesNotThrowsIfNoKey()
+    {
+      this.webClient.Setup(x => x.DownloadString(It.IsAny<string>())).Returns("");
+
+      var weatherForecastClient = new TestableWeatherForecast(webClient.Object);
+      //omitting configure so that the API key isn't set
+      weatherForecastClient.Run();
+
+      //webclient shouldn't be called if the key isn't set
+      this.webClient.Verify(x => x.DownloadString(It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
     public void WeatherForecastDoesNotThrowsIfNoResult()
     {
       this.webClient.Setup(x => x.DownloadString(It.IsAny<string>())).Returns("");
 
       var weatherForecastClient = new TestableWeatherForecast(webClient.Object);
-      weatherForecastClient.Run();
+      weatherForecastClient.Configure(this.options);
+      weatherForecastClient.Run("atlanta");
 
-      this.webClient.Verify(x => x.DownloadString(It.IsAny<string>()), Times.Never);
+      //assert...nothing to do, just shouldnt error
     }
 
     private WeatherRoot getWeatherRootObject()
