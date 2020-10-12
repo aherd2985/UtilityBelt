@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="responseSamples\birdFactResponse.json" />
     <None Remove="responseSamples\catFactResponse.json" />
     <None Remove="responseSamples\countryInfoResponse.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="responseSamples\birdFactResponse.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="responseSamples\catFactResponse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
