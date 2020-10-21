@@ -1,21 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace UtilityBelt.Models
 {
   public class CookieSuspectModel
   {
-    public List<CookieSuspect> Results { get; set; }
-  }
-  public class CookieSuspect
-  {
-    public CookieSuspectName Name { get; set; }
-  }
-  public class CookieSuspectName
-  {
-    public string First { get; set; }
+    [JsonPropertyName("results")]
+    public List<ResultData> Results { get; set; }
 
-    public string Last { get; set; }
+    public class ResultData
+    {
+      [JsonPropertyName("name")]
+      public CookieSuspectName Name { get; set; }
+
+      public class CookieSuspectName
+      {
+        [JsonPropertyName("first")]
+        public string First { get; set; }
+
+        [JsonPropertyName("last")]
+        public string Last { get; set; }
+      }
+    }
   }
 }
