@@ -112,6 +112,9 @@ namespace UtilityBelt.Utilities
       switch (searchMethod)
       {
         case "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=":
+        case "https://www.thecocktaildb.com/api/json/v1/1/search.php?f=":
+        case "https://www.thecocktaildb.com/api/json/v1/1/random.php":
+        case "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=":
           try
           {
             using (var wc = GetWebClient())
@@ -122,7 +125,7 @@ namespace UtilityBelt.Utilities
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            drinkClass.drinks.ForEach(Print);
+            drinkClass.drinks.ForEach(PrintDrink);
           }
           catch(Exception ex)
           {
@@ -131,18 +134,18 @@ namespace UtilityBelt.Utilities
           }
           break;
 
-        case "https://www.thecocktaildb.com/api/json/v1/1/random.php":
+        case "https://www.thecocktaildb.com/api/json/v1/1/search.php?i=":
           try
           {
             using (var wc = GetWebClient())
             {
               content = wc.DownloadString(cocktailUrl);
             }
-            CocktailDrinkModel drinkClass = JsonSerializer.Deserialize<CocktailDrinkModel>(content);
+            CocktailIngredientModel ingredientClass = JsonSerializer.Deserialize<CocktailIngredientModel>(content);
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
 
-            drinkClass.drinks.ForEach(Print);
+            ingredientClass.ingredients.ForEach(PrintIngredient);
           }
           catch (Exception ex)
           {
@@ -158,7 +161,7 @@ namespace UtilityBelt.Utilities
       Console.WriteLine();
     }
 
-    void Print(Drink d)
+    void PrintDrink(Drink d)
     {
       Console.WriteLine(@$"{d.strDrink}");
       Console.WriteLine(@$"Category: {d.strCategory}");
@@ -202,6 +205,17 @@ namespace UtilityBelt.Utilities
       Console.WriteLine(@$"{d.strInstructions}");
       Console.WriteLine("");
       Console.WriteLine("");
+    }
+
+    void PrintIngredient(Ingredient i)
+    {
+      Console.WriteLine($@"Ingedient: {i.strIngredient}");
+      Console.WriteLine($@"Type: {i.strType}");
+      Console.WriteLine($@"Alcohol: {i.strAlcohol}");
+      Console.WriteLine($@"ABV: {i.strABV}");
+      Console.WriteLine("Description:");
+      Console.WriteLine(@$"{i.strDescription}");
+
     }
 
     protected virtual IWebClient GetWebClient()
