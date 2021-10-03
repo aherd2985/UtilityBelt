@@ -93,7 +93,7 @@ namespace UtilityBelt.Utilities
       string searchMethod = CocktailSearchMethod(Console.ReadLine().ToLower());
       string enteredValue = string.Empty;
 
-      if (searchMethod != "")
+      if (searchMethod != "https://www.thecocktaildb.com/api/json/v1/1/random.php")
       {
         Console.Write("Type value: ");
         enteredValue = searchValue(Console.ReadLine().ToLower());
@@ -112,8 +112,6 @@ namespace UtilityBelt.Utilities
       switch (searchMethod)
       {
         case "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=":
-          CocktailDrinkModel DrinkData = new CocktailDrinkModel();
-
           try
           {
             using (var wc = GetWebClient())
@@ -131,10 +129,26 @@ namespace UtilityBelt.Utilities
             Console.WriteLine("Got no results!");
             return;
           }
+          break;
 
+        case "https://www.thecocktaildb.com/api/json/v1/1/random.php":
+          try
+          {
+            using (var wc = GetWebClient())
+            {
+              content = wc.DownloadString(cocktailUrl);
+            }
+            CocktailDrinkModel drinkClass = JsonSerializer.Deserialize<CocktailDrinkModel>(content);
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
 
-
-
+            drinkClass.drinks.ForEach(Print);
+          }
+          catch (Exception ex)
+          {
+            Console.WriteLine("Got no results!");
+            return;
+          }
           break;
 
       }
