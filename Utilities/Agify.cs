@@ -23,7 +23,7 @@ namespace UtilityBelt.Utilities
     {
       string content = string.Empty;
 
-      Console.WriteLine("Please enter a name  to guess its age");
+      Console.WriteLine("Please enter a name to guess the age");
       String userInput = Console.ReadLine();
 
       string agifyURL = $"https://api.agify.io/?name={userInput}";
