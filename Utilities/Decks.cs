@@ -37,6 +37,20 @@ namespace UtilityBelt.Utilities
       Console.WriteLine(@$"DeckId -- {deck.Id}");
       Console.WriteLine(@$"Shuffled -- {deck.Shuffled}");
       Console.WriteLine(@$"Remaining -- {deck.Remaining}");
+
+      Console.WriteLine("Pick some cards from the decks");
+      if (!int.TryParse(Console.ReadLine(), out var cardNum)) return;
+
+      string decksCardURL = $"https://deckofcardsapi.com/api/deck/{deck.Id}/draw/?count={cardNum}";
+      using (var wc = new WebClient())
+      {
+        content = wc.DownloadString(decksCardURL);
+      }
+
+      DecksModelCardPick deckCards = JsonSerializer.Deserialize<DecksModelCardPick>(content);
+      Console.WriteLine();
+      Console.WriteLine(@$"Picked -- {deckCards.Cards.Count}");
+      Console.WriteLine(@$"Remaining -- {deckCards.Remaining}");
     }
   }
 }
