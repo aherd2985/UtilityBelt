@@ -13,7 +13,7 @@ namespace UtilityBelt.Utilities
   {
     public IList<string> Commands => new List<string> { "decks" };
 
-    public string Name => "Decks";
+    public string Name => "Decks of Cards";
 
     public void Configure(IOptions<SecretsModel> options)
     {
