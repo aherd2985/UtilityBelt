@@ -9,11 +9,11 @@ using UtilityBelt.Models;
 namespace UtilityBelt.Utilities
 {
   [Export(typeof(IUtility))]
-  internal class Agify : IUtility
+  internal class Anime : IUtility
   {
-    public IList<string> Commands => new List<string> { "agify" };
+    public IList<string> Commands => new List<string> { "anime" };
 
-    public string Name => "Agify - Get Age from your name";
+    public string Name => "Anime Quotes";
 
     public void Configure(IOptions<SecretsModel> options)
     {
@@ -22,19 +22,18 @@ namespace UtilityBelt.Utilities
     public void Run()
     {
       string content = string.Empty;
-
-      Console.WriteLine("Please enter a name to guess the age");
-      String userInput = Console.ReadLine();
-
-      string agifyURL = $"https://api.agify.io/?name={userInput}";
+      
+      string agifyURL = $"https://animechan.vercel.app/api/random";
       using (var wc = new WebClient())
       {
         content = wc.DownloadString(agifyURL);
       }
 
-      AgifyModel agify = JsonSerializer.Deserialize<AgifyModel>(content);
+      AnimeModel anime = JsonSerializer.Deserialize<AnimeModel>(content);
       Console.WriteLine();
-      Console.WriteLine(@$"Age -- {agify.Age}");
+      Console.WriteLine(@$"Anime -- {anime.Anime}");
+      Console.WriteLine(@$"Character -- {anime.Character}");
+      Console.WriteLine(@$"Quote -- {anime.Quote}");
     }
   }
 }
