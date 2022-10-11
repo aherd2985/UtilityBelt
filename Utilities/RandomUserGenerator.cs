@@ -28,13 +28,13 @@ namespace UtilityBelt.Utilities
         content = wc.DownloadString(randomUserUrl);
       }
 
-      RandomUser randomUser = JsonSerializer.Deserialize<RandomUser>(content);
+      RandomUserModel randomUserModel = JsonSerializer.Deserialize<RandomUserModel>(content);
       Console.WriteLine();
       Console.ForegroundColor = ConsoleColor.Cyan;
 
       int cnt = 1;
 
-      foreach (var user in randomUser.results)
+      foreach (var user in randomUserModel.results)
       {
         Console.WriteLine($"User Generated Nbr: {cnt}");
         Console.WriteLine($"Gender: {user.Gender}");
