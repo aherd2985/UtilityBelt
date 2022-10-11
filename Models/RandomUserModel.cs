@@ -42,7 +42,7 @@ namespace UtilityBelt.Models
     public string Version { get; set; }
     }
 
-    public class RandomUser    
+    public class RandomUserModel    
     {
         [JsonPropertyName("results")]
         public List<Result> results { get; set; }
