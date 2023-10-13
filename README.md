@@ -1,16 +1,11 @@
-# UtilityBelt
-Fun console application
+# UtilityBelt - Fun Console Application
 
-Learn the basics of Git and C#
+UtilityBelt is a console application designed to help you learn the basics of Git and C# while participating in Hacktoberfest. This project incorporates User Secrets to securely manage sensitive information. It's a great opportunity to enhance your coding skills and contribute to open-source development.
 
-Participate in Hacktoberfest.
+## User Secrets
 
-This project incorporates User Secrets.
+User Secrets provide a secure way to manage sensitive information in your application. In UtilityBelt, you can store your secret data in a `secrets.json` file. Here's an example of what the `secrets.json` file might look like:
 
-https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows
-https://technoherder.com/fredAPIsecret.php
-
-Here is an example of the secrets.json file:
 ```json
 {
   "SecretsModel": {
@@ -22,10 +17,24 @@ Here is an example of the secrets.json file:
 }
 ```
 
-The Open Weather API key can be generated for free from their site:
+You can use these secrets to protect sensitive data, such as email credentials, API keys, or webhooks, without exposing them in your code.
 
-https://openweathermap.org/api
+## Getting Started
 
-Feel free to holler if you have any questions or concerns.
+1. Get your Open Weather API Key: To use the Open Weather functionality, you can generate a free API key from the [OpenWeatherMap website](https://openweathermap.org/api).
 
-Happy coding!
+2. Configure User Secrets: Add your secrets to the `secrets.json` file as shown in the example above.
+
+3. Have Fun Coding: Dive into the world of Git and C#, participate in Hacktoberfest, and contribute to the project.
+
+## Resources
+
+- Learn more about User Secrets in ASP.NET Core: [User Secrets Documentation](https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows)
+
+- Find the Open Weather API Key: [OpenWeatherMap API](https://openweathermap.org/api)
+
+## Get Involved
+
+Feel free to reach out if you have any questions or concerns. Your contributions are greatly appreciated. Happy coding and happy Hacktoberfest!
+
+[Contribute to UtilityBelt](https://technoherder.com/fredAPIsecret.php)
