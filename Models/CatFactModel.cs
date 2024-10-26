@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace UtilityBelt.Models
 {
-    class CatFactModel
+    public class CatFactModel
     {
         [JsonPropertyName("used")]
         public bool Used { get; set; }

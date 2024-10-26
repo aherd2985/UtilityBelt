@@ -1,0 +1,17 @@
+{
+  "used": true,
+  "source": "user",
+  "type": "cat",
+  "deleted": false,
+  "_id": "5887e1d85c873e0011036889",
+  "user": "5a9ac18c7478810ea6c06381",
+  "text": "Cats make about 100 different sounds. Dogs make only about 10.",
+  "__v": 0,
+  "updatedAt": "2020-09-03T16:39:39.578Z",
+  "createdAt": "2018-01-15T21:20:00.003Z",
+  "status": {
+    "verified": true,
+    "feedback": "",
+    "sentCount": 1
+  }
+}

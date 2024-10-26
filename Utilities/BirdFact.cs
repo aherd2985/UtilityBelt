@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Net;
-using System.Text;
 using System.Text.Json;
 using UtilityBelt.Interfaces;
 using UtilityBelt.Models;
@@ -11,11 +9,11 @@ using UtilityBelt.Models;
 namespace UtilityBelt.Utilities
 {
   [Export(typeof(IUtility))]
-  public class CatFact : IUtility
+  public class BirdFact : IUtility
   {
-    public IList<string> Commands => new List<string> { "cat", "cat fact" };
+    public IList<string> Commands => new List<string> { "bird", "bird fact" };
 
-    public string Name => "Cat Facts";
+    public string Name => "Bird Facts";
 
     public void Configure(IOptions<SecretsModel> options)
     {
@@ -24,29 +22,27 @@ namespace UtilityBelt.Utilities
     public void Run()
     {
       string content = string.Empty;
-      string catUrl = "https://cat-fact.herokuapp.com/facts/random";
-      CatFactModel catFact = new CatFactModel();
+      string birdUrl = "https://some-random-api.ml/facts/bird";
+      BirdFactModel BirdFact = new BirdFactModel();
 
       try
       {
         using (var wc = GetWebClient())
         {
-          content = wc.DownloadString(catUrl);
+          content = wc.DownloadString(birdUrl);
         }
-        catFact = JsonSerializer.Deserialize<CatFactModel>(content);
+        BirdFact = JsonSerializer.Deserialize<BirdFactModel>(content);
       }
       catch
       {
-        Console.WriteLine("Got no result or couldn't convert to a cat fact");
+        Console.WriteLine("Got no result or couldn't convert to a bird fact");
         return;
       }
-      
+
       Console.WriteLine();
-      if (catFact.Status != null && catFact.Status.Verified)
-        Console.ForegroundColor = ConsoleColor.Yellow;
-      else
-        Console.ForegroundColor = ConsoleColor.Red;
-      Console.WriteLine(catFact.Text);
+      Console.ForegroundColor = ConsoleColor.Yellow;
+
+      Console.WriteLine(BirdFact.Fact);
       Console.WriteLine();
     }
 
@@ -55,6 +51,5 @@ namespace UtilityBelt.Utilities
       var factory = new SystemWebClientFactory();
       return factory.Create();
     }
-
   }
 }

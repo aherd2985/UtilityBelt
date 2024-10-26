@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace UtilityBelt.Models
 {
-    class BreakingBadQuoteModel
+    public class BreakingBadQuoteModel
     {
         [JsonPropertyName("quote")]
         public string Quote { get; set; }
