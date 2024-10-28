@@ -35,15 +35,17 @@ namespace UtilityBelt.Utilities
       defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
       string content = string.Empty;
-      string genderizatorUrl = $"https://api.magicthegathering.io/v1/cards/{cardId}";
+      string magicUrl = $"https://api.magicthegathering.io/v1/cards/{cardId}";
+      MagicCardModel magicCard = new MagicCardModel();
+
       using (var wc = new WebClient() { Proxy = defaultWebProxy })
       {
-        content = wc.DownloadString(genderizatorUrl);
+        content = wc.DownloadString(magicUrl);
       }
+      magicCard = magicCard = JsonSerializer.Deserialize<MagicCardModel>(content);
 
-      string magicResult = content;
       Console.WriteLine();
-      Console.WriteLine(@$"The result is {magicResult}");
+      Console.WriteLine(@$"The card is a {magicCard.Card.Name} of type {magicCard.Card.Type}");
 
       Console.WriteLine();
     }
