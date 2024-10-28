@@ -9,11 +9,11 @@ using UtilityBelt.Models;
 namespace UtilityBelt.Utilities
 {
   [Export(typeof(IUtility))]
-  internal class MagicTheGathering : IUtility
+  internal class Joke : IUtility
   {
     public IList<string> Commands => new List<string> { };
 
-    public string Name => "Magic The Gathering";
+    public string Name => "Joke";
 
     public void Configure(IOptions<SecretsModel> options)
     {
@@ -21,31 +21,25 @@ namespace UtilityBelt.Utilities
 
     public void Run()
     {
-      Console.Write("Type the card ID, and then press Enter: ");
-      string cardId = Console.ReadLine().ToLower();
-
-      if (string.IsNullOrEmpty(cardId))
-      {
-        Console.WriteLine("No card ID provided!");
-        Console.WriteLine();
-        return;
-      }    
+      Console.Write("Type the optional joke search string, and then press Enter: ");
+      string jokeString = Console.ReadLine().ToLower();
 
       IWebProxy defaultWebProxy = WebRequest.DefaultWebProxy;
       defaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
 
       string content = string.Empty;
-      string magicUrl = $"https://api.magicthegathering.io/v1/cards/{cardId}";
-      MagicCardModel magicCard = new MagicCardModel();
+      string jokeUrl = $"https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit&type=single";
+      if (!string.IsNullOrEmpty(jokeString)) jokeUrl += $"&contains={jokeString}";
+      JokeModel jokeResult = new JokeModel();
 
       using (var wc = new WebClient() { Proxy = defaultWebProxy })
       {
-        content = wc.DownloadString(magicUrl);
+        content = wc.DownloadString(jokeUrl);
       }
-      magicCard = JsonSerializer.Deserialize<MagicCardModel>(content);
+      jokeResult = JsonSerializer.Deserialize<JokeModel>(content);
 
       Console.WriteLine();
-      Console.WriteLine(@$"The card is a {magicCard.Card.Name} of type {magicCard.Card.Type}");
+      Console.WriteLine(@$"{jokeResult.Joke}");
 
       Console.WriteLine();
     }
