@@ -189,11 +189,15 @@ namespace UtilityBelt
       COOL = 1,
       TRUE = 1,
       Y = 1,
+      SI = 1,
       YEAH = 1,
+      YEP = 1,
+      YUP = 1,
       NAW = 0,
       NO = 0,
       FALSE = 0,
-      N = 0
+      N = 0,
+      NOPE = 0,
     }
 
     private static bool FromString(string str)

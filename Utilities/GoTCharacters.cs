@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Net;
+using System.Net.Http;
 using System.Text.Json;
+using UtilityBelt.Helpers;
 using UtilityBelt.Models;
 
 namespace UtilityBelt.Utilities
@@ -31,17 +34,22 @@ namespace UtilityBelt.Utilities
 
       if (int.TryParse(userInput, out numberEntered))
       {
+        string goTApiURL = $"https://thronesapi.com/api/v2/Characters/{userInput}";
+
         try
         {
-          string goTApiURL = $"https://thronesapi.com/api/v2/Characters/{userInput}";
-          using (var wc = new WebClient())
-          {
-            content = wc.DownloadString(goTApiURL);
-          }
+          using var http = new HttpClient();
+
+          content = http.GetStringAsync(goTApiURL).GetAwaiter().GetResult();
 
           goTCharacter = JsonSerializer.Deserialize<GoTCharactersModel>(content);
 
           Console.WriteLine($"Well done you found {goTCharacter?.FullName} - {goTCharacter?.Title}");
+          if (!string.IsNullOrEmpty(goTCharacter?.ImageUrl))
+          {
+            ImageToConsole.Show(goTCharacter.ImageUrl, 60);
+            Console.WriteLine(goTCharacter.ImageUrl);
+          }
         }
         catch
         {
